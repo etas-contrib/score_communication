@@ -253,7 +253,12 @@ if __name__ == "__main__":
     logger.info(f"Parsing source files: {args.inputs}")
 
     # Finding the GH URL
-    gh_base_url=f"{args.url}{get_github_repo()}"
+    github_repo = get_github_repo()
+    if github_repo is None:
+        logger.warning("Could not find GitHub repository information.")
+        exit(0)
+    else:
+        gh_base_url = f"{args.url}{github_repo}"
 
     requirement_mappings: Dict[str, List[Tuple[str, str]]] = collections.defaultdict(list)
 

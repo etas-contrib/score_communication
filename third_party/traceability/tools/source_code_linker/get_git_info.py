@@ -19,8 +19,10 @@ import sys
 import subprocess
 from pathlib import Path
 
-def get_github_repo() -> str:
+def get_github_repo() -> str|None:
     git_root = find_git_root()
+    if git_root is None:
+        return None
     repo = get_github_repo_info(git_root)
     return repo
 
@@ -60,7 +62,7 @@ def get_github_repo_info(git_root_cwd: Path) -> str:
     return repo
 
 
-def find_git_root():
+def find_git_root() -> Path|None:
     """
     This is copied from 'find_runfiles' as the import does not work for some reason.
     This should be fixed.
@@ -69,10 +71,11 @@ def find_git_root():
     while not (git_root / ".git").exists():
         git_root = git_root.parent
         if git_root == Path("/"):
-            sys.exit(
-                "Could not find git root. Please run this script from the "
-                f"root of the repository. {__file__}"
-            )
+            return None
+            # sys.exit(
+            #     "Could not find git root. Please run this script from the "
+            #     f"root of the repository. {__file__}"
+            # )
     return git_root
 
 
