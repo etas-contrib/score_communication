@@ -20,7 +20,7 @@ trlc_requirements(
         "//score/mw/com/requirements/assumed_system_requirements",
     ],
     spec = [
-        "@//third_party/traceability/config/trlc/score_model:requirement_metamodel",
+        "//third_party/traceability/config/trlc/score_model:requirement_metamodel",
     ],
     visibility = ["//visibility:public"],
 )

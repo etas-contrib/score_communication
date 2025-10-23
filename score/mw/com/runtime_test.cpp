@@ -82,10 +82,24 @@ class RuntimeTestExternalJsonFixture : public ::testing::Test
             file.close();
             return default_path;
         }
-        else
-        {
-            return "external/safe_posix_platform/" + default_path;
+        
+        // Try multiple possible external repository names
+        std::vector<std::string> external_paths = {
+            "external/safe_posix_platform/" + default_path,
+            "external/communication+/" + default_path,
+            "external/communication/" + default_path
+        };
+        
+        for (const auto& path : external_paths) {
+            std::ifstream ext_file(path);
+            if (ext_file.is_open()) {
+                ext_file.close();
+                return path;
+            }
         }
+        
+        // Return the original fallback if nothing works
+        throw std::runtime_error("Could not find configuration file: " + file_name);
     }
 };
 
