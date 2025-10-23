@@ -255,8 +255,7 @@ if __name__ == "__main__":
     # Finding the GH URL
     github_repo = get_github_repo()
     if github_repo is None:
-        logger.warning("Could not find GitHub repository information.")
-        exit(0)
+        gh_base_url = f"{args.url}etas-contrib/score_reference_integration"
     else:
         gh_base_url = f"{args.url}{github_repo}"
 
