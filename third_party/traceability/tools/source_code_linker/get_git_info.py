@@ -71,7 +71,7 @@ def find_git_root():
         if git_root == Path("/"):
             sys.exit(
                 "Could not find git root. Please run this script from the "
-                "root of the repository."
+                f"root of the repository. {__file__}"
             )
     return git_root
 
