@@ -14,13 +14,13 @@ def safety_analysis(
 
     lobster_trlc(
         name = FMEA_FAILUREMODES,
-        config = "@//third_party/traceability/config/lobster:safety_analysis_conf",
+        config = "//third_party/traceability/config/lobster:safety_analysis_conf",
         requirements = failuremodes,
     )
 
     lobster_trlc(
         name = FMEA_CONTROLMEASURES,
-        config = "@//third_party/traceability/config/lobster:safety_analysis_conf",
+        config = "//third_party/traceability/config/lobster:safety_analysis_conf",
         requirements = controlmeasures,
     )
 
@@ -40,7 +40,7 @@ def safety_analysis(
     LOBSTER_CONFIG = "{}_lobster_config".format(name)
     expand_template(
         name = LOBSTER_CONFIG,
-        template = "@//third_party/traceability/config/lobster:traceability_safety_analysis_conf",
+        template = "//third_party/traceability/config/lobster:traceability_safety_analysis_conf",
         out = "{}_traceability_config".format(name),
         substitutions = {
             "fmea_control_measures": FMEA_CONTROLMEASURES,

@@ -5,6 +5,6 @@ py_binary(
     deps = [
         "@communication_pip//bigtree",
         "@communication_pip//pydot",
-        #"@//third_party/trlc:trlc_whl",
+        #"//third_party/trlc:trlc_whl",
     ],
 )
