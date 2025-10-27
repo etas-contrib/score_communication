@@ -1049,25 +1049,25 @@ using TracingRuntimeShmMetaInfoFixture = TracingRuntimeMetaInfoParamaterisedFixt
 INSTANTIATE_TEST_CASE_P(TracingRuntimeShmMetaInfoFixture,
                         TracingRuntimeShmMetaInfoFixture,
                         ::testing::Values(MetaInfoTestData{SkeletonEventTracePointType::SEND,
-                                                           analysis::tracing::TracePointType::SKEL_EVENT_SND},
+                                                           analysis::tracing::TracePointType::kSkelEventSnd},
                                           MetaInfoTestData{SkeletonEventTracePointType::SEND_WITH_ALLOCATE,
-                                                           analysis::tracing::TracePointType::SKEL_EVENT_SND_A},
+                                                           analysis::tracing::TracePointType::kSkelEventSndA},
                                           MetaInfoTestData{SkeletonFieldTracePointType::UPDATE,
-                                                           analysis::tracing::TracePointType::SKEL_FIELD_UPD},
+                                                           analysis::tracing::TracePointType::kSkelFieldUpd},
                                           MetaInfoTestData{SkeletonFieldTracePointType::UPDATE_WITH_ALLOCATE,
-                                                           analysis::tracing::TracePointType::SKEL_FIELD_UPD_A}));
+                                                           analysis::tracing::TracePointType::kSkelFieldUpdA}));
 
 using TracingRuntimeLocalMetaInfoFixture = TracingRuntimeMetaInfoParamaterisedFixture;
 INSTANTIATE_TEST_CASE_P(TracingRuntimeLocalMetaInfoFixture,
                         TracingRuntimeLocalMetaInfoFixture,
                         ::testing::Values(MetaInfoTestData{ProxyEventTracePointType::GET_NEW_SAMPLES,
-                                                           analysis::tracing::TracePointType::PROXY_EVENT_GET_SAMPLES},
+                                                           analysis::tracing::TracePointType::kProxyEventGetSamples},
                                           MetaInfoTestData{ProxyEventTracePointType::SUBSCRIBE,
-                                                           analysis::tracing::TracePointType::PROXY_EVENT_SUB},
+                                                           analysis::tracing::TracePointType::kProxyEventSub},
                                           MetaInfoTestData{ProxyFieldTracePointType::GET_NEW_SAMPLES,
-                                                           analysis::tracing::TracePointType::PROXY_FIELD_GET_SAMPLES},
+                                                           analysis::tracing::TracePointType::kProxyFieldGetSamples},
                                           MetaInfoTestData{ProxyFieldTracePointType::SUBSCRIBE,
-                                                           analysis::tracing::TracePointType::PROXY_FIELD_SUB}));
+                                                           analysis::tracing::TracePointType::kProxyFieldSub}));
 
 TEST_P(TracingRuntimeShmMetaInfoFixture, ShmTraceCallMetaInfoContainsAraComMetaInfo)
 {
@@ -1128,7 +1128,7 @@ TEST_P(TracingRuntimeShmMetaInfoFixture,
 
                 // Then the meta_info properties contain the correct TracePointType and ServiceInstanceElement
                 const auto [actual_trace_point_type, actual_service_instance_element] =
-                    ara_com_meta_info->properties_.trace_point_id_;
+                    ara_com_meta_info->properties.trace_point_id;
 
                 EXPECT_EQ(actual_trace_point_type, expected_trace_point_type);
                 EXPECT_EQ(actual_service_instance_element, kServiceInstanceElement);
@@ -1205,7 +1205,7 @@ TEST_P(TracingRuntimeLocalMetaInfoFixture,
 
                 // Then the meta_info properties contain the correct TracePointType and ServiceInstanceElement
                 const auto [actual_trace_point_type, actual_service_instance_element] =
-                    ara_com_meta_info->properties_.trace_point_id_;
+                    ara_com_meta_info->properties.trace_point_id;
 
                 EXPECT_EQ(actual_trace_point_type, expected_trace_point_type);
                 EXPECT_EQ(actual_service_instance_element, kServiceInstanceElement);
@@ -1261,7 +1261,7 @@ TEST_P(TracingRuntimeTraceDataLossFlagParameterisedFixture, CallingShmTraceWillT
     EXPECT_CALL(*generic_trace_api_mock_.get(), Trace(trace_client_id_, _, _, trace_context_id_))
         .WillOnce(WithArg<1>(Invoke([data_loss_flag](const auto& meta_info) -> analysis::tracing::TraceResult {
             const auto ara_com_meta_info = score::cpp::get<analysis::tracing::AraComMetaInfo>(meta_info);
-            const auto transmitted_data_loss_value_bitset = ara_com_meta_info.trace_status_;
+            const auto transmitted_data_loss_value_bitset = ara_com_meta_info.trace_status;
 
             if (data_loss_flag)
             {
@@ -1309,7 +1309,7 @@ TEST_P(TracingRuntimeTraceDataLossFlagParameterisedFixture, CallingLocalTraceWil
     EXPECT_CALL(*generic_trace_api_mock_.get(), Trace(trace_client_id_, _, _))
         .WillOnce(WithArg<1>(Invoke([data_loss_flag](const auto& meta_info) -> analysis::tracing::TraceResult {
             const auto ara_com_meta_info = score::cpp::get<analysis::tracing::AraComMetaInfo>(meta_info);
-            const auto transmitted_data_loss_value_bitset = ara_com_meta_info.trace_status_;
+            const auto transmitted_data_loss_value_bitset = ara_com_meta_info.trace_status;
 
             if (data_loss_flag)
             {
