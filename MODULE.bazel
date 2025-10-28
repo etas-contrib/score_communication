@@ -76,10 +76,24 @@ download_archive(
 bazel_dep(name = "nlohmann_json", version = "3.11.3")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "score-baselibs", version = "0.0.0")
+
+# git_override(
+#     module_name = "score-baselibs",
+#     commit = "06a27a163a2aa787e1b99f6b04feb00b413b3355",  # or use "tag" or "branch"
+#     remote = "https://github.com/eclipse-score/baselibs.git",
+# )
 git_override(
     module_name = "score-baselibs",
-    commit = "c2d9b7e872c1e67b69256214a75c937e00d03601",
-    remote = "https://github.com/eclipse-score/baselibs.git",
+    remote = "https://github.com/etas-contrib/score_baselibs.git",
+    commit = "5b3a469d80c6480f633ffc789ffb1277ee89fd7f",
+)
+
+bazel_dep(name = "score-mw-log", version = "0.0.0")
+git_override(
+    module_name = "score-mw-log",
+    remote = "https://github.com/eclipse-score/logging.git",
+    # 2025-10-24
+    commit = "fffdb25cd7784c46a4e6d72b46309790f1fcd9ed",
 )
 
 # Python 3.12 toolchain for Bazel (required for LOBSTER/TRLC dependencies)
