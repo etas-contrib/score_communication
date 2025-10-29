@@ -87,7 +87,7 @@ class RuntimeTestExternalJsonFixture : public ::testing::Test
         std::vector<std::string> external_paths = {
             "external/safe_posix_platform/" + default_path,
             "external/communication+/" + default_path,
-            "external/communication/" + default_path
+            "external/score_communication+/" + default_path
         };
         
         for (const auto& path : external_paths) {

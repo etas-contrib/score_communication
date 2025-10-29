@@ -255,7 +255,7 @@ if __name__ == "__main__":
     # Finding the GH URL
     github_repo = get_github_repo()
     if github_repo is None:
-        gh_base_url = f"{args.url}etas-contrib/score_reference_integration"
+        gh_base_url = f"{args.url}eclipse-score/communication"
     else:
         gh_base_url = f"{args.url}{github_repo}"
 
