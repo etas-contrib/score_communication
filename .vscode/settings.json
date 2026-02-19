@@ -1,0 +1,17 @@
+{
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "score/mw/log/configuration/**/*config.json",
+                "score/json/examples/logging.json"
+            ],
+            "url": "./score/mw/log/configuration/schema/logging_schema.json"
+        },
+        {
+            "fileMatch": [
+                "score/mw/log/configuration/**/*class-id*.json",
+            ],
+            "url": "./score/mw/log/configuration/schema/class_id_logging_schema.json"
+        }
+    ]
+}

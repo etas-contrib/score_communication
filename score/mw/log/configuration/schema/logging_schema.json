@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "mw::log Configuration",
+  "description": "Schema for the mw::log logging configuration files (ecu_logging_config.json / logging.json).",
+  "type": "object",
+  "properties": {
+    "ecuId": {
+      "type": "string",
+      "description": "4-character identifier for the ECU.",
+      "minLength": 4,
+      "maxLength": 4
+    },
+    "appId": {
+      "type": "string",
+      "description": "4-character identifier for the application.",
+      "minLength": 4,
+      "maxLength": 4
+    },
+    "appDesc": {
+      "type": "string",
+      "description": "Description of the application."
+    },
+    "logMode": {
+      "description": "Logging mode(s)",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/logModeValue"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/logModeValue"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      ],
+      "default": "kRemote"
+    },
+    "logFilePath": {
+      "type": "string",
+      "description": "Directory path for file logging. Used when logMode includes \"kFile\". The log file <appId>.dlt will be created in this directory."
+    },
+    "logLevel": {
+      "$ref": "#/definitions/logLevel",
+      "description": "Global log level threshold for the application. Default: \"kWarn\".",
+      "default": "kWarn"
+    },
+    "logLevelThresholdConsole": {
+      "$ref": "#/definitions/logLevel",
+      "description": "Console-specific log level filter."
+    },
+    "contextConfigs": {
+      "type":"array",
+      "markdownDescription": "Context-specific log level overrides. Each item has a `name` context identifier and defines the log level for that context. This overrides the global logLevel threshold for the specified context.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Context identifier",
+            "type": "string"
+          },
+          "logLevel": {
+            "$ref": "#/definitions/logLevel",
+            "description": "Log level override for this specific context."
+          }
+        },
+        "required": ["logLevel", "name"],
+        "additionalProperties": false
+      }
+    },
+    "stackBufferSize": {
+      "type": "integer",
+      "description": "Size of the linear buffer.",
+      "minimum": 1
+    },
+    "ringBufferSize": {
+      "type": "integer",
+      "description": "Size of the ring buffer for data sent to the datarouter",
+      "minimum": 1
+    },
+    "overwriteOnFull": {
+      "type": "boolean",
+      "description": "Defines the ring buffer write strategy.",
+      "default": true
+    },
+    "numberOfSlots": {
+      "type": "integer",
+      "description": "Number of slots in the CircularBuffer used by mw::log",
+      "minimum": 1,
+      "default": 8
+    },
+    "slotSizeBytes": {
+      "type": "integer",
+      "description": "Size of a single slot in bytes.",
+      "minimum": 1,
+      "default": 2048
+    },
+    "datarouterUid": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295,
+      "default": 1038
+    },
+    "dynamicDatarouterIdentifiers": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "logModeValue": {
+      "type": "string",
+      "markdownDescription": "Log destination. Multiple modes can be defined simultaneously. e.g. logging to the file and console is possible in parallel with `\"logMode\": \"kFile|kConsole\"`",
+      "pattern": "^k(Remote|File|Console|System|Custom|Invalid)(\\|k(Remote|File|Console|System|Custom|Invalid))*$"
+    },
+    "logLevel": {
+      "type": "string",
+      "markdownDescription": "Log severity level. kWarning is accepted as an alias for kWarn log level",
+      "enum": [
+        "kOff",
+        "kFatal",
+        "kError",
+        "kWarning",
+        "kWarn",
+        "kInfo",
+        "kDebug",
+        "kVerbose"
+      ]
+    }
+  }
+}
+ 
