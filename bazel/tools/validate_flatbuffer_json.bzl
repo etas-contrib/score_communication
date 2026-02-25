@@ -115,13 +115,13 @@ validate_json_flatbuffer_test = rule(
         validate_json_flatbuffer_test(
             name = "valid_config_test",
             json = "valid_config.json",
-            schema = "ara_com_config.fbs",
+            schema = "mw_com_config.fbs",
         )
         
         validate_json_flatbuffer_test(
             name = "invalid_config_test",
             json = "invalid_config.json",
-            schema = "ara_com_config.fbs",
+            schema = "mw_com_config.fbs",
             expected_failure = True,
         )
     """,

@@ -19,7 +19,7 @@ load("//score/mw:common_features.bzl", "COMPILER_WARNING_FEATURES")
 
 exports_files(
     [
-        "ara_com_config.fbs",
+        "mw_com_config.fbs",
     ],
     visibility = [
         "//bazel/tools:__pkg__",
@@ -31,9 +31,9 @@ exports_files(
 # Generate C++ header from FlatBuffer schema
 genrule(
     name = "generate_com_flatbuffer_headers",
-    srcs = ["ara_com_config.fbs"],
-    outs = ["ara_com_config_generated.h"],
-    cmd = "$(location @flatbuffers//:flatc) --cpp --scoped-enums -o $(@D) $(location ara_com_config.fbs)",
+    srcs = ["mw_com_config.fbs"],
+    outs = ["mw_com_config_generated.h"],
+    cmd = "$(location @flatbuffers//:flatc) --cpp --scoped-enums -o $(@D) $(location mw_com_config.fbs)",
     tools = ["@flatbuffers//:flatc"],
 )
 
@@ -810,56 +810,56 @@ filegroup(
 )
 
 filegroup(
-    name = "ara_com_config_flatbuffer_conform.json",
-    srcs = ["example/ara_com_config_flatbuffer_conform.json"],
+    name = "mw_com_config_flatbuffer_conform.json",
+    srcs = ["example/mw_com_config_flatbuffer_conform.json"],
     visibility = ["//visibility:public"],
 )
 
 generate_com_config(
-    name = "ara_com_config.bin",
-    json = "example/ara_com_config.json",
+    name = "mw_com_config.bin",
+    json = "example/mw_com_config.json",
     convert = True,
     visibility = ["//visibility:public"],
 )
 
 generate_com_config(
-    name = "ara_com_config_other.bin",
-    json = "example/ara_com_config_other.json",
+    name = "mw_com_config_other.bin",
+    json = "example/mw_com_config_other.json",
     convert = True,
     visibility = ["//visibility:public"],
 )
 
 generate_com_config(
-    name = "ara_com_config_invalid_trace_config_path.bin",
-    json = "example/ara_com_config_invalid_trace_config_path.json",
+    name = "mw_com_config_invalid_trace_config_path.bin",
+    json = "example/mw_com_config_invalid_trace_config_path.json",
     convert = True,
     visibility = ["//visibility:public"],
 )
 
 generate_com_config(
-    name = "ara_com_config_disabled_trace_config.bin",
-    json = "example/ara_com_config_disabled_trace_config.json",
+    name = "mw_com_config_disabled_trace_config.bin",
+    json = "example/mw_com_config_disabled_trace_config.json",
     convert = True,
     visibility = ["//visibility:public"],
 )
 
 generate_com_config(
-    name = "ara_com_config_valid_trace_config.bin",
-    json = "example/ara_com_config_valid_trace_config.json",
+    name = "mw_com_config_valid_trace_config.bin",
+    json = "example/mw_com_config_valid_trace_config.json",
     convert = True,
     visibility = ["//visibility:public"],
 )
 
 generate_com_config(
-    name = "ara_com_config_valid_trace_config_external.bin",
-    json = "example/ara_com_config_valid_trace_config_external.json",
+    name = "mw_com_config_valid_trace_config_external.bin",
+    json = "example/mw_com_config_valid_trace_config_external.json",
     convert = True,
     visibility = ["//visibility:public"],
 )
 
 generate_com_config(
-    name = "ara_com_config_flatbuffer_conform.bin",
-    json = "example/ara_com_config_flatbuffer_conform.json",
+    name = "mw_com_config_flatbuffer_conform.bin",
+    json = "example/mw_com_config_flatbuffer_conform.json",
     convert = False,
     visibility = ["//visibility:public"],
 )

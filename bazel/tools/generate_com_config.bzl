@@ -14,7 +14,7 @@ def generate_com_config(name, json, convert, visibility = None):
     before compiling to FlatBuffer binary format.
 
     The schema is hardcoded to the COM FlatBuffer schema at:
-    //score/mw/com/impl/configuration:ara_com_config.fbs
+    //score/mw/com/impl/configuration:mw_com_config.fbs
 
     The output .bin file will be generated in the same directory path as the
     input JSON file to match the filegroup behavior for JSON files.
@@ -29,7 +29,7 @@ def generate_com_config(name, json, convert, visibility = None):
 
     Outputs:
         A .bin file in the same directory as the input JSON
-        Example: "example/ara_com_config.json" -> "example/ara_com_config.bin"
+        Example: "example/mw_com_config.json" -> "example/mw_com_config.bin"
 
     Example:
         generate_com_config(
@@ -41,7 +41,7 @@ def generate_com_config(name, json, convert, visibility = None):
     """
 
     # Always use the COM FlatBuffer schema
-    schema = "//score/mw/com/impl/configuration:ara_com_config.fbs"
+    schema = "//score/mw/com/impl/configuration:mw_com_config.fbs"
 
     # Extract base filepath and filename (remove .json extension if present)
     if json.endswith(".json"):

@@ -138,7 +138,7 @@ validate_json_flatbuffer_test(
     name = "flatbuffer_invalid_json_consumer_name",
     expected_failure = True,
     json = "invalid_json_consumer_name.json",
-    schema = "//score/mw/com/impl/configuration:ara_com_config.fbs",
+    schema = "//score/mw/com/impl/configuration:mw_com_config.fbs",
     tags = ["lint"],
 )
 
@@ -146,7 +146,7 @@ validate_json_flatbuffer_test(
     name = "flatbuffer_invalid_json_provider_name",
     expected_failure = True,
     json = "invalid_json_provider_name.json",
-    schema = "//score/mw/com/impl/configuration:ara_com_config.fbs",
+    schema = "//score/mw/com/impl/configuration:mw_com_config.fbs",
     tags = ["lint"],
 )
 
@@ -154,7 +154,7 @@ validate_json_flatbuffer_test(
     name = "flatbuffer_invalid_json_permission_check_value",
     expected_failure = True,
     json = "invalid_json_unknown_permission_check_value.json",
-    schema = "//score/mw/com/impl/configuration:ara_com_config.fbs",
+    schema = "//score/mw/com/impl/configuration:mw_com_config.fbs",
     tags = ["lint"],
 )
 
@@ -162,7 +162,7 @@ validate_json_flatbuffer_test(
     name = "flatbuffer_invalid_json_incomplete_service_type",
     expected_failure = True,
     json = "invalid_json_incomplete_service_type.json",
-    schema = "//score/mw/com/impl/configuration:ara_com_config.fbs",
+    schema = "//score/mw/com/impl/configuration:mw_com_config.fbs",
     tags = ["lint"],
 )
 
@@ -170,7 +170,7 @@ validate_json_flatbuffer_test(
     name = "flatbuffer_invalid_json_incomplete_binding",
     expected_failure = True,
     json = "invalid_json_incomplete_binding.json",
-    schema = "//score/mw/com/impl/configuration:ara_com_config.fbs",
+    schema = "//score/mw/com/impl/configuration:mw_com_config.fbs",
     tags = ["lint"],
 )
 
@@ -178,7 +178,7 @@ validate_json_flatbuffer_test(
     name = "flatbuffer_invalid_json_incomplete_event",
     expected_failure = True,
     json = "invalid_json_incomplete_event.json",
-    schema = "//score/mw/com/impl/configuration:ara_com_config.fbs",
+    schema = "//score/mw/com/impl/configuration:mw_com_config.fbs",
     tags = ["lint"],
 )
 
@@ -186,7 +186,7 @@ validate_json_flatbuffer_test(
     name = "flatbuffer_invalid_json_incomplete_field",
     expected_failure = True,
     json = "invalid_json_incomplete_field.json",
-    schema = "//score/mw/com/impl/configuration:ara_com_config.fbs",
+    schema = "//score/mw/com/impl/configuration:mw_com_config.fbs",
     tags = ["lint"],
 )
 
@@ -194,7 +194,7 @@ validate_json_flatbuffer_test(
     name = "flatbuffer_invalid_json_incomplete_service_instance",
     expected_failure = True,
     json = "invalid_json_incomplete_service_instance.json",
-    schema = "//score/mw/com/impl/configuration:ara_com_config.fbs",
+    schema = "//score/mw/com/impl/configuration:mw_com_config.fbs",
     tags = ["lint"],
 )
 
@@ -202,7 +202,7 @@ validate_json_flatbuffer_test(
     name = "flatbuffer_invalid_json_incomplete_instance",
     expected_failure = True,
     json = "invalid_json_incomplete_instance.json",
-    schema = "//score/mw/com/impl/configuration:ara_com_config.fbs",
+    schema = "//score/mw/com/impl/configuration:mw_com_config.fbs",
     tags = ["lint"],
 )
 
@@ -210,7 +210,7 @@ validate_json_flatbuffer_test(
     name = "flatbuffer_invalid_json_incomplete_instance_event",
     expected_failure = True,
     json = "invalid_json_incomplete_instance_event.json",
-    schema = "//score/mw/com/impl/configuration:ara_com_config.fbs",
+    schema = "//score/mw/com/impl/configuration:mw_com_config.fbs",
     tags = ["lint"],
 )
 
@@ -218,6 +218,6 @@ validate_json_flatbuffer_test(
     name = "flatbuffer_invalid_json_incomplete_instance_field",
     expected_failure = True,
     json = "invalid_json_incomplete_instance_field.json",
-    schema = "//score/mw/com/impl/configuration:ara_com_config.fbs",
+    schema = "//score/mw/com/impl/configuration:mw_com_config.fbs",
     tags = ["lint"],
 )
