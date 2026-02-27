@@ -33,6 +33,7 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <variant>
 #include <vector>
 
 namespace score::mw::com::impl::configuration
@@ -377,7 +378,7 @@ Configuration::ServiceTypeDeployments FlatBufferConfigLoader::CreateServiceTypes
             }
         }
 
-        if (binding_info == score::cpp::blank{})
+        if (std::holds_alternative<score::cpp::blank>(binding_info))
         {
             ::score::mw::log::LogFatal("lola")
                 << "No SHM binding found for Service Type: " << service_identifier.ToString();
