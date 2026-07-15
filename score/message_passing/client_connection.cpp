@@ -19,6 +19,8 @@
 
 #include <score/utility.hpp>
 
+#include <algorithm>
+#include <chrono>
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
@@ -63,6 +65,7 @@ ClientConnection::ClientConnection(std::shared_ptr<ISharedResourceEngine> engine
       send_pool_{},
       send_queue_{},
       waiting_for_reply_{},
+      reply_owner_{nullptr},
       connection_timer_{},
       disconnection_command_{},
       async_send_command_{},
@@ -95,7 +98,9 @@ ClientConnection::~ClientConnection() noexcept
     send_pool_.clear();
 }
 
-bool ClientConnection::TryQueueMessage(score::cpp::span<const std::uint8_t> message, ReplyCallback callback) noexcept
+bool ClientConnection::TryQueueMessage(score::cpp::span<const std::uint8_t> message,
+                                       ReplyCallback callback,
+                                       const void* const owner) noexcept
 {
     if (send_pool_.empty())
     {
@@ -105,6 +110,7 @@ bool ClientConnection::TryQueueMessage(score::cpp::span<const std::uint8_t> mess
     send_pool_.pop_front();
     send_command.message.assign(message.begin(), message.end());
     send_command.callback = std::move(callback);
+    send_command.owner = owner;
     send_queue_.push_back(send_command);
     return true;
 }
@@ -129,7 +135,7 @@ score::cpp::expected_blank<score::os::Error> ClientConnection::Send(
     {
         if (client_config_.truly_async)
         {
-            if (!TryQueueMessage(message, ReplyCallback{}))
+            if (!TryQueueMessage(message, ReplyCallback{}, nullptr))
             {
                 return score::cpp::make_unexpected(score::os::Error::createFromErrno(ENOBUFS));
             }
@@ -142,7 +148,7 @@ score::cpp::expected_blank<score::os::Error> ClientConnection::Send(
     }
     else
     {
-        if (!TryQueueMessage(message, ReplyCallback{}))
+        if (!TryQueueMessage(message, ReplyCallback{}, nullptr))
         {
             return score::cpp::make_unexpected(score::os::Error::createFromErrno(ENOBUFS));
         }
@@ -200,8 +206,9 @@ score::cpp::expected<score::cpp::span<const std::uint8_t>, score::os::Error> Cli
         // Either the callback is destructed inside the TryQueueMessage call, or it is queued and then fired only once
         // unblocking the send_condition_ while holding send_mutex_. We don't access the referenced values after
         // the send_condition_ is unblocked and we don't leave the SendWaitReply function scope before it's unblocked.
+        // The timeout path below guarantees the latter even when the reply never arrives.
         // coverity[autosar_cpp14_a5_1_4_violation]
-        if (!TryQueueMessage(message, std::move(callback)))
+        if (!TryQueueMessage(message, std::move(callback), &future))
         {
             return score::cpp::make_unexpected(score::os::Error::createFromErrno(ENOBUFS));
         }
@@ -209,6 +216,7 @@ score::cpp::expected<score::cpp::span<const std::uint8_t>, score::os::Error> Cli
     else
     {
         waiting_for_reply_ = std::move(callback);
+        reply_owner_ = &future;
         lock.unlock();
         const auto expected =
             engine_->SendProtocolMessage(client_fd_, score::cpp::to_underlying(ClientToServer::REQUEST), message);
@@ -219,6 +227,7 @@ score::cpp::expected<score::cpp::span<const std::uint8_t>, score::os::Error> Cli
             {
                 // no one managed to get into queue while we were blocking it
                 waiting_for_reply_.reset();
+                reply_owner_ = nullptr;
             }
             else
             {
@@ -229,6 +238,42 @@ score::cpp::expected<score::cpp::span<const std::uint8_t>, score::os::Error> Cli
         }
     }
     lock.unlock();
+
+    const auto reply_timeout = std::chrono::milliseconds{client_config_.reply_timeout_ms};
+    if ((reply_timeout.count() > 0) && (!future.WaitFor(reply_timeout)))
+    {
+        // The reply did not arrive in time (e.g. the server process is wedged). We cannot just return: the callback
+        // above captures this stack frame by reference, so we first have to make sure it can never be invoked.
+        lock.lock();
+        if (reply_owner_ == &future)
+        {
+            // Our request went out, but no reply arrived. Neutralize the reply slot: it has to stay occupied to keep
+            // the request/reply pairing intact if the reply arrives late; the no-op callback lets such a late reply
+            // be dropped without touching this stack frame.
+            waiting_for_reply_ = ReplyCallback{[](auto) noexcept {}};
+            reply_owner_ = nullptr;
+            lock.unlock();
+            LogError(engine_->GetLogger(), "SendWaitReply ", identifier_, " timed out waiting for reply");
+            return score::cpp::make_unexpected(score::os::Error::createFromErrno(ETIMEDOUT));
+        }
+        const auto found = std::find_if(send_queue_.begin(), send_queue_.end(), [&future](SendCommand& command) {
+            return command.owner == &future;
+        });
+        if (found != send_queue_.end())
+        {
+            // our request is still in the send queue and was never sent; withdraw it
+            SendCommand& command = *found;
+            score::cpp::ignore = send_queue_.erase(found);
+            send_pool_.push_front(command);
+            lock.unlock();
+            LogError(engine_->GetLogger(), "SendWaitReply ", identifier_, " timed out waiting to send request");
+            return score::cpp::make_unexpected(score::os::Error::createFromErrno(ETIMEDOUT));
+        }
+        // Neither in the reply slot nor in the queue: our callback is either already done (the reply raced with the
+        // timeout) or currently being invoked on another thread. Invocation takes bounded time (it only copies the
+        // reply and marks the future ready), so we can safely wait for it to finish.
+        lock.unlock();
+    }
 
     future.Wait();
     return result;
@@ -249,7 +294,7 @@ score::cpp::expected_blank<score::os::Error> ClientConnection::SendWithCallback(
     std::lock_guard<std::mutex> guard(send_mutex_);
     if (waiting_for_reply_.has_value())
     {
-        if (!TryQueueMessage(message, std::move(callback)))
+        if (!TryQueueMessage(message, std::move(callback), nullptr))
         {
             return score::cpp::make_unexpected(score::os::Error::createFromErrno(ENOBUFS));
         }
@@ -257,7 +302,7 @@ score::cpp::expected_blank<score::os::Error> ClientConnection::SendWithCallback(
     }
     if (client_config_.truly_async)
     {
-        if (!TryQueueMessage(message, std::move(callback)))
+        if (!TryQueueMessage(message, std::move(callback), nullptr))
         {
             return score::cpp::make_unexpected(score::os::Error::createFromErrno(ENOBUFS));
         }
@@ -272,6 +317,7 @@ score::cpp::expected_blank<score::os::Error> ClientConnection::SendWithCallback(
             return score::cpp::make_unexpected(expected.error());
         }
         waiting_for_reply_ = std::move(callback);
+        reply_owner_ = nullptr;
     }
     return {};
 }
@@ -367,7 +413,9 @@ void ClientConnection::TryConnect() noexcept
     {
         auto error = fd_expected.error();
         auto os_code = error.GetOsDependentErrorCode();
-        if (((os_code != EAGAIN) && (os_code != ECONNREFUSED)) && (os_code != ENOENT))
+        // ETIMEDOUT: the peer did not serve our connect in time (e.g. its dispatch thread is itself blocked
+        // towards us); retryable, as the timeout has dissolved the potential mutual blocking
+        if ((((os_code != EAGAIN) && (os_code != ECONNREFUSED)) && (os_code != ENOENT)) && (os_code != ETIMEDOUT))
         {
             LogError(logger, "TryOpenClientConnection ", identifier_, " non-retry OS error code ", os_code);
             StopReason stop_reason = (os_code == EACCES) ? StopReason::kPermission : StopReason::kIoError;
@@ -447,10 +495,12 @@ IClientConnection::StopReason ClientConnection::ProcessInputEvent() noexcept
     if (!message_expected.has_value())
     {
         auto os_code = message_expected.error().GetOsDependentErrorCode();
-        if (os_code == EAGAIN)
+        if ((os_code == EAGAIN) || (os_code == ETIMEDOUT))
         {
-            // cam happen due to notificaion intended to older connection, but shall be rare
-            LogWarn(engine_->GetLogger(), "ProcessInputEvent ", identifier_, " spurious wake-up");
+            // EAGAIN: cam happen due to notificaion intended to older connection, but shall be rare.
+            // ETIMEDOUT: the peer did not serve our read in time (e.g. its dispatch thread is itself blocked
+            // towards us); back off and let the server notification re-trigger the input event.
+            LogWarn(engine_->GetLogger(), "ProcessInputEvent ", identifier_, " spurious wake-up or busy peer");
             return StopReason::kNone;
         }
         return (os_code == EPIPE) ? StopReason::kClosedByPeer : StopReason::kIoError;
@@ -468,6 +518,7 @@ IClientConnection::StopReason ClientConnection::ProcessInputEvent() noexcept
             {
                 ReplyCallback callback = std::move(*waiting_for_reply_);
                 waiting_for_reply_.reset();
+                reply_owner_ = nullptr;
                 ProcessSendQueueUnderLock(lock);
                 lock.unlock();
                 callback(message);
@@ -504,6 +555,7 @@ void ClientConnection::ArmSendQueueUnderLock() noexcept
     // here we are temporarily blocking async_send_command_ from attempts to push it several times into the
     // queue; waiting_for_reply_ will be released in ProcessSendQueueUnderLock()
     waiting_for_reply_ = ReplyCallback{};
+    reply_owner_ = nullptr;
     engine_->EnqueueCommand(
         async_send_command_,
         ISharedResourceEngine::TimePoint{},
@@ -525,6 +577,7 @@ void ClientConnection::ProcessSendQueueUnderLock(std::unique_lock<std::mutex>& l
         if (!send.callback.empty())
         {
             waiting_for_reply_ = std::move(send.callback);
+            reply_owner_ = send.owner;
             // waiting_for_reply_ is now guaranteed to be occupied. This forces other potential fully_ordered or
             // truly_async senders to push their messages into the send_queue_. We neeed to unlock that queue
             // temporarily, as the other side of SendProtocolMessage is not under our control and it may cause
@@ -539,6 +592,7 @@ void ClientConnection::ProcessSendQueueUnderLock(std::unique_lock<std::mutex>& l
                 break;
             }
             auto callback = std::move(*waiting_for_reply_);
+            reply_owner_ = nullptr;
             // We are not releasing waiting_for_reply_ yet. This makes our life easier if the callback and/or some
             // competing thread wants to queue another message - they will just add it to the send_queue_ and we will
             // process it in the next iteration.
@@ -552,6 +606,7 @@ void ClientConnection::ProcessSendQueueUnderLock(std::unique_lock<std::mutex>& l
             // Temporarily make waiting_for_reply_ occupied to activate send_queue_ for fully_ordered or truly_async
             // senders and release the queue lock for the duration of SendProtocolMessage.
             waiting_for_reply_ = ReplyCallback{};
+            reply_owner_ = nullptr;
             lock.unlock();
             // nowhere to return the potential error
             score::cpp::ignore =
@@ -580,6 +635,7 @@ void ClientConnection::SwitchToStopState() noexcept
     {
         auto callback = std::move(*waiting_for_reply_);
         waiting_for_reply_.reset();
+        reply_owner_ = nullptr;
         lock.unlock();
         if (!callback.empty())
         {

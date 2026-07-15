@@ -13,6 +13,7 @@
 #ifndef SCORE_LIB_MESSAGE_PASSING_NON_ALLOCATING_FUTURE_NON_ALLOCATING_FUTURE_H
 #define SCORE_LIB_MESSAGE_PASSING_NON_ALLOCATING_FUTURE_NON_ALLOCATING_FUTURE_H
 
+#include <chrono>
 #include <mutex>
 #include <utility>
 #include <variant>
@@ -71,6 +72,17 @@ class NonAllocatingFuture
         });
     }
 
+    /// \brief Waits until the future is ready, but no longer than the given timeout.
+    /// \return true if the future became ready within the timeout, false otherwise
+    template <typename Rep, typename Period>
+    bool WaitFor(const std::chrono::duration<Rep, Period> timeout) noexcept
+    {
+        std::unique_lock lock{mutex_};
+        return cv_.wait_for(lock, timeout, [this]() {
+            return ready_;
+        });
+    }
+
   private:
     Lockable& mutex_;
     CV& cv_;
@@ -88,6 +100,7 @@ class NonAllocatingFuture<Lockable, CV, void> : NonAllocatingFuture<Lockable, CV
     }
     using NonAllocatingFuture<Lockable, CV, std::monostate>::MarkReady;
     using NonAllocatingFuture<Lockable, CV, std::monostate>::Wait;
+    using NonAllocatingFuture<Lockable, CV, std::monostate>::WaitFor;
 
   private:
     std::monostate blank_;

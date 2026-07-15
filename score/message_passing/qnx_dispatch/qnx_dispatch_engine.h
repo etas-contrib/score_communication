@@ -25,6 +25,7 @@
 #include "score/os/qnx/channel.h"
 #include "score/os/qnx/dispatch.h"
 #include "score/os/qnx/iofunc.h"
+#include "score/os/qnx/neutrino_impl.h"
 #include "score/os/qnx/timer_impl.h"
 #include "score/os/sys_uio.h"
 #include "score/os/unistd.h"
@@ -67,6 +68,9 @@ class QnxDispatchEngine final : public ISharedResourceEngine
         // coverity[autosar_cpp14_m11_0_1_violation]
         // coverity[autosar_cpp14_a9_6_1_violation]
         score::cpp::pmr::unique_ptr<score::os::IoFunc> iofunc{};
+        // coverity[autosar_cpp14_m11_0_1_violation]
+        // coverity[autosar_cpp14_a9_6_1_violation]
+        score::cpp::pmr::unique_ptr<score::os::qnx::Neutrino> neutrino{};
         // coverity[autosar_cpp14_m11_0_1_violation]
         // coverity[autosar_cpp14_a9_6_1_violation]
         score::cpp::pmr::unique_ptr<score::os::Signal> signal{};
@@ -186,6 +190,7 @@ class QnxDispatchEngine final : public ISharedResourceEngine
                 score::os::Dispatch::Default(memory_resource),
                 score::os::Fcntl::Default(memory_resource),
                 score::os::IoFunc::Default(memory_resource),
+                score::cpp::pmr::make_unique<score::os::qnx::NeutrinoImpl>(memory_resource),
                 score::cpp::pmr::make_unique<score::os::SignalImpl>(memory_resource),
                 score::cpp::pmr::make_unique<score::os::qnx::TimerImpl>(memory_resource),
                 score::os::SysUio::Default(memory_resource),
@@ -256,6 +261,7 @@ class QnxDispatchEngine final : public ISharedResourceEngine
 
     void SendPulseEvent(const PulseEvent pulse_event) noexcept;
     void ProcessPulseEvent(const std::int32_t pulse_event) noexcept;
+    void ArmPeerCallTimeout() noexcept;
     void ProcessCleanup(const void* const owner) noexcept;
     void RunOnThread() noexcept;
 

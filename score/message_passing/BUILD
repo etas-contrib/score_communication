@@ -232,6 +232,7 @@ cc_library(
         "@score_baselibs//score/os/qnx:channel",
         "@score_baselibs//score/os/qnx:dispatch",
         "@score_baselibs//score/os/qnx:iofunc",
+        "@score_baselibs//score/os/qnx:neutrino",
         "@score_baselibs//score/os/qnx:timer",
         "@score_baselibs//score/os/utils:signal",
     ],
@@ -309,12 +310,16 @@ cc_unit_test(
     deps = [
         ":message_passing_qnx_dispatch",
         "@score_baselibs//score/concurrency",
+        # score/os/qnx:neutrino transitively links mw/log:frontend (via score/os:sigevent);
+        # the test binary needs a recorder factory implementation to link
+        "@score_baselibs//score/mw/log:minimal",
         "@score_baselibs//score/os/mocklib:fcntl_mock",
         "@score_baselibs//score/os/mocklib:sys_uio_mock",
         "@score_baselibs//score/os/mocklib:unistd_mock",
         "@score_baselibs//score/os/mocklib/qnx:channel_mock",
         "@score_baselibs//score/os/mocklib/qnx:dispatch_mock",
         "@score_baselibs//score/os/mocklib/qnx:iofunc_mock",
+        "@score_baselibs//score/os/mocklib/qnx:neutrino_qnx_mock",
         "@score_baselibs//score/os/mocklib/qnx:timer_mock",
         "@score_baselibs//score/os/utils/mocklib:signal_mock",
     ],

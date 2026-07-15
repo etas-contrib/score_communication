@@ -55,6 +55,8 @@ class IClientFactory
         // coverity[autosar_cpp14_a9_6_1_violation : FALSE]
         bool sync_first_connect;  ///< true if the first connection attempt uses the thread on which Start() is called
                                   ///< (can lead to deadlocks if the connection is established from within a callback)
+        std::int32_t reply_timeout_ms{5000};  ///< upper bound in milliseconds for SendWaitReply to wait for the reply;
+                                              ///< 0 or negative means wait indefinitely
     };
 
     /// \brief Creates an implementation instance of IClientConnection.

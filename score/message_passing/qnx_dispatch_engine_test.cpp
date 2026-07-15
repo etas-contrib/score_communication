@@ -649,6 +649,70 @@ TEST_F(QnxDispatchEngineTestFixture, ReceiveProtocolMessageFailure)
     EXPECT_EQ(zero_read_result.error().GetOsDependentErrorCode(), EPIPE);
 }
 
+TEST_F(QnxDispatchEngineTestFixture, TryOpenClientConnectionArmsPeerCallTimeout)
+{
+    ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty("given", "QNX dispatch engine running with ``MockOs``");
+    WithEngineRunning();
+
+    constexpr std::int32_t kFakeClientFd{5};
+
+    ::testing::Test::RecordProperty("when", "``TryOpenClientConnection`` is called");
+    ::testing::Test::RecordProperty(
+        "then", "a kernel SEND/REPLY timeout is armed right before ``open`` so a wedged peer cannot block us forever");
+    {
+        InSequence is;
+        ExpectPeerCallTimeoutArmed(Exactly(1));
+        EXPECT_CALL(*fcntl_, open(_, _)).Times(1).WillOnce(Return(kFakeClientFd));
+    }
+
+    const auto fd_expected = engine_->TryOpenClientConnection("fake_path");
+    EXPECT_TRUE(fd_expected.has_value());
+    EXPECT_EQ(fd_expected.value(), kFakeClientFd);
+}
+
+TEST_F(QnxDispatchEngineTestFixture, TryOpenClientConnectionPassesThroughTimeout)
+{
+    ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty("given", "QNX dispatch engine running with ``MockOs``");
+    WithEngineRunning();
+
+    ::testing::Test::RecordProperty("when", "the bounded ``open`` towards the peer times out with ``ETIMEDOUT``");
+    EXPECT_CALL(*fcntl_, open(_, _))
+        .Times(1)
+        .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(ETIMEDOUT))));
+
+    const auto fd_expected = engine_->TryOpenClientConnection("fake_path");
+    ::testing::Test::RecordProperty("then", "``TryOpenClientConnection`` returns the retryable ``ETIMEDOUT`` error");
+    EXPECT_FALSE(fd_expected.has_value());
+    EXPECT_EQ(fd_expected.error().GetOsDependentErrorCode(), ETIMEDOUT);
+}
+
+TEST_F(QnxDispatchEngineTestFixture, ReceiveProtocolMessageArmsPeerCallTimeout)
+{
+    ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty("given", "QNX dispatch engine running with ``MockOs``");
+    WithEngineRunning();
+
+    constexpr std::int32_t kFakeFd{-1};
+    std::uint8_t code{};
+
+    ::testing::Test::RecordProperty("when", "``ReceiveProtocolMessage`` is called and ``read`` times out");
+    ::testing::Test::RecordProperty(
+        "then", "a kernel SEND/REPLY timeout is armed right before ``read`` and ``ETIMEDOUT`` is passed through");
+    {
+        InSequence is;
+        ExpectPeerCallTimeoutArmed(Exactly(1));
+        EXPECT_CALL(*unistd_, read)
+            .Times(1)
+            .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(ETIMEDOUT))));
+    }
+
+    const auto timed_out_result = engine_->ReceiveProtocolMessage(kFakeFd, code);
+    EXPECT_FALSE(timed_out_result.has_value());
+    EXPECT_EQ(timed_out_result.error().GetOsDependentErrorCode(), ETIMEDOUT);
+}
+
 TEST_F(QnxDispatchEngineTestFixture, CleanupNonOwner)
 {
     WithEngineRunning();

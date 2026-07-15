@@ -153,6 +153,25 @@ TEST_F(NonAllocatingFutureSamplesFixture, NonVoidMarkReady)
     t.join();
 }
 
+TEST_F(NonAllocatingFutureSamplesFixture, WaitForTimesOutWhenNotReadyAndSucceedsWhenReady)
+{
+    detail::NonAllocatingFuture future{mutex_, condition_};
+
+    // no one is going to mark the future ready; the bounded wait shall report a timeout
+    EXPECT_FALSE(future.WaitFor(std::chrono::milliseconds(10)));
+
+    std::thread t{[&future]() {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        future.MarkReady();
+    }};
+    // generous timeout: shall return true as soon as the future is marked ready
+    EXPECT_TRUE(future.WaitFor(std::chrono::minutes(1)));
+    t.join();
+
+    // an already ready future shall not wait at all
+    EXPECT_TRUE(future.WaitFor(std::chrono::milliseconds(0)));
+}
+
 TEST_F(NonAllocatingFutureSamplesFixture, OptionalBySignal)
 {
     // In this test, we use two instances of NonAllocatingFuture to send signals in both directions.

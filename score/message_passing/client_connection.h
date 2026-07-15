@@ -66,7 +66,9 @@ class ClientConnection final : public IClientConnection
 
   private:
     void TryConnect() noexcept;
-    bool TryQueueMessage(score::cpp::span<const std::uint8_t> message, ReplyCallback callback) noexcept;
+    bool TryQueueMessage(score::cpp::span<const std::uint8_t> message,
+                         ReplyCallback callback,
+                         const void* const owner) noexcept;
     StopReason ProcessInputEvent() noexcept;
 
     // The lock shall be already taken.
@@ -124,18 +126,23 @@ class ClientConnection final : public IClientConnection
       public:
         using allocator_type = score::cpp::pmr::polymorphic_allocator<SendCommand>;
         explicit SendCommand(const allocator_type& allocator)
-            : score::containers::intrusive_list_element<>{}, message(allocator), callback{}
+            : score::containers::intrusive_list_element<>{}, message(allocator), callback{}, owner{nullptr}
         {
         }
 
         score::cpp::pmr::vector<std::uint8_t> message;
         ReplyCallback callback;
+        const void* owner;  ///< identifies the waiter that queued the command (see reply_owner_); may be nullptr
     };
     score::cpp::pmr::vector<SendCommand> send_storage_;
     score::containers::intrusive_list<SendCommand> send_pool_;
     score::containers::intrusive_list<SendCommand> send_queue_;
 
     std::optional<ReplyCallback> waiting_for_reply_;
+    // Identifies the SendWaitReply waiter whose (not yet invoked) callback currently occupies waiting_for_reply_;
+    // nullptr for internal or SendWithCallback callbacks. Guarded by send_mutex_. It allows a timed-out SendWaitReply
+    // to find and neutralize its own callback, so that a late reply cannot touch the waiter's dead stack frame.
+    const void* reply_owner_;
 
     ISharedResourceEngine::CommandQueueEntry connection_timer_;
     ISharedResourceEngine::CommandQueueEntry disconnection_command_;

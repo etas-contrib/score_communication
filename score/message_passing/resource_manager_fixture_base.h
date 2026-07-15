@@ -22,11 +22,15 @@
 #include "score/os/mocklib/qnx/mock_dispatch.h"
 #include "score/os/mocklib/qnx/mock_iofunc.h"
 #include "score/os/mocklib/qnx/mock_timer.h"
+#include "score/os/mocklib/qnx/neutrino_qnx_mock.h"
 #include "score/os/mocklib/sys_uio_mock.h"
 #include "score/os/mocklib/unistdmock.h"
 #include "score/os/utils/mocklib/signalmock.h"
 
+#include <chrono>
 #include <future>
+#include <optional>
+#include <tuple>
 #include <unordered_map>
 
 #include <gmock/gmock.h>
@@ -451,10 +455,12 @@ class ResourceManagerFixtureBase : public ::testing::Test
         SetupResource(dispatch_);
         SetupResource(fcntl_);
         SetupResource(iofunc_);
+        SetupResource(neutrino_);
         SetupResource(signal_);
         SetupResource(timer_);
         SetupResource(sysuio_);
         SetupResource(unistd_);
+        ExpectPeerCallTimeoutsArmed();
     }
 
     void TearDown() override
@@ -471,10 +477,45 @@ class ResourceManagerFixtureBase : public ::testing::Test
                 dispatch_.MoveOwnership(),
                 fcntl_.MoveOwnership(),
                 iofunc_.MoveOwnership(),
+                neutrino_.MoveOwnership(),
                 signal_.MoveOwnership(),
                 timer_.MoveOwnership(),
                 sysuio_.MoveOwnership(),
                 unistd_.MoveOwnership()};
+    }
+
+    /// Matches the (deprecated, null-sigevent) TimerTimeout overload used by ArmPeerCallTimeout()
+    static auto PeerCallTimeoutMatcher()
+    {
+        using namespace testing;
+        using Neutrino = score::os::qnx::Neutrino;
+        return std::make_tuple(Neutrino::ClockType::kMonotonic,
+                               Neutrino::TimerTimeoutFlag::kSend | Neutrino::TimerTimeoutFlag::kReply,
+                               Matcher<const sigevent*>(IsNull()),
+                               Matcher<const std::chrono::nanoseconds&>(_),
+                               Matcher<std::optional<std::chrono::nanoseconds>>(_));
+    }
+
+    /// By default, allow peer call timeouts to be armed any number of times; individual tests can
+    /// add stricter expectations on top
+    void ExpectPeerCallTimeoutsArmed()
+    {
+        ExpectPeerCallTimeoutArmed(testing::AnyNumber());
+    }
+
+    /// Expects ArmPeerCallTimeout() to arm the kernel timeout the given number of times
+    void ExpectPeerCallTimeoutArmed(const testing::Cardinality cardinality)
+    {
+        using namespace testing;
+        const auto matchers = PeerCallTimeoutMatcher();
+        EXPECT_CALL(*neutrino_,
+                    TimerTimeout(std::get<0>(matchers),
+                                 std::get<1>(matchers),
+                                 std::get<2>(matchers),
+                                 std::get<3>(matchers),
+                                 std::get<4>(matchers)))
+            .Times(cardinality)
+            .WillRepeatedly(Return(0));
     }
 
     void ExpectEngineConstructed()
@@ -583,6 +624,7 @@ class ResourceManagerFixtureBase : public ::testing::Test
     mock_ptr<score::os::MockDispatch> dispatch_;
     mock_ptr<score::os::FcntlMock> fcntl_;
     mock_ptr<score::os::MockIoFunc> iofunc_;
+    mock_ptr<score::os::qnx::NeutrinoMock> neutrino_;
     mock_ptr<score::os::SignalMock> signal_;
     mock_ptr<score::os::qnx::MockTimer> timer_;
     mock_ptr<score::os::SysUioMock> sysuio_;

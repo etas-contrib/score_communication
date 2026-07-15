@@ -16,6 +16,7 @@
 #include "score/message_passing/non_allocating_future/non_allocating_future.h"
 #include "score/message_passing/qnx_dispatch/qnx_resource_path.h"
 
+#include <chrono>
 #include <iostream>
 
 #include <sys/siginfo.h>
@@ -46,6 +47,14 @@ constexpr std::uint16_t kIomgrStickySelect = _IOMGR_PRIVATE_BASE;
 // Pulse signals from server to client that we have...
 constexpr std::uint16_t kSignalNewData = 0U;  // new protocol message to read
 constexpr std::uint16_t kSignalPing = 1U;     // ping to react on
+
+// Both open() on a peer's resource manager path and read() on a client fd are MsgSends that can only be served by
+// the peer process's dispatch thread. When two processes perform such calls towards each other from their own
+// dispatch threads simultaneously, both threads become SEND-blocked on each other forever (circular wait).
+// Bounding the kernel blocking states of these calls dissolves the circular wait; the resulting ETIMEDOUT is
+// treated as retryable by ClientConnection.
+// coverity[autosar_cpp14_a0_1_1_violation] false-positive: used in ArmPeerCallTimeout
+constexpr std::chrono::nanoseconds kPeerCallTimeout{std::chrono::milliseconds{100}};
 
 template <typename T>
 // Suppress "AUTOSAR C++14 A9-5-1" rule finding: "Unions shall not be used.".
@@ -348,11 +357,33 @@ QnxDispatchEngine::~QnxDispatchEngine() noexcept
     os_resources_.dispatch->dispatch_context_free(context_pointer_);
 }
 
+// Arms a one-shot kernel timeout for the SEND/REPLY blocking states of the next kernel call on the calling thread,
+// so that a kernel call served by a wedged or busy peer process unblocks with ETIMEDOUT instead of blocking forever.
+void QnxDispatchEngine::ArmPeerCallTimeout() noexcept
+{
+    // The non-deprecated TimerTimeout overload cannot be used here: it rejects a null sigevent, while the
+    // unblock-with-ETIMEDOUT semantics requires exactly that, and it would heap-allocate on every call.
+    // Suppress "-Wdeprecated-declarations" for this single call.
+    // Suppress "AUTOSAR C++14 A16-7-1" rule finding: "The #pragma directive shall not be used.". See above.
+    // coverity[autosar_cpp14_a16_7_1_violation]
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    score::cpp::ignore = os_resources_.neutrino->TimerTimeout(
+        score::os::qnx::Neutrino::ClockType::kMonotonic,
+        score::os::qnx::Neutrino::TimerTimeoutFlag::kSend | score::os::qnx::Neutrino::TimerTimeoutFlag::kReply,
+        static_cast<const sigevent*>(nullptr),
+        kPeerCallTimeout);
+    // coverity[autosar_cpp14_a16_7_1_violation]
+#pragma GCC diagnostic pop
+}
+
 // coverity[autosar_cpp14_m7_3_1_violation] false-positive: class method (Ticket-234468)
 score::cpp::expected<std::int32_t, score::os::Error> QnxDispatchEngine::TryOpenClientConnection(
     std::string_view identifier) noexcept
 {
     const detail::QnxResourcePath path{identifier};
+    // open() on the peer's resource manager path is served by the peer's dispatch thread; see kPeerCallTimeout
+    ArmPeerCallTimeout();
     // NOLINTNEXTLINE(score-banned-function) implementing FFI wrapper
     return os_resources_.fcntl->open(path.c_str(),
                                      score::os::Fcntl::Open::kReadWrite | score::os::Fcntl::Open::kCloseOnExec);
@@ -561,6 +592,8 @@ score::cpp::expected<score::cpp::span<const std::uint8_t>, score::os::Error> Qnx
     const std::int32_t fd,
     std::uint8_t& code) noexcept
 {
+    // read() on the client fd is served by the peer's dispatch thread; see kPeerCallTimeout
+    ArmPeerCallTimeout();
     // NOLINTNEXTLINE(score-banned-function) implementing FFI wrapper
     auto size_expected = os_resources_.unistd->read(fd, posix_receive_buffer_.data(), posix_receive_buffer_.size());
     if (!size_expected.has_value())

@@ -40,6 +40,10 @@ class MockCV
   public:
     MOCK_METHOD(void, notify_all, (), ());
     MOCK_METHOD(void, wait, (std::unique_lock<StrictMock<MockMutex>>&, std::function<bool()>), ());
+    MOCK_METHOD(bool,
+                wait_for,
+                (std::unique_lock<StrictMock<MockMutex>>&, std::chrono::nanoseconds, std::function<bool()>),
+                ());
 };
 
 class NonAllocatingFutureTestFixture : public ::testing::Test
@@ -186,6 +190,51 @@ TEST_F(NonAllocatingFutureTestFixture, WaitWithChangedReadyCallsCvWithCorrectMut
     future.Wait();
     future.MarkReady();
     future.Wait();
+}
+
+TEST_F(NonAllocatingFutureTestFixture, WaitForWithoutReadyCallsCvWithCorrectMutexTimeoutAndFalsePredicate)
+{
+    InSequence is;
+
+    constexpr std::chrono::milliseconds kTimeout{25};
+
+    // WaitFor Not Ready
+    EXPECT_CALL(mutex_, lock()).Times(1);
+    EXPECT_CALL(condition_, wait_for(_, _, _))
+        .Times(1)
+        .WillOnce([this, kTimeout](auto&& lock, auto&& timeout, auto&& predicate) {
+            EXPECT_EQ(lock.mutex(), &mutex_);
+            EXPECT_EQ(timeout, kTimeout);
+            EXPECT_EQ(predicate(), false);
+            return predicate();
+        });
+    EXPECT_CALL(mutex_, unlock()).Times(1);
+
+    detail::NonAllocatingFuture future{mutex_, condition_};
+    EXPECT_FALSE(future.WaitFor(kTimeout));
+}
+
+TEST_F(NonAllocatingFutureTestFixture, WaitForWithReadyCallsCvWithCorrectMutexAndTruePredicate)
+{
+    InSequence is;
+
+    // Ready
+    EXPECT_CALL(mutex_, lock()).Times(1);
+    EXPECT_CALL(condition_, notify_all()).Times(1);
+    EXPECT_CALL(mutex_, unlock()).Times(1);
+
+    // WaitFor Ready
+    EXPECT_CALL(mutex_, lock()).Times(1);
+    EXPECT_CALL(condition_, wait_for(_, _, _)).Times(1).WillOnce([this](auto&& lock, auto&&, auto&& predicate) {
+        EXPECT_EQ(lock.mutex(), &mutex_);
+        EXPECT_EQ(predicate(), true);
+        return predicate();
+    });
+    EXPECT_CALL(mutex_, unlock()).Times(1);
+
+    detail::NonAllocatingFuture future{mutex_, condition_};
+    future.MarkReady();
+    EXPECT_TRUE(future.WaitFor(std::chrono::milliseconds{25}));
 }
 
 }  // namespace

@@ -606,6 +606,47 @@ TEST_F(ClientConnectionTest, SuccessfullyConnectingAtFirstAttemptThenSpuriousRea
     StopCurrentConnection(connection);
 }
 
+TEST_F(ClientConnectionTest, TryingToConnectRetriesAfterTimedOutConnect)
+{
+    ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty("given", "client connection whose connect attempt times out towards a busy peer");
+    detail::ClientConnection connection(engine_, protocol_config_, client_config_);
+
+    CatchImmediateConnectCommand();
+    connection.Start(IClientConnection::StateCallback(), IClientConnection::NotifyCallback());
+    EXPECT_EQ(connection.GetState(), State::kStarting);
+
+    ::testing::Test::RecordProperty("when", "``TryOpenClientConnection`` returns ``ETIMEDOUT``");
+    AtTryOpenCall_Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(ETIMEDOUT)));
+    CatchTimedConnectCommand();
+    InvokeConnectCommand();
+    ::testing::Test::RecordProperty("then", "connection keeps retrying and succeeds on the next attempt");
+    EXPECT_EQ(connection.GetState(), State::kStarting);
+
+    AtTryOpenCall_Return(kValidFd);
+    CatchPosixEndpointRegistration();
+    InvokeConnectCommand();
+    EXPECT_EQ(connection.GetState(), State::kReady);
+
+    StopCurrentConnection(connection);
+}
+
+TEST_F(ClientConnectionTest, SuccessfullyConnectingAtFirstAttemptThenTimedOutReadGetsIgnored)
+{
+    ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty("given", "client connection established successfully");
+    detail::ClientConnection connection(engine_, protocol_config_, client_config_);
+    MakeSuccessfulConnection(connection);
+
+    ::testing::Test::RecordProperty("when", "protocol receive returns ``ETIMEDOUT`` (busy peer)");
+    AtProtocolReceive_Return(0, score::cpp::make_unexpected(score::os::Error::createFromErrno(ETIMEDOUT)));
+    InvokeEndpointInput();
+    ::testing::Test::RecordProperty("then", "connection remains in ``kReady`` state");
+    EXPECT_EQ(connection.GetState(), State::kReady);
+
+    StopCurrentConnection(connection);
+}
+
 TEST_F(ClientConnectionTest, NotConnectedSendNotReady)
 {
     ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.SendBufferArgumentValidation");
@@ -928,6 +969,140 @@ TEST_F(ClientConnectionTest, SendWaitReplyFailsWhenReceiveTooLong)
     ::testing::Test::RecordProperty("then", "``SendWaitReply`` returns ``EMSGSIZE``");
     EXPECT_FALSE(send_wait_reply_result);
     EXPECT_EQ(send_wait_reply_result.error().GetOsDependentErrorCode(), EMSGSIZE);
+
+    StopCurrentConnection(connection);
+}
+
+TEST_F(ClientConnectionTest, SendWaitReplyTimesOutWhenReplyNeverArrivesThenRecovers)
+{
+    ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty("given",
+                                    "client connection established with a finite ``reply_timeout_ms`` and a server "
+                                    "that does not reply in time");
+    client_config_.reply_timeout_ms = 50;
+    detail::ClientConnection connection(engine_, protocol_config_, client_config_);
+    MakeSuccessfulConnection(connection);
+
+    std::array<std::uint8_t, kMaxSendSize> send_buffer;
+    std::array<std::uint8_t, kMaxReplySize> reply_buffer;
+
+    ::testing::Test::RecordProperty("when",
+                                    "``SendWaitReply`` sends the request but no reply arrives within the bound");
+    EXPECT_CALL(*engine_, SendProtocolMessage).Times(1);
+
+    const auto send_wait_reply_result = connection.SendWaitReply(send_buffer, reply_buffer);
+    ::testing::Test::RecordProperty("then",
+                                    "``SendWaitReply`` returns ``ETIMEDOUT``; the late reply is dropped harmlessly and "
+                                    "the next ``SendWaitReply`` works again");
+    EXPECT_FALSE(send_wait_reply_result);
+    EXPECT_EQ(send_wait_reply_result.error().GetOsDependentErrorCode(), ETIMEDOUT);
+    EXPECT_EQ(connection.GetState(), State::kReady);
+
+    // the late reply to the timed-out request is consumed by the neutralized reply slot
+    AtProtocolReceive_Return(score::cpp::to_underlying(detail::ServerToClient::REPLY), {});
+    InvokeEndpointInput();
+    EXPECT_EQ(connection.GetState(), State::kReady);
+
+    // the connection is fully usable again: a new request round-trip succeeds
+    const std::array<std::uint8_t, 2U> reply_message{42U, 43U};
+    EXPECT_CALL(*engine_, SendProtocolMessage).WillOnce([&](auto&&...) {
+        AtProtocolReceive_Return(score::cpp::to_underlying(detail::ServerToClient::REPLY), reply_message);
+        InvokeEndpointInput();
+        return score::cpp::blank{};
+    });
+
+    const auto second_result = connection.SendWaitReply(send_buffer, reply_buffer);
+    EXPECT_TRUE(second_result);
+    EXPECT_EQ(second_result.value().size(), reply_message.size());
+    EXPECT_EQ(reply_buffer[0], 42U);
+    EXPECT_EQ(reply_buffer[1], 43U);
+
+    StopCurrentConnection(connection);
+}
+
+TEST_F(ClientConnectionTest, SendWaitReplyTimesOutWhileStillQueued)
+{
+    ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty(
+        "given",
+        "client connection with the reply slot occupied by a pending ``SendWithCallback`` and a finite "
+        "``reply_timeout_ms``");
+    client_config_.reply_timeout_ms = 50;
+    detail::ClientConnection connection(engine_, protocol_config_, client_config_);
+    MakeSuccessfulConnection(connection);
+
+    std::array<std::uint8_t, kMaxSendSize> send_buffer;
+    std::array<std::uint8_t, kMaxReplySize> reply_buffer;
+
+    // only the SendWithCallback request goes out; the queued SendWaitReply request is withdrawn on timeout
+    EXPECT_CALL(*engine_, SendProtocolMessage).Times(1);
+
+    std::uint32_t callback_counter{0U};
+    auto send_with_callback_result = connection.SendWithCallback(send_buffer, [&callback_counter](auto&&) {
+        ++callback_counter;
+    });
+    EXPECT_TRUE(send_with_callback_result);
+
+    ::testing::Test::RecordProperty("when", "``SendWaitReply`` gets queued behind it and the reply never arrives");
+    const auto send_wait_reply_result = connection.SendWaitReply(send_buffer, reply_buffer);
+    ::testing::Test::RecordProperty(
+        "then", "``SendWaitReply`` returns ``ETIMEDOUT`` and its queued request is withdrawn without being sent");
+    EXPECT_FALSE(send_wait_reply_result);
+    EXPECT_EQ(send_wait_reply_result.error().GetOsDependentErrorCode(), ETIMEDOUT);
+    EXPECT_EQ(connection.GetState(), State::kReady);
+
+    // the reply to the SendWithCallback request still reaches its callback; nothing is sent afterwards
+    AtProtocolReceive_Return(score::cpp::to_underlying(detail::ServerToClient::REPLY), {});
+    InvokeEndpointInput();
+    EXPECT_EQ(callback_counter, 1U);
+    EXPECT_EQ(connection.GetState(), State::kReady);
+
+    StopCurrentConnection(connection);
+}
+
+TEST_F(ClientConnectionTest, SendWaitReplySucceedsWhenReplyRacesWithTimeout)
+{
+    ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty("given",
+                                    "client connection established with a finite ``reply_timeout_ms`` and a reply "
+                                    "arriving around the timeout deadline");
+    client_config_.reply_timeout_ms = 50;
+    detail::ClientConnection connection(engine_, protocol_config_, client_config_);
+    MakeSuccessfulConnection(connection);
+
+    std::array<std::uint8_t, kMaxSendSize> send_buffer;
+    std::array<std::uint8_t, kMaxReplySize> reply_buffer;
+
+    const std::array<std::uint8_t, 1U> reply_message{7U};
+    std::promise<void> request_sent;
+    EXPECT_CALL(*engine_, SendProtocolMessage).WillOnce([&request_sent](auto&&...) {
+        request_sent.set_value();
+        return score::cpp::blank{};
+    });
+    AtProtocolReceive_Return(score::cpp::to_underlying(detail::ServerToClient::REPLY), reply_message);
+
+    ::testing::Test::RecordProperty("when", "the reply is delivered from another thread close to the deadline");
+    background_thread_ = std::thread([&]() {
+        request_sent.get_future().wait();
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        InvokeEndpointInput();
+    });
+
+    const auto send_wait_reply_result = connection.SendWaitReply(send_buffer, reply_buffer);
+    background_thread_.join();
+    ::testing::Test::RecordProperty("then",
+                                    "``SendWaitReply`` either succeeds or reports ``ETIMEDOUT``, but never hangs");
+    if (send_wait_reply_result.has_value())
+    {
+        EXPECT_EQ(send_wait_reply_result.value().size(), reply_message.size());
+        EXPECT_EQ(reply_buffer[0], 7U);
+    }
+    else
+    {
+        EXPECT_EQ(send_wait_reply_result.error().GetOsDependentErrorCode(), ETIMEDOUT);
+        // the late(r) reply has been consumed by the neutralized slot; connection stays usable
+    }
+    EXPECT_EQ(connection.GetState(), State::kReady);
 
     StopCurrentConnection(connection);
 }
