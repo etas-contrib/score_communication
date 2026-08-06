@@ -244,6 +244,7 @@ class SkeletonComponentTestFixture : public ::testing::Test
 TEST_F(SkeletonComponentTestFixture, ACLPermissionsSetCorrectly)
 {
     RecordProperty("Verifies", "SCR-5899184");
+    RecordProperty("PartiallyVerifies", "comp_req__OnlyConfiguredUidsShallHaveAccessToTheLoLaSharedMemorySegments");
     RecordProperty("Description", "Ensure that the correct ACLs are set that are configured.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -279,6 +280,7 @@ TEST_F(SkeletonComponentTestFixture, ACLPermissionsSetCorrectly)
 TEST_F(SkeletonComponentTestFixture, CannotCreateTheSameSkeletonTwice)
 {
     RecordProperty("Verifies", "SCR-5898312, SCR-5898324");  // SWS_CM_00102, SWS_CM_10450
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonExceptionLessCreationWithInstanceId");
     RecordProperty("Description", "Tries to offer the same service twice");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -307,6 +309,12 @@ TEST_F(SkeletonComponentTestFixture, ShmObjectsAreCreated)
     RecordProperty("Verifies",
                    "SCR-5897992, SCR-5899052, SCR-5899136, SCR-5899143, SCR-5899159, SCR-5899160, SCR-5899126, "
                    "SCR-5899059, 2908703");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__UserDataShallBeProvidedInASeparateReadOnlySharedMemorySegment,"
+        "comp_req__OneSharedMemorySegmentPerASILLevelForControlData,"
+        "comp_req__CalculateNecessarySharedMemorySizePriorToCreatingIt,"
+        "comp_req__ThereShallBeOneTripletOfSharedMemorySegmentsPerServiceInstance");
     RecordProperty("Description",
                    "Ensure that QM Control segment and Data segment are created. Maximum memory allocation is "
                    "configured on runtime and allocated on offer. Thus, it is ensured that "
@@ -361,6 +369,10 @@ TEST_F(SkeletonComponentTestFixture, ShmObjectsAreCreated)
 TEST_F(SkeletonComponentTestFixture, ASILShmIsCreated)
 {
     RecordProperty("Verifies", "SCR-5899059, SCR-5899136, SCR-5899143, SCR-5899159, SCR-5899160, 2908703");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__OneSharedMemorySegmentPerASILLevelForControlData,"
+        "comp_req__ThereShallBeOneTripletOfSharedMemorySegmentsPerServiceInstance");
     RecordProperty("Description", "Ensure that ASIL Control segment is created");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -392,6 +404,7 @@ TEST_F(SkeletonComponentTestFixture, ASILShmIsCreated)
 TEST_F(SkeletonComponentTestFixture, DataShmObjectSizeCalc_Simulation_QM)
 {
     RecordProperty("Verifies", "SCR-5899126");
+    RecordProperty("PartiallyVerifies", "comp_req__CalculateNecessarySharedMemorySizePriorToCreatingIt");
     RecordProperty("Description", "Check if the data_shm is calculated correctly.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -452,6 +465,7 @@ TEST_F(SkeletonComponentTestFixture, DataShmObjectSizeCalc_Simulation_QM)
 TEST_F(SkeletonComponentTestFixture, DataShmObjectSizeCalc_Simulation_AsilB)
 {
     RecordProperty("Verifies", "SCR-5899126");
+    RecordProperty("PartiallyVerifies", "comp_req__CalculateNecessarySharedMemorySizePriorToCreatingIt");
     RecordProperty("Description", "Check if the data_shm is calculated correctly.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -515,6 +529,7 @@ TEST_F(SkeletonComponentTestFixture,
        DataShmObjectSizeCalc_Simulation_QM_DoesNotTerminateWhenConfiguredSizeIsLargerThanEstimate)
 {
     RecordProperty("Verifies", "SCR-5899126");
+    RecordProperty("PartiallyVerifies", "comp_req__CalculateNecessarySharedMemorySizePriorToCreatingIt");
     RecordProperty("Description", "Check if the data_shm is calculated correctly.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -553,6 +568,7 @@ using SkeletonComponentTestDeathTest = SkeletonComponentTestFixture;
 TEST_F(SkeletonComponentTestDeathTest, DataShmObjectSizeCalc_Simulation_QM_TerminatesWithTooSmallConfiguredSize)
 {
     RecordProperty("Verifies", "SCR-5899126");
+    RecordProperty("PartiallyVerifies", "comp_req__CalculateNecessarySharedMemorySizePriorToCreatingIt");
     RecordProperty("Description", "Check if the data_shm is calculated correctly.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -590,6 +606,7 @@ TEST_F(SkeletonComponentTestFixture,
        DataShmObjectSizeCalc_Simulation_QM_DoesNotTerminateWhenConfiguredControlQmSizeIsLargerThanEstimate)
 {
     RecordProperty("Verifies", "SCR-5899126");
+    RecordProperty("PartiallyVerifies", "comp_req__CalculateNecessarySharedMemorySizePriorToCreatingIt");
     RecordProperty("Description", "Check if the control_shm is calculated correctly.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -630,6 +647,7 @@ TEST_F(SkeletonComponentTestFixture,
        DataShmObjectSizeCalc_Simulation_QM_DoesNotTerminateWhenConfiguredControlAsilBSizeIsLargerThanEstimate)
 {
     RecordProperty("Verifies", "SCR-5899126");
+    RecordProperty("PartiallyVerifies", "comp_req__CalculateNecessarySharedMemorySizePriorToCreatingIt");
     RecordProperty("Description", "Check if the asil_control_shm is calculated correctly.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -668,6 +686,7 @@ TEST_F(SkeletonComponentTestFixture,
        DataShmObjectSizeCalc_Simulation_QM_DoesNotTerminateWhenShmSizesAreLargerThanEstimates)
 {
     RecordProperty("Verifies", "SCR-5899126");
+    RecordProperty("PartiallyVerifies", "comp_req__CalculateNecessarySharedMemorySizePriorToCreatingIt");
     RecordProperty("Description", "Check if all shm sizes are calculated correctly.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -711,6 +730,7 @@ TEST_F(SkeletonComponentTestDeathTest,
        DataShmObjectSizeCalc_Simulation_QM_TerminatesWithTooSmallConfiguredControlQmSize)
 {
     RecordProperty("Verifies", "SCR-5899126");
+    RecordProperty("PartiallyVerifies", "comp_req__CalculateNecessarySharedMemorySizePriorToCreatingIt");
     RecordProperty("Description", "Check if the control_shm is calculated correctly.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -751,6 +771,7 @@ TEST_F(SkeletonComponentTestDeathTest,
        DataShmObjectSizeCalc_Simulation_QM_TerminatesWithTooSmallConfiguredControlAsilBSize)
 {
     RecordProperty("Verifies", "SCR-5899126");
+    RecordProperty("PartiallyVerifies", "comp_req__CalculateNecessarySharedMemorySizePriorToCreatingIt");
     RecordProperty("Description", "Check if the asil_control_shm is calculated correctly.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

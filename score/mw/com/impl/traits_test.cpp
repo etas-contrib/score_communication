@@ -170,6 +170,7 @@ class ProxyCreationFixture : public ::testing::Test
 TEST(GeneratedProxyTest, NotCopyable)
 {
     RecordProperty("Verifies", "SCR-21290780");
+    RecordProperty("FullyVerifies", "comp_req__ProxyCopySemantics");
     RecordProperty("Description", "Checks copy semantics for proxies");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -182,6 +183,7 @@ TEST(GeneratedProxyTest, NotCopyable)
 TEST(GeneratedProxyTest, IsMoveable)
 {
     RecordProperty("Verifies", "SCR-21290799");
+    RecordProperty("FullyVerifies", "comp_req__ProxyMoveSemantics");
     RecordProperty("Description", "Checks move semantics for proxies");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -195,6 +197,7 @@ using GeneratedProxyCreationTestFixture = ProxyCreationFixture;
 TEST_F(GeneratedProxyCreationTestFixture, ReturnGeneratedProxyWhenSuccessfullyCreatingProxyWithValidBindings)
 {
     RecordProperty("Verifies", "SCR-14108458");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyExceptionlessCreation");
     RecordProperty("Description", "Proxy shall be created with Create function.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -237,6 +240,10 @@ TEST_F(GeneratedProxyCreationTestFixture, CreatingProxyReturnsErrorWhenProxyBind
 {
     RecordProperty("Verifies", "SCR-14108458, SCR-31295722, SCR-32158471, SCR-32158442, SCR-33047276");
     RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__ProxyExceptionlessCreation,"
+        "comp_req__ErrorOnUnsuccessfulRestart");
+    RecordProperty(
         "Description",
         "Proxy shall be created with Create function which returns an error if the Proxy binding cannot be created.");
     RecordProperty("TestType", "Requirements-based test");
@@ -258,6 +265,7 @@ TEST_F(GeneratedProxyCreationTestFixture, CreatingProxyReturnsErrorWhenProxyBind
 TEST_F(GeneratedProxyCreationTestFixture, CreatingProxyReturnsErrorWhenProxyEventBindingCreationReturnsError)
 {
     RecordProperty("Verifies", "SCR-14108458");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyExceptionlessCreation");
     RecordProperty("Description",
                    "Proxy shall be created with Create function which returns an error if a ProxyEvent binding cannot "
                    "be created.");
@@ -282,6 +290,7 @@ TEST_F(GeneratedProxyCreationTestFixture, CreatingProxyReturnsErrorWhenProxyEven
 TEST_F(GeneratedProxyCreationTestFixture, CreatingProxyReturnsErrorWhenProxyFieldEventBindingCreationReturnsError)
 {
     RecordProperty("Verifies", "SCR-14108458");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyExceptionlessCreation");
     RecordProperty(
         "Description",
         "Proxy shall be created with Create function which returns an error if a ProxyField's event binding cannot "
@@ -305,6 +314,7 @@ TEST_F(GeneratedProxyCreationTestFixture, CreatingProxyReturnsErrorWhenProxyFiel
 TEST_F(GeneratedProxyCreationTestFixture, CreatingProxyReturnsErrorWhenProxyFieldGetterBindingCreationReturnsError)
 {
     RecordProperty("Verifies", "SCR-14108458");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyExceptionlessCreation");
     RecordProperty("Description",
                    "Proxy shall be created with Create function which returns an error if a ProxyMethods getter "
                    "binding cannot be created.");
@@ -327,6 +337,7 @@ TEST_F(GeneratedProxyCreationTestFixture, CreatingProxyReturnsErrorWhenProxyFiel
 TEST_F(GeneratedProxyCreationTestFixture, CreatingProxyReturnsErrorWhenProxyFieldSetterBindingCreationReturnsError)
 {
     RecordProperty("Verifies", "SCR-14108458");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyExceptionlessCreation");
     RecordProperty("Description",
                    "Proxy shall be created with Create function which returns an error if a ProxyMethods setter "
                    "binding cannot be created.");
@@ -458,6 +469,10 @@ TEST_F(GeneratedProxyDestructionFixture, CallsUnsubscribeOnDestruction)
     // proxy_event_common_test.cpp. this test covers destruction triggering Unsubscribe on the events and
     // fields, the other covers Unsubscribe triggering UnregisterEventNotification.
     RecordProperty("Verifies", "SCR-20236391, SCR-20237033");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__ImplicitLifetimeEndingByDestructionOfContext,"
+        "comp_req__GenericProxyEventDestructor");
     RecordProperty("Description",
                    "Checks that destroying a proxy triggers Unsubscribe on its bindings, events, and fields.");
     RecordProperty("TestType", "Requirements-based test");
@@ -530,6 +545,7 @@ TEST_F(GeneratedProxyMoveConstructionFixture, DestroyingMovedFromProxyDoesNotCal
 TEST(GeneratedProxyFindServiceTest, GeneratedProxyUsesProxyBaseFindServiceWithInstanceSpecifier)
 {
     RecordProperty("Verifies", "SCR-14110930");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyFindServiceWithInstanceSpecifier");
     RecordProperty("Description", "Checks that a generated proxy uses FindService in ProxyBase");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -546,6 +562,7 @@ TEST(GeneratedProxyFindServiceTest, GeneratedProxyUsesProxyBaseFindServiceWithIn
 TEST(GeneratedProxyFindServiceTest, GeneratedProxyUsesProxyBaseFindServiceWithInstanceIdentifier)
 {
     RecordProperty("Verifies", "SCR-14110933");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyFindServiceWithInstanceIdentifier");
     RecordProperty("Description", "Checks that a generated proxy uses FindService in ProxyBase");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -562,6 +579,7 @@ TEST(GeneratedProxyFindServiceTest, GeneratedProxyUsesProxyBaseFindServiceWithIn
 TEST(GeneratedProxyStartFindServiceTest, GeneratedProxyUsesProxyBaseStartFindServiceWithInstanceSpecifier)
 {
     RecordProperty("Verifies", "SCR-21792392");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyStartFindServiceWithInstanceSpecifier");
     RecordProperty("Description",
                    "Checks that a generated proxy uses StartFindService with InstanceSpecifier in ProxyBase");
     RecordProperty("TestType", "Requirements-based test");
@@ -581,6 +599,7 @@ TEST(GeneratedProxyStartFindServiceTest, GeneratedProxyUsesProxyBaseStartFindSer
 TEST(GeneratedProxyStartFindServiceTest, GeneratedProxyUsesProxyBaseStartFindServiceWithInstanceIdentifier)
 {
     RecordProperty("Verifies", "SCR-21792393");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyStartFindServiceWithInstanceIdentifier");
     RecordProperty("Description",
                    "Checks that a generated proxy uses StartFindService with InstanceIdentifier in ProxyBase");
     RecordProperty("TestType", "Requirements-based test");
@@ -600,6 +619,7 @@ TEST(GeneratedProxyStartFindServiceTest, GeneratedProxyUsesProxyBaseStartFindSer
 TEST(GeneratedProxyStopFindServiceTest, GeneratedProxyUsesProxyBaseStopFindServiceWithInstanceIdentifier)
 {
     RecordProperty("Verifies", "SCR-21792394");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyStopFindService");
     RecordProperty("Description", "Checks that a generated proxy uses StopFindService in ProxyBase");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -614,6 +634,7 @@ TEST(GeneratedProxyStopFindServiceTest, GeneratedProxyUsesProxyBaseStopFindServi
 TEST(GeneratedProxyHandleTest, GeneratedProxyUsesProxyBaseGetHandle)
 {
     RecordProperty("Verifies", "SCR-14110935");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyGetHandle");
     RecordProperty("Description", "Checks that a generated proxy uses GetHandle in ProxyBase");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -625,6 +646,7 @@ TEST(GeneratedProxyHandleTest, GeneratedProxyUsesProxyBaseGetHandle)
 TEST(GeneratedProxyHandleTest, GeneratedProxyContainsPublicHandleTypeAlias)
 {
     RecordProperty("Verifies", "SCR-14110936");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyHandleTypeClass");
     RecordProperty("Description",
                    "Checks that a generated proxy contains a public alias to our implementation of HandleType.");
     RecordProperty("TestType", "Requirements-based test");
@@ -637,6 +659,7 @@ TEST(GeneratedProxyHandleTest, GeneratedProxyContainsPublicHandleTypeAlias)
 TEST(GeneratedSkeletonTest, NotCopyable)
 {
     RecordProperty("Verifies", "SCR-5897862, SCR-17432387");  // SWS_CM_00134
+    RecordProperty("FullyVerifies", "comp_req__SkeletonCopySemantics");
     RecordProperty("Description", "Checks copy semantics for Skeletons");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -649,6 +672,7 @@ TEST(GeneratedSkeletonTest, NotCopyable)
 TEST(GeneratedSkeletonTest, IsMoveable)
 {
     RecordProperty("Verifies", "SCR-5897869, SCR-17432438");  // SWS_CM_00135
+    RecordProperty("FullyVerifies", "comp_req__SkeletonMoveSemantics");
     RecordProperty("Description", "Checks move semantics for Skeletons");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -738,6 +762,7 @@ TEST_F(GeneratedSkeletonCreationInstanceSpecifierTestFixture,
        ReturnGeneratedSkeletonWhenSuccessfullyCreatingSkeletonWithValidBindings)
 {
     RecordProperty("Verifies", "SCR-17434559");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonExceptionLessCreationWithInstanceSpecifier");
     RecordProperty("Description", "Checks exception-less creation of skeleton");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -784,6 +809,7 @@ TEST_F(GeneratedSkeletonCreationInstanceSpecifierTestFixture,
 TEST_F(GeneratedSkeletonCreationInstanceSpecifierTestFixture, ReturnErrorWhenCreatingSkeletonWithNoSkeletonBinding)
 {
     RecordProperty("Verifies", "SCR-17434559");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonExceptionLessCreationWithInstanceSpecifier");
     RecordProperty("Description",
                    "Checks that exception-less creation of skeleton returns a kBindingFailure on failure to create.");
     RecordProperty("TestType", "Requirements-based test");
@@ -805,6 +831,7 @@ TEST_F(GeneratedSkeletonCreationInstanceSpecifierTestFixture, ReturnErrorWhenCre
 TEST_F(GeneratedSkeletonCreationInstanceSpecifierTestFixture, ReturnErrorWhenCreatingSkeletonWithNoSkeletonEventBinding)
 {
     RecordProperty("Verifies", "SCR-17434559");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonExceptionLessCreationWithInstanceSpecifier");
     RecordProperty("Description",
                    "Checks that exception-less creation of skeleton returns a kBindingFailure on failure to create.");
     RecordProperty("TestType", "Requirements-based test");
@@ -828,6 +855,7 @@ TEST_F(GeneratedSkeletonCreationInstanceSpecifierTestFixture, ReturnErrorWhenCre
 TEST_F(GeneratedSkeletonCreationInstanceSpecifierTestFixture, ReturnErrorWhenCreatingSkeletonWithNoSkeletonFieldBinding)
 {
     RecordProperty("Verifies", "SCR-17434559");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonExceptionLessCreationWithInstanceSpecifier");
     RecordProperty("Description",
                    "Checks that exception-less creation of skeleton returns a kBindingFailure on failure to create.");
     RecordProperty("TestType", "Requirements-based test");
@@ -851,6 +879,7 @@ TEST_F(GeneratedSkeletonCreationInstanceSpecifierTestFixture,
        ReturnErrorWhenCreatingSkeletonWithNoSkeletonMethodBinding)
 {
     RecordProperty("Verifies", "SCR-17434559");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonExceptionLessCreationWithInstanceSpecifier");
     RecordProperty("Description",
                    "Checks that exception-less creation of skeleton returns a kBindingFailure on failure to create.");
     RecordProperty("TestType", "Requirements-based test");
@@ -895,6 +924,7 @@ using GeneratedSkeletonCreationInstanceIdentifierTestFixture = SkeletonCreationF
 TEST_F(GeneratedSkeletonCreationInstanceIdentifierTestFixture, ConstructingFromExistingValidSpecifierCreatesSkeleton)
 {
     RecordProperty("Verifies", "SCR-18447605");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonExceptionLessCreationWithInstanceId");
     RecordProperty("Description", "Checks exception-less creation of skeleton");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -928,6 +958,7 @@ TEST_F(GeneratedSkeletonCreationInstanceIdentifierTestFixture, ConstructingFromE
 TEST_F(GeneratedSkeletonCreationInstanceIdentifierTestFixture, ConstructingFromInvalidSkeletonReturnsError)
 {
     RecordProperty("Verifies", "SCR-18447605");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonExceptionLessCreationWithInstanceId");
     RecordProperty("Description",
                    "Checks that exception-less creation of skeleton returns a kBindingFailure on failure to create.");
     RecordProperty("TestType", "Requirements-based test");
@@ -949,6 +980,7 @@ TEST_F(GeneratedSkeletonCreationInstanceIdentifierTestFixture, ConstructingFromI
 TEST_F(GeneratedSkeletonCreationInstanceIdentifierTestFixture, ConstructingFromInvalidSkeletonEventReturnsError)
 {
     RecordProperty("Verifies", "SCR-18447605");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonExceptionLessCreationWithInstanceId");
     RecordProperty("Description",
                    "Checks that exception-less creation of skeleton returns a kBindingFailure on failure to create.");
     RecordProperty("TestType", "Requirements-based test");
@@ -972,6 +1004,7 @@ TEST_F(GeneratedSkeletonCreationInstanceIdentifierTestFixture, ConstructingFromI
 TEST_F(GeneratedSkeletonCreationInstanceIdentifierTestFixture, ConstructingFromInvalidSkeletonFieldReturnsError)
 {
     RecordProperty("Verifies", "SCR-18447605");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonExceptionLessCreationWithInstanceId");
     RecordProperty("Description",
                    "Checks that exception-less creation of skeleton returns a kBindingFailure on failure to create.");
     RecordProperty("TestType", "Requirements-based test");
@@ -1230,6 +1263,10 @@ using GeneratedSkeletonDestructionFixture = GeneratedSkeletonStopOfferServiceRai
 TEST_F(GeneratedSkeletonDestructionFixture, CallsStopOfferServiceOnDestructionOfOfferedService)
 {
     RecordProperty("Verifies", "SCR-6093144, SCR-17432457");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__StopOfferingServiceDuringServiceObjectDestruction,"
+        "comp_req__SkeletonDestructor");
     RecordProperty("Description", "Check whether the service event offering is stopped when the skeleton is destroyed");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -1253,6 +1290,10 @@ TEST_F(GeneratedSkeletonDestructionFixture, CallsStopOfferServiceOnDestructionOf
 TEST_F(GeneratedSkeletonDestructionFixture, DoesNotCallStopOfferServiceOnDestructionOfNotOfferedService)
 {
     RecordProperty("Verifies", "SCR-6093144, SCR-17432457");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__StopOfferingServiceDuringServiceObjectDestruction,"
+        "comp_req__SkeletonDestructor");
     RecordProperty("Description", "Check whether the service event offering is stopped when the skeleton is destroyed");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -1273,6 +1314,7 @@ using GeneratedSkeletonMoveConstructionFixture = GeneratedSkeletonStopOfferServi
 TEST_F(GeneratedSkeletonMoveConstructionFixture, MoveConstructingDoesNotCallStopOfferService)
 {
     RecordProperty("Verifies", "SCR-17432438");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonMoveSemantics");
     RecordProperty("Description", "skeleton is move constructible");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -1292,6 +1334,7 @@ TEST_F(GeneratedSkeletonMoveConstructionFixture, MoveConstructingDoesNotCallStop
 TEST_F(GeneratedSkeletonMoveConstructionFixture, DestroyingMovedToSkeletonCallsStopOfferService)
 {
     RecordProperty("Verifies", "SCR-17432438");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonMoveSemantics");
     RecordProperty("Description", "skeleton is move constructible");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -1314,6 +1357,7 @@ TEST_F(GeneratedSkeletonMoveConstructionFixture, DestroyingMovedToSkeletonCallsS
 TEST_F(GeneratedSkeletonMoveConstructionFixture, DestroyingMovedFromSkeletonDoesNotCallStopOfferService)
 {
     RecordProperty("Verifies", "SCR-17432438");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonMoveSemantics");
     RecordProperty("Description", "skeleton is move constructible");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -1337,6 +1381,7 @@ using GeneratedSkeletonMoveAssignmentFixture = GeneratedSkeletonStopOfferService
 TEST_F(GeneratedSkeletonMoveAssignmentFixture, MoveAssigningCallsStopOfferServiceOnMovedToSkeleton)
 {
     RecordProperty("Verifies", "SCR-17432438");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonMoveSemantics");
     RecordProperty("Description", "skeleton is move assignable");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -1360,6 +1405,7 @@ TEST_F(GeneratedSkeletonMoveAssignmentFixture, MoveAssigningCallsStopOfferServic
 TEST_F(GeneratedSkeletonMoveAssignmentFixture, DestroyingMovedToSkeletonCallsStopOfferService)
 {
     RecordProperty("Verifies", "SCR-17432438");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonMoveSemantics");
     RecordProperty("Description", "skeleton is move assignable");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -1382,6 +1428,7 @@ TEST_F(GeneratedSkeletonMoveAssignmentFixture, DestroyingMovedToSkeletonCallsSto
 TEST_F(GeneratedSkeletonMoveAssignmentFixture, DestroyingMovedFromSkeletonDoesNotCallStopOfferService)
 {
     RecordProperty("Verifies", "SCR-17432438");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonMoveSemantics");
     RecordProperty("Description", "skeleton is move assignable");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -1404,6 +1451,7 @@ TEST_F(GeneratedSkeletonMoveAssignmentFixture, DestroyingMovedFromSkeletonDoesNo
 TEST_F(GeneratedSkeletonMoveAssignmentFixture, MoveAssigningToAMovedFromSkeletonDoesNotCallStopOfferService)
 {
     RecordProperty("Verifies", "SCR-17432438");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonMoveSemantics");
     RecordProperty("Description", "skeleton is move assignable");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

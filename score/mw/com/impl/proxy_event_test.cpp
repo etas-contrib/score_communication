@@ -132,6 +132,10 @@ TYPED_TEST(ProxyEventFixture, ReceiveDataFromProxy)
     Base::RecordProperty("Verifies",
                          ""
                          "SCR-7822488, SCR-14035773, SCR-21350367");
+    Base::RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__BehaviourOfGetNewSamples,"
+        "comp_req__ReturnValueOfSuccessfulGetNewSamples");
     Base::RecordProperty("Description", "Checks event proxy by simulating an skeleton event");
     Base::RecordProperty("TestType", "Requirements-based test");
     Base::RecordProperty("Priority", "1");
@@ -175,6 +179,11 @@ TYPED_TEST(ProxyEventFixture, SamplePtrLimitsAreEnforced)
     Base::RecordProperty(
         "Verifies",
         "SCR-6367376, SCR-6342893, SCR-6225130, SCR-6338237, SCR-6340966, SCR-14035773, SCR-21350367, SCR-21803116");
+    Base::RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__BehaviourOfGetNewSamples,"
+        "comp_req__ReturnValueOfSuccessfulGetNewSamples,"
+        "comp_req__CalculationOfFreeSampleCount");
     Base::RecordProperty("Description",
                          "Checks event proxy by simulating an skeleton event. Also checks that GetFreeSampleCount "
                          "correctly reflects the number of samples that can be received by the user.");
@@ -309,6 +318,7 @@ TYPED_TEST(ProxyEventFixture, CanConstructUnboundProxy)
 
     // SWS_CM_00141, SWS_CM_00701, SWS_CM_00702
     Base::RecordProperty("Verifies", "SCR-5898016");
+    Base::RecordProperty("PartiallyVerifies", "comp_req__ProxyEventClass");
     Base::RecordProperty("Description", "Checks event proxy by simulating an skeleton event");
     Base::RecordProperty("TestType", "Requirements-based test");
     Base::RecordProperty("Priority", "1");
@@ -325,6 +335,13 @@ TYPED_TEST(ProxyEventGetNewSamplesFixture, GetNewSamplesDispatchesToBinding)
     using Base = ProxyEventGetNewSamplesFixture<TypeParam>;
 
     Base::RecordProperty("Verifies", "SCR-14034910, SCR-14137273, SCR-17292401, SCR-14035773, SCR-21350367");
+    Base::RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__GenericProxyEventGetNewSamples,"
+        "comp_req__ProxyEventGetNewSamples,"
+        "comp_req__ProxyFieldGetNewSamples,"
+        "comp_req__BehaviourOfGetNewSamples,"
+        "comp_req__ReturnValueOfSuccessfulGetNewSamples");
     Base::RecordProperty("Description", "Checks that GetNewSamples dispatches to the binding");
     Base::RecordProperty("TestType", "Requirements-based test");
     Base::RecordProperty("Priority", "1");
@@ -357,6 +374,13 @@ TYPED_TEST(ProxyEventGetNewSamplesFixture, GetNewSamplesReturnsErrorIfMaxSamples
     using Base = ProxyEventGetNewSamplesFixture<TypeParam>;
 
     Base::RecordProperty("Verifies", "SCR-14034910, SCR-14137273, SCR-17292401, SCR-14035773, SCR-21350367");
+    Base::RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__GenericProxyEventGetNewSamples,"
+        "comp_req__ProxyEventGetNewSamples,"
+        "comp_req__ProxyFieldGetNewSamples,"
+        "comp_req__BehaviourOfGetNewSamples,"
+        "comp_req__ReturnValueOfSuccessfulGetNewSamples");
     Base::RecordProperty("Description",
                          "Checks that GetNewSamples will return an error if the max samples has already been reached");
     Base::RecordProperty("TestType", "Requirements-based test");
@@ -385,6 +409,11 @@ TYPED_TEST(ProxyEventGetNewSamplesFixture, GetNewSamplesReturnsErrorIfNotSubscri
     using Base = ProxyEventGetNewSamplesFixture<TypeParam>;
 
     Base::RecordProperty("Verifies", "SCR-14034910, SCR-14137273, SCR-17292401");
+    Base::RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__GenericProxyEventGetNewSamples,"
+        "comp_req__ProxyEventGetNewSamples,"
+        "comp_req__ProxyFieldGetNewSamples");
     Base::RecordProperty("Description",
                          "Checks that GetNewSamples will forward an error kNotSubscribed from the binding");
     Base::RecordProperty("TestType", "Requirements-based test");
@@ -418,6 +447,11 @@ TYPED_TEST(ProxyEventGetNewSamplesFixture, GetNewSamplesReturnsErrorFromBinding)
 
     Base::RecordProperty("Verifies", "SCR-14034910, SCR-14137273, SCR-17292401");
     Base::RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__GenericProxyEventGetNewSamples,"
+        "comp_req__ProxyEventGetNewSamples,"
+        "comp_req__ProxyFieldGetNewSamples");
+    Base::RecordProperty(
         "Description",
         "Checks that GetNewSamples will return kBindingFailure for a generic error code from the binding");
     Base::RecordProperty("TestType", "Requirements-based test");
@@ -448,6 +482,7 @@ TYPED_TEST(ProxyEventGetNewSamplesFixture, GetNewSamplesReturnsErrorFromBinding)
 TEST(ProxyEventTest, SamplePtrsToSlotDataAreConst)
 {
     RecordProperty("Verifies", "SCR-6340729");
+    RecordProperty("PartiallyVerifies", "comp_req__SamplePtr");
     RecordProperty("Description", "Proxy shall interpret slot data as const");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -513,6 +548,7 @@ TEST(ProxyEventDeathTest, DieOnProxyDestructionWhileHoldingSamplePtrs)
 TEST(ProxyEventTest, NotCopyable)
 {
     RecordProperty("Verifies", "SCR-5897862, SCR-14137269");  // SWS_CM_00134
+    RecordProperty("FullyVerifies", "comp_req__ProxyEventCopySemantics");
     RecordProperty("Description", "Checks copy semantics for ProxyEvents");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -568,6 +604,7 @@ TEST_F(ProxyEventMoveAssignmentTest, MoveAssignmentTransfersBindingFromSourceToD
 TEST(ProxyEventTest, ClassTypeDependsOnEventDataType)
 {
     RecordProperty("Verifies", "SCR-29235350");
+    RecordProperty("FullyVerifies", "comp_req__ProxyEventClassDefinition");
     RecordProperty("Description", "ProxyEvents with different field data types should be different classes.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -582,6 +619,7 @@ TEST(ProxyEventTest, ClassTypeDependsOnEventDataType)
 TEST(ProxyEventTest, ProxyEventContainsPublicSampleType)
 {
     RecordProperty("Verifies", "SCR-14137294");
+    RecordProperty("FullyVerifies", "comp_req__ProxyEventMemberTypeSampleType");
     RecordProperty("Description",
                    "A ProxyEvent contains a public member type SampleType which denotes the type of the event.");
     RecordProperty("TestType", "Requirements-based test");

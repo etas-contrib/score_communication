@@ -31,6 +31,7 @@ using ::testing::Return;
 TEST(FindServiceHandle, CanBeCopiedAndEqualCompared)
 {
     RecordProperty("Verifies", "SCR-21789762");
+    RecordProperty("PartiallyVerifies", "comp_req__FindServiceHandle");
     RecordProperty("Description", "Checks CopyAssignment operator and EqualComparableOperator");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -45,6 +46,7 @@ TEST(FindServiceHandle, CanBeCopiedAndEqualCompared)
 TEST(FindServiceHandle, LessCompareable)
 {
     RecordProperty("Verifies", "SCR-21789762");
+    RecordProperty("PartiallyVerifies", "comp_req__FindServiceHandle");
     RecordProperty("Description", "Checks LessComparableOperator");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

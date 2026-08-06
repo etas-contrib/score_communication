@@ -78,6 +78,7 @@ const ServiceTypeDeployment kTestTypeDeployment2{LolaServiceTypeDeployment{18U}}
 TEST(InstanceIdentifierTest, Copyable)
 {
     RecordProperty("Verifies", "SCR-18563675");
+    RecordProperty("FullyVerifies", "comp_req__InstanceIdentifierCopySemantics");
     RecordProperty("Description", "Checks copy semantics for InstanceIdentifier");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -90,6 +91,7 @@ TEST(InstanceIdentifierTest, Copyable)
 TEST(InstanceIdentifier, Moveable)
 {
     RecordProperty("Verifies", "SCR-21353341");
+    RecordProperty("FullyVerifies", "comp_req__InstanceidentifierMoveSemantics");
     RecordProperty("Description", "Checks move semantics for InstanceIdentifier");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -111,6 +113,7 @@ TEST(InstanceIdentifierTest, constructable)
 TEST(InstanceIdentifierTest, CanBeCopiedAndEqualCompared)
 {
     RecordProperty("Verifies", "SCR-17556907");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceIdentifierComparisonOperators");
     RecordProperty("Description", "Checks CopyAssignment operator and EqualComparableOperator");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -152,6 +155,7 @@ TEST(InstanceIdentifierTest, CopyAssignmentOperatorCopiesInstanceIdentifier)
 TEST(InstanceIdentifierTest, LessCompareable)
 {
     RecordProperty("Verifies", "SCR-17556907");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceIdentifierComparisonOperators");
     RecordProperty("Description", "Checks LessComparableOperator");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -280,6 +284,10 @@ using InstanceIdentifierFixture = ConfigurationStructsFixture;
 TEST_F(InstanceIdentifierFixture, CanCreateFromSerializedObject)
 {
     RecordProperty("Verifies", "SCR-18448357, SCR-18448382");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__InstanceIdentifierCreate,"
+        "comp_req__InstanceIdentifierToString");
     RecordProperty("Description",
                    "Checks creating InstanceIdentifier from valid serialized InstanceIdentifier from "
                    "InstanceIdentifier::ToString");
@@ -313,6 +321,10 @@ TEST_F(InstanceIdentifierFixture, CanCreateFromSerializedObject)
 TEST_F(InstanceIdentifierFixture, CreateStoresDeploymentsIntoConfiguredConfiguration)
 {
     RecordProperty("Verifies", "SCR-18448357, SCR-18448382");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__InstanceIdentifierCreate,"
+        "comp_req__InstanceIdentifierToString");
     RecordProperty("Description",
                    "Checks that InstanceIdentifier::Create adds the reconstructed ServiceType-/ServiceInstance-"
                    "Deployments into the Configuration set via InstanceIdentifier::SetConfiguration.");
@@ -361,6 +373,7 @@ TEST_F(InstanceIdentifierFixture, CreateStoresDeploymentsIntoConfiguredConfigura
 TEST_F(InstanceIdentifierFixture, CreatingFromInvalidSerializedObjectReturnsError)
 {
     RecordProperty("Verifies", "SCR-18448357");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceIdentifierCreate");
     RecordProperty("Description", "Checks creating InstanceIdentifier from invalid serialized InstanceIdentifier");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

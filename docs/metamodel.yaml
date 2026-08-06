@@ -1,0 +1,135 @@
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+#
+# Communication-specific docs-as-code metamodel.
+#
+# Rationale:
+# The Communication component's TRLC model uses simple record names like
+# `CommunicationInterfaces` rather than the docs-as-code default structure.
+# The projection prefixes those names with their need type, for example
+# `feat_req__CommunicationInterfaces`. This metamodel adapts the default checks
+# to Communication's TRLC schema so that:
+#
+#   * one deterministic ID mapping is used by generated Sphinx-Needs,
+#     source-code `req-Id` annotations, and
+#     `RecordProperty("FullyVerifies", ...)` test metadata;
+#   * mandatory fields match exactly what Communication's TRLC contains
+#     (description, safety, version, status) rather than fields the TRLC model
+#     does not carry (reqtype, security, valid_from);
+#   * requirement discovery, code linking, and test linking all use the
+#     same identifier vocabulary end to end.
+#
+# When DR-008 (upstream TRLC -> native Sphinx-Needs conversion) becomes
+# available, this metamodel can either be simplified or deleted; the ID
+# scheme decided here (`<type>__<TRLC name>`) remains the contract with tests
+# and source annotations either way.
+
+needs_types_base_options:
+  optional_options:
+    tags: ^.*$
+    template: ^.*$
+    source_code_link: ^https://github.com/.*
+    testlink: ^https://github.com/.*
+
+needs_extra_links:
+  derived_from:
+    incoming: derives
+    outgoing: derived from
+  fully_verifies:
+    incoming: fully verified by
+    outgoing: fully verifies
+  partially_verifies:
+    incoming: partially verified by
+    outgoing: partially verifies
+
+# Prohibited words: keep the default title checks; skip content checks that
+# would flag legitimate technical prose in the imported TRLC descriptions.
+prohibited_words_checks:
+  title_check:
+    title:
+      - shall
+      - must
+      - will
+
+needs_types:
+  # Feature Requirement - matches TRLC ScoreReq.FeatReq
+  # Mandatory fields kept minimal to match what Communication's TRLC records.
+  feat_req:
+    title: Feature Requirement
+    style: node
+    mandatory_options:
+      # IDs use `<type>__<TRLC_name>` (e.g. `feat_req__EventType`).
+      # The 2-part scheme is required because the upstream `check_id_length`
+      # unconditionally indexes `id.split("__")[1]`; a bare 1-part id would
+      # crash the metamodel check even though `parts: 1` allows it.
+      id: ^feat_req__[A-Za-z][A-Za-z0-9_]*$
+      status: ^valid$
+      # TRLC safety maps ScoreReq.Asil.{B,D} to ASIL_B/ASIL_D; QM stays QM.
+      safety: ^(QM|ASIL_B|ASIL_D)$
+      version: ^[1-9][0-9]*$
+      content: ^[\s\S]+$
+    optional_links:
+      derived_from: feat_req
+      satisfied_by: comp_req
+    tags:
+      - requirement
+      - requirement_excl_process
+    parts: 2
+
+  # Component Requirement - matches TRLC ScoreReq.CompReq
+  comp_req:
+    title: Component Requirement
+    mandatory_options:
+      id: ^comp_req__[A-Za-z][A-Za-z0-9_]*$
+      status: ^valid$
+      safety: ^(QM|ASIL_B|ASIL_D)$
+      version: ^[1-9][0-9]*$
+      content: ^[\s\S]+$
+    optional_links:
+      derived_from: feat_req
+      satisfied_by: comp_req
+    tags:
+      - requirement
+      - requirement_excl_process
+    parts: 2
+
+  # Assumption of Use Requirement - matches TRLC ScoreReq.AouReq
+  aou_req:
+    title: Assumption of Use Requirement
+    mandatory_options:
+      id: ^aou_req__[A-Za-z][A-Za-z0-9_]*$
+      status: ^valid$
+      safety: ^(QM|ASIL_B|ASIL_D)$
+      version: ^[1-9][0-9]*$
+      content: ^[\s\S]+$
+    tags:
+      - requirement
+      - requirement_excl_process
+    parts: 2
+
+  # Keep the upstream testcase vocabulary for compatibility. The repository's
+  # traceability exporter reads Bazel JUnit XML and maps these properties to
+  # requirement testlink fields and aggregate metrics.
+  testcase:
+    title: Testcase Needs parsed from test.xml files
+    optional_options:
+      name: ^.*$
+      file: ^.*$
+      line: ^.*$
+      test_type: ^.*$
+      derivation_technique: ^.*$
+      result: ^.*$
+      result_text: ^.*$
+    optional_links:
+      fully_verifies: ANY
+      partially_verifies: ANY

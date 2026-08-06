@@ -112,6 +112,7 @@ ServiceTypeDeployment CreateServiceTypeDeploymentWithLolaBinding(const std::vect
 TEST(GenericProxyTest, NotCopyable)
 {
     RecordProperty("Verifies", "SCR-17292012");
+    RecordProperty("FullyVerifies", "comp_req__GenericProxyCopySemantics");
     RecordProperty("Description", "Checks copy semantics for GenericProxies");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -124,6 +125,7 @@ TEST(GenericProxyTest, NotCopyable)
 TEST(GenericProxyTest, IsMoveable)
 {
     RecordProperty("Verifies", "SCR-17292032");
+    RecordProperty("FullyVerifies", "comp_req__GenericProxyMoveSemantics");
     RecordProperty("Description", "Checks move semantics for GenericProxies");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -136,6 +138,7 @@ TEST(GenericProxyTest, IsMoveable)
 TEST(GenericProxyTest, ServiceElementsAreIndexedUsingElementFqId)
 {
     RecordProperty("Verifies", "SCR-21205130");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyEventMapViewClassProperties");
     RecordProperty(
         "Description",
         "Checks that GenericProxyEvents are stored in a std::map within GenericProxy. A std::map is provided by the "
@@ -218,6 +221,7 @@ TEST_F(GenericProxyFixture, CanSetupFixture) {}
 TEST_F(GenericProxyFixture, CreatingGenericProxyWithValidProxyBindingReturnsValidResult)
 {
     RecordProperty("Verifies", "SCR-14005969");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyExceptionLessCreation");
     RecordProperty("Description",
                    "Checks that a valid GenericProxy can be created from a valid HandleType and binding.");
     RecordProperty("TestType", "Requirements-based test");
@@ -253,6 +257,7 @@ TEST_F(GenericProxyFixture, CreatingGenericProxyWithConfigurationContainingBlank
 TEST_F(GenericProxyFixture, CreatingGenericProxyReturnsErrorWhenBindingCreationReturnsNullptr)
 {
     RecordProperty("Verifies", "SCR-14005969");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyExceptionLessCreation");
     RecordProperty(
         "Description",
         "Checks that creating a GenericProxy returns an error if the GenericProxy binding cannot be created.");
@@ -292,6 +297,7 @@ TEST_F(GenericProxyFixture, CreatingGenericProxyReturnsErrorWhenBindingCreationR
 TEST_F(GenericProxyFixture, CreatingGenericProxyWhenGenericProxyEventBindingCreationReturnsError)
 {
     RecordProperty("Verifies", "SCR-14005969");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyExceptionLessCreation");
     RecordProperty(
         "Description",
         "Checks that creating a GenericProxy returns an error if the GenericProxyEvent binding cannot be created.");
@@ -317,6 +323,7 @@ TEST_F(GenericProxyFixture, CreatingGenericProxyWhenGenericProxyEventBindingCrea
 TEST_F(GenericProxyFixture, GenericProxyWillCreateEventBindingsSpecifiedInHandleType)
 {
     RecordProperty("Verifies", "SCR-15600146");
+    RecordProperty("PartiallyVerifies", "comp_req__EventListSource");
     RecordProperty("Description",
                    "Checks that the GenericProxy will create a GenericProxyEvent binding for each event listed in the "
                    "HandleType used to "
@@ -347,6 +354,10 @@ TEST_F(GenericProxyFixture, GenericProxyWillContainEventsSpecifiedInHandleType)
 {
     RecordProperty("Verifies", "SCR-15600146, SCR-14006006");
     RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__EventListSource,"
+        "comp_req__GenericProxyGetEvents");
+    RecordProperty(
         "Description",
         "Checks that the GenericProxy will contain a GenericProxyEvent for each event listed in the HandleType used to "
         "create the GenericProxy (SCR-15600146). GetEvents will return the events contained in the GenericProxy "
@@ -369,6 +380,7 @@ TEST_F(GenericProxyFixture, GenericProxyWillContainEventsSpecifiedInHandleType)
 TEST_F(GenericProxyFixture, GenericProxyWillOnlyCreateEventBindingsForEventsProvidedInSharedMemory)
 {
     RecordProperty("Verifies", "SCR-15603826");
+    RecordProperty("PartiallyVerifies", "comp_req__ReactionOnMissingEventTypeInfo");
     RecordProperty("Description",
                    "Checks that the GenericProxy will only create a GenericProxyEvent binding for events that are "
                    "provided in shared memory.");
@@ -403,6 +415,10 @@ TEST_F(GenericProxyFixture, GenericProxyWillContainEventsForEventsProvidedInShar
 {
     RecordProperty("Verifies", "SCR-15603826, SCR-14006006");
     RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__ReactionOnMissingEventTypeInfo,"
+        "comp_req__GenericProxyGetEvents");
+    RecordProperty(
         "Description",
         "Checks that the GenericProxy will only contain a GenericProxyEvent for events that are provided in shared "
         "memory (SCR-15603826). GetEvents will return the events contained in the GenericProxy (SCR-14006006).");
@@ -429,6 +445,7 @@ TEST_F(GenericProxyFixture, GenericProxyWillContainEventsForEventsProvidedInShar
 TEST_F(GenericProxyFixture, GenericProxyWillLogErrorMessageForEventsProvidedInConfigurationButNotInSharedMemory)
 {
     RecordProperty("Verifies", "SCR-15603826");
+    RecordProperty("PartiallyVerifies", "comp_req__ReactionOnMissingEventTypeInfo");
     RecordProperty("Description",
                    "Checks that the GenericProxy will log an error message if an event is provided in the "
                    "configuration but not in shared memory.");
@@ -496,6 +513,7 @@ using GenericProxyDeathTest = GenericProxyFixture;
 TEST_F(GenericProxyDeathTest, FillingEventMapWithDuplicateEventNamesWillTerminate)
 {
     RecordProperty("Verifies", "SCR-15603826");
+    RecordProperty("PartiallyVerifies", "comp_req__ReactionOnMissingEventTypeInfo");
     RecordProperty("Description",
                    "Checks that the function used to add GenericProxyEvents to the event map of GenericProxy i.e. "
                    "FillEventMap() will terminate if an event list containing duplicate event names is provided.");
@@ -515,6 +533,7 @@ TEST_F(GenericProxyDeathTest, FillingEventMapWithDuplicateEventNamesWillTerminat
 TEST(GenericProxyHandleTest, GenericProxyUsesProxyBaseGetHandle)
 {
     RecordProperty("Verifies", "SCR-14030261");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyGetHandle");
     RecordProperty("Description", "Checks that GenericProxy uses GetHandle in ProxyBase");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -526,6 +545,7 @@ TEST(GenericProxyHandleTest, GenericProxyUsesProxyBaseGetHandle)
 TEST(GenericProxyHandleTest, GenericProxyContainsPublicHandleTypeAlias)
 {
     RecordProperty("Verifies", "SCR-14030385");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyHandleTypeClass");
     RecordProperty("Description", "A GenericProxy contains a public alias to our implementation of HandleType.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -537,6 +557,7 @@ TEST(GenericProxyHandleTest, GenericProxyContainsPublicHandleTypeAlias)
 TEST(GenericProxyFindServiceTest, GenericProxyUsesProxyBaseFindServiceWithInstanceSpecifier)
 {
     RecordProperty("Verifies", "SCR-14005977");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyFindServiceWithInstanceSpecifier");
     RecordProperty("Description", "Checks that GenericProxy uses FindService in ProxyBase");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -554,6 +575,7 @@ TEST(GenericProxyFindServiceTest, GenericProxyUsesProxyBaseFindServiceWithInstan
 TEST(GenericProxyFindServiceTest, GenericProxyUsesProxyBaseFindServiceWithInstanceIdentifier)
 {
     RecordProperty("Verifies", "SCR-14005991");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyFindServiceWithInstanceIdentifier");
     RecordProperty("Description", "Checks that GenericProxy uses FindService in ProxyBase");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -571,6 +593,7 @@ TEST(GenericProxyFindServiceTest, GenericProxyUsesProxyBaseFindServiceWithInstan
 TEST(GenericProxyStartFindServiceTest, GeneratedProxyUsesProxyBaseStartFindServiceWithInstanceSpecifier)
 {
     RecordProperty("Verifies", "SCR-21788695");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyStartFindServiceWithInstanceSpecifier");
     RecordProperty("Description",
                    "Checks that a generic proxy uses StartFindService with InstanceSpecifier in ProxyBase");
     RecordProperty("TestType", "Requirements-based test");
@@ -590,6 +613,7 @@ TEST(GenericProxyStartFindServiceTest, GeneratedProxyUsesProxyBaseStartFindServi
 TEST(GenericProxyStartFindServiceTest, GeneratedProxyUsesProxyBaseStartFindServiceWithInstanceIdentifier)
 {
     RecordProperty("Verifies", "SCR-21790264");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyStartFindServiceWithInstanceIdentifier");
     RecordProperty("Description",
                    "Checks that a generic proxy uses StartFindService with InstanceIdentifier in ProxyBase");
     RecordProperty("TestType", "Requirements-based test");
@@ -609,6 +633,7 @@ TEST(GenericProxyStartFindServiceTest, GeneratedProxyUsesProxyBaseStartFindServi
 TEST(GenericProxyStopFindServiceTest, GeneratedProxyUsesProxyBaseStopFindService)
 {
     RecordProperty("Verifies", "SCR-21790756");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyStopFindService");
     RecordProperty("Description", "Checks that a generic proxy uses StopFindService in ProxyBase");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -623,6 +648,7 @@ TEST(GenericProxyStopFindServiceTest, GeneratedProxyUsesProxyBaseStopFindService
 TEST(GenericProxyEventMapTest, GenericProxyContainsEventMapClass)
 {
     RecordProperty("Verifies", "SCR-14031112");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyEventMapViewClass");
     RecordProperty("Description", "Checks that GenericProxy contains a public EventMap class");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -635,6 +661,7 @@ TEST(GenericProxyEventMapTest, GenericProxyContainsEventMapClass)
 TEST(GenericProxyEventMapTest, CheckEventMapClassInterface)
 {
     RecordProperty("Verifies", "SCR-14031544");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyEventMapViewClassProperties");
     RecordProperty(
         "Description",
         "Checks that the EventMapView class adheres to the required interface and that EventMapView is a "

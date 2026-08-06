@@ -518,6 +518,7 @@ TEST_F(ClientConnectionTest, TryingToConnectMultipleTimesFinallyConnectingAndImp
 
 TEST_F(ClientConnectionTest, SuccessfullyConnectingAtFirstAttemptThenExplicitlyStopping)
 {
+    ::testing::Test::RecordProperty("FullyVerifies", "comp_req__ClientConnectionMaintainsStateMachine");
     detail::ClientConnection connection(engine_, protocol_config_, client_config_);
     MakeSuccessfulConnection(connection);
 
@@ -609,8 +610,13 @@ TEST_F(ClientConnectionTest, SuccessfullyConnectingAtFirstAttemptThenSpuriousRea
 TEST_F(ClientConnectionTest, NotConnectedSendNotReady)
 {
     ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.SendBufferArgumentValidation");
+    ::testing::Test::RecordProperty("FullyVerifies",
+                                    "comp_req__ClientConnectionSendFailsWhenStopped,"
+                                    "comp_req__ClientConnectionSendWaitReplyFailsWhenStopped,"
+                                    "comp_req__ClientConnectionSendWithCallbackFailsWhenStopped");
     ::testing::Test::RecordProperty("given", "client connection not yet connected");
     detail::ClientConnection connection(engine_, protocol_config_, client_config_);
+    ASSERT_EQ(connection.GetState(), State::kStopped);
 
     std::array<std::uint8_t, kMaxSendSize> send_buffer;
     std::array<std::uint8_t, kMaxReplySize> reply_buffer;
@@ -701,6 +707,7 @@ TEST_F(ClientConnectionTest, SendIsDirectWithFullyOrderedAndEmptyQueue)
 TEST_F(ClientConnectionTest, GivenTrulyAsyncWhenSendIsCalledItIsQueued)
 {
     ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.BE_SendQueueExhausted");
+    ::testing::Test::RecordProperty("FullyVerifies", "comp_req__AsynchronousSendReturnsAfterLocalAcceptance");
     ::testing::Test::RecordProperty("given", "truly-async client connection with send queue capacity of 2");
     client_config_.max_queued_sends = 2;
     // Given Truly Async
@@ -780,6 +787,7 @@ TEST_F(ClientConnectionTest, SendWaitReplyFailsWhenCalledInCallback)
 TEST_F(ClientConnectionTest, SendWaitReplyFailsWhenCannotSendMessageDirectly)
 {
     ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty("PartiallyVerifies", "comp_req__SendWaitReplyBlocksUntilServerReply");
     ::testing::Test::RecordProperty("given", "client connection established");
     detail::ClientConnection connection(engine_, protocol_config_, client_config_);
     MakeSuccessfulConnection(connection);
@@ -803,6 +811,7 @@ TEST_F(ClientConnectionTest, SendWaitReplyFailsWhenCannotSendMessageDirectly)
 TEST_F(ClientConnectionTest, SendWaitReplyFailsDirectlyButUnblocksQueue)
 {
     ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty("PartiallyVerifies", "comp_req__SendWaitReplyBlocksUntilServerReply");
     ::testing::Test::RecordProperty("given", "truly-async client connection with a message already queued");
     client_config_.truly_async = true;
     detail::ClientConnection connection(engine_, protocol_config_, client_config_);
@@ -867,6 +876,7 @@ TEST_F(ClientConnectionTest, SendWaitReplyFailsWhenCannotQueueMessage)
 TEST_F(ClientConnectionTest, SendWaitReplyFailsWhenQueuedMessageCancels)
 {
     ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty("PartiallyVerifies", "comp_req__SendWaitReplyBlocksUntilServerReply");
     ::testing::Test::RecordProperty(
         "given", "truly-async client connection with a ``SendWaitReply`` blocked waiting for a reply");
     client_config_.max_queued_sends = 2;
@@ -1008,6 +1018,7 @@ TEST_F(ClientConnectionTest, SendWithCallbackFailsWhenCannotQueueMessageTrulyAsy
 TEST_F(ClientConnectionTest, SendWithCallbackReportsFailureWhenQueuedSendFailsTrulyAsync)
 {
     ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty("PartiallyVerifies", "comp_req__IClientConnectionSendWithCallbackAPI");
     ::testing::Test::RecordProperty(
         "given", "truly-async client connection with one async reply slot and a send queued for dispatch");
     client_config_.truly_async = true;
@@ -1040,6 +1051,7 @@ TEST_F(ClientConnectionTest, SendWithCallbackReportsFailureWhenQueuedSendFailsTr
 TEST_F(ClientConnectionTest, SendWithCallbackStillHasItsSlotBusyWhenQueuedSendHappensTrulyAsync)
 {
     ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.BE_SendQueueExhausted");
+    ::testing::Test::RecordProperty("PartiallyVerifies", "comp_req__IClientConnectionSendWithCallbackAPI");
     ::testing::Test::RecordProperty(
         "given", "truly-async client connection with one async reply slot busy with a pending ``SendWithCallback``");
     client_config_.truly_async = true;
@@ -1080,6 +1092,9 @@ TEST_F(ClientConnectionTest, SendWithCallbackStillHasItsSlotBusyWhenQueuedSendHa
 TEST_F(ClientConnectionTest, QueuedSendsCancelIfConnectionClosed)
 {
     ::testing::Test::RecordProperty("lobster-tracing", "MessagePassing.OsIpcFaultHandling");
+    ::testing::Test::RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__IClientConnectionSendWithCallbackAPI,comp_req__SendWaitReplyBlocksUntilServerReply");
     ::testing::Test::RecordProperty(
         "given", "truly-async client connection with queued sends and a ``SendWaitReply`` pending reply");
     client_config_.max_queued_sends = 4;

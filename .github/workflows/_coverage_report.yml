@@ -48,22 +48,18 @@ jobs:
         if: inputs.fetch-only == 'true'
         run: bazel build --nobuild //...
 
-      - name: Run coverage
+      - name: Generate coverage artifacts
         if: inputs.fetch-only != 'true'
-        id: run-coverage
-        run: bazel coverage //... --build_tests_only
-
-      - name: Generate coverage report
-        if: inputs.fetch-only != 'true' && steps.run-coverage.outcome == 'success'
         id: generate-report
-        run: |
-          bazel run //quality/coverage:generate_coverage_html -- \
-            --archive "${{ github.event.repository.name }}_coverage_report_${{ github.sha }}" \
-            cpp_coverage_linux
+        run: bazel run //:code_coverage -- --archive-name "${{ github.event.repository.name }}_coverage_report_${{ github.sha }}"
 
       - name: Upload coverage artifacts
         if: inputs.fetch-only != 'true' && steps.generate-report.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}_coverage_report_${{ github.sha }}
-          path: ${{ github.event.repository.name }}_coverage_report_${{ github.sha }}.zip
+          path: |
+            ${{ github.event.repository.name }}_coverage_report_${{ github.sha }}.zip
+            _quality/artifacts/coverage.cpp.*
+            _quality/artifacts/coverage/**
+          if-no-files-found: error

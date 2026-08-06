@@ -257,6 +257,11 @@ using SkeletonEventComponentTestFixture = SkeletonEventComponentTestTemplateFixt
 TEST_F(SkeletonEventComponentTestFixture, CanAllocateAndSendEvent)
 {
     RecordProperty("Verifies", "SCR-5898932, SSR-6225206, SCR-21470600, SCR-21553623");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__UserDataShallBeExchangedViaSharedMemory,comp_req__SkeletonEventClassAllocate,"
+        "comp_req__SkeletonEventClassZeroCopySend,comp_req__BehaviourOfAllocate,"
+        "comp_req__BehaviourOfZeroCopyUpdateSend");
     RecordProperty("Description",
                    "Checks whether a skeleton can send data into shared memory (req. SCR-5898932, SCR-21553623) and "
                    "slot allocation works (req. SSR-6225206, SCR-21470600).");
@@ -292,6 +297,10 @@ TEST_F(SkeletonEventComponentTestFixture, CanAllocateAndSendEvent)
 TEST_F(SkeletonEventComponentTestFixture, CanSendByValue)
 {
     RecordProperty("Verifies", "SCR-5898932, SCR-21553375");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__UserDataShallBeExchangedViaSharedMemory,comp_req__SkeletonEventClassSend,"
+        "comp_req__BehaviourOfUpdateSendWithCopy");
     RecordProperty("Description",
                    "Sends an event sample by Copy on send via shared-memory (req. SCR-5898932, SCR-21553375).");
     RecordProperty("TestType", "Requirements-based test");
@@ -376,6 +385,9 @@ TEST_F(SkeletonEventSingleSlotComponentTestFixture, SendByValueReturnsErrorIfSlo
 TEST_F(SkeletonEventSingleSlotComponentTestFixture, SendByValueFreesSampleAllocateePtrAfterReturning)
 {
     RecordProperty("Verifies", "SCR-6244582");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__BehaviourOfUpdateSendWithCopy,comp_req__AProducerShallAlwaysBeAbleToStoreNewData");
     RecordProperty(
         "Description",
         "Sends an event sample by Copy and verifies that the Sample Allocatee Ptr that gets allocated is destroyed.");

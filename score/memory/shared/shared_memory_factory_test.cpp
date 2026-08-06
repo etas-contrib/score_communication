@@ -516,6 +516,7 @@ TEST_F(SharedMemoryFactoryTest, PreventsToOpenSameFileTwice)
 TEST_F(SharedMemoryFactoryTest, AllowsAccessToMatchingProvidersPreventsNonMatching)
 {
     RecordProperty("Verifies", "SCR-33047276");
+    RecordProperty("PartiallyVerifies", "comp_req__OnlyConfiguredUidsShallHaveAccessToTheLoLaSharedMemorySegments");
     RecordProperty("Description",
                    "Checks that SharedMemoryFactory::Open will return a nullptr if the provided of the "
                    "SharedMemoryResource to be opened is not in the passed list of allowed providers.");

@@ -33,6 +33,7 @@ using std::string_view_literals::operator""sv;
 TEST(InstanceSpecifierTest, Copyable)
 {
     RecordProperty("Verifies", "SCR-18442922");
+    RecordProperty("FullyVerifies", "comp_req__InstanceSpecifierCopySemantics");
     RecordProperty("Description", "Checks copy semantics for InstanceSpecifier");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -45,6 +46,7 @@ TEST(InstanceSpecifierTest, Copyable)
 TEST(InstanceSpecifierTest, Moveable)
 {
     RecordProperty("Verifies", "SCR-21355358");
+    RecordProperty("FullyVerifies", "comp_req__InstanceSpecifierMoveSemantics");
     RecordProperty("Description", "Checks move semantics for InstanceSpecifier");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -57,6 +59,7 @@ TEST(InstanceSpecifierTest, Moveable)
 TEST(InstanceSpecifierComparisonOperatorTest, EqualityOperatorForTwoInstanceSpecifiers)
 {
     RecordProperty("Verifies", "SCR-18443704");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceSpecifierComparisonOperators");
     RecordProperty("Description", "Checks equality operator for two InstanceSpecifiers");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -82,6 +85,7 @@ TEST(InstanceSpecifierComparisonOperatorTest, EqualityOperatorForTwoInstanceSpec
 TEST(InstanceSpecifierComparisonOperatorTest, EqualityOperatorForInstanceSpecifierAndStringView)
 {
     RecordProperty("Verifies", "SCR-18443704");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceSpecifierComparisonOperators");
     RecordProperty("Description", "Checks equality operator for an InstanceSpecifier and an std::string_view");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -104,6 +108,7 @@ TEST(InstanceSpecifierComparisonOperatorTest, EqualityOperatorForInstanceSpecifi
 TEST(InstanceSpecifierComparisonOperatorTest, InequalityOperatorForTwoInstanceSpecifiers)
 {
     RecordProperty("Verifies", "SCR-18443704");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceSpecifierComparisonOperators");
     RecordProperty("Description", "Checks inequality operator for two InstanceSpecifiers");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -129,6 +134,7 @@ TEST(InstanceSpecifierComparisonOperatorTest, InequalityOperatorForTwoInstanceSp
 TEST(InstanceSpecifierComparisonOperatorTest, InequalityOperatorForInstanceSpecifierAndStringView)
 {
     RecordProperty("Verifies", "SCR-18443704");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceSpecifierComparisonOperators");
     RecordProperty("Description", "Checks inequality operator for an InstanceSpecifier and an std::string_view");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -151,6 +157,7 @@ TEST(InstanceSpecifierComparisonOperatorTest, InequalityOperatorForInstanceSpeci
 TEST(InstanceSpecifierComparisonOperatorTest, LessThanOperatorForTwoInstanceSpecifiers)
 {
     RecordProperty("Verifies", "SCR-18443704");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceSpecifierComparisonOperators");
     RecordProperty("Description", "Checks less than operator for two InstanceSpecifiers");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -178,6 +185,7 @@ TEST(InstanceSpecifierComparisonOperatorTest, LessThanOperatorForTwoInstanceSpec
 TEST(InstanceSpecifierComparisonOperatorTest, HashOperatorForDifferentUnderlyingStringsAreDifferent)
 {
     RecordProperty("Verifies", "SCR-21777400");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceSpecifierHashOperator");
     RecordProperty("Description",
                    "Checks the hash for InstanceSpecifiers with different underlying string are different");
     RecordProperty("TestType", "Requirements-based test");
@@ -206,6 +214,7 @@ TEST(InstanceSpecifierComparisonOperatorTest, HashOperatorForDifferentUnderlying
 TEST(InstanceSpecifierHashTest, HashOperatorForTheSameUnderlyingStringIsTheSame)
 {
     RecordProperty("Verifies", "SCR-21777400");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceSpecifierHashOperator");
     RecordProperty("Description",
                    "Checks the hash for InstanceSpecifiers with the same underlying string are the same");
     RecordProperty("TestType", "Requirements-based test");
@@ -234,6 +243,7 @@ TEST(InstanceSpecifierHashTest, HashOperatorForTheSameUnderlyingStringIsTheSame)
 TEST(InstanceSpecifierHashTest, InstanceSpecifierCanBeKeyForStlContainer)
 {
     RecordProperty("Verifies", "SCR-21777400");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceSpecifierHashOperator");
     RecordProperty("Description", "Checks the InstanceSpecifier can be used as key in STL container");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -256,6 +266,7 @@ TEST(InstanceSpecifierHashTest, InstanceSpecifierCanBeKeyForStlContainer)
 TEST(InstanceSpecifierToStringTest, ToStringWillReturnTheUnderlyingString)
 {
     RecordProperty("Verifies", "SCR-18444700");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceSpecifierToString");
     RecordProperty("Description", "Checks the ToString should return the underlying string");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -280,6 +291,7 @@ class InstanceSpecifierCanConstructFromValidStringFixture : public ::testing::Te
 TEST_P(InstanceSpecifierCanConstructFromValidStringFixture, CanConstructFromValidString)
 {
     RecordProperty("Verifies", "SCR-18443828");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceSpecifierCreate");
     RecordProperty("Description", "Checks that an InstanceSpecifier can be created from a valid shortname path.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -309,6 +321,7 @@ class InstanceSpecifierCannotConstructFromInvalidStringFixture : public ::testin
 TEST_P(InstanceSpecifierCannotConstructFromInvalidStringFixture, ConstructingFromInvalidStringReturnsError)
 {
     RecordProperty("Verifies", "SCR-18443828");
+    RecordProperty("PartiallyVerifies", "comp_req__InstanceSpecifierCreate");
     RecordProperty(
         "Description",
         "Checks that trying to create an InstanceSpecifier from an invalid shortname path returns an error.");

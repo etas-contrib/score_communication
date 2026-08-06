@@ -39,10 +39,7 @@ project_url = (
 
 # Sphinx extensions - comprehensive list for SCORE modules
 extensions = [
-    "sphinx_needs",
-    "sphinx_design",
-    "myst_parser",
-    "sphinxcontrib.plantuml",
+    "score_sphinx_bundle",
     "breathe",
     "trlc",
 ]
@@ -132,6 +129,19 @@ bazel_sphinx_needs.log_config_info(project)
 r = Runfiles.Create()
 if r is None:
     raise ValueError("Could not initialize Bazel runfiles.")
+
+_communication_metamodel = r.Rlocation(
+    "score_communication/docs/metamodel.yaml", source_repo=""
+)
+if not _communication_metamodel:
+    raise ValueError("Could not resolve Communication's docs metamodel.")
+score_metamodel_yaml = _communication_metamodel
+score_metamodel_checks = (
+    "check_options,"
+    "check_extra_options,"
+    "check_for_prohibited_words,"
+    "check_validity_consistency"
+)
 
 _plantuml_path = None
 # Use source_repo="" (the root module's canonical source repo key in repo_mapping)

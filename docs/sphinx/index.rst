@@ -47,5 +47,5 @@ in the data path.
    lola
    message_passing
    quality_reports
+   /trlc_requirements.generated
    CONTRIBUTING
-

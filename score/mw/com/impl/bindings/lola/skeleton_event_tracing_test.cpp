@@ -114,6 +114,7 @@ using SkeletonEventTracingSendFixture = SkeletonEventTracingFixture;
 TEST_F(SkeletonEventTracingSendFixture, SendCallsAreTracedWhenEnabled)
 {
     RecordProperty("Verifies", "SCR-18216878, SCR-18200105, SCR-18222321, SCR-18200106, SCR-18200787, SCR-18200533");
+    RecordProperty("PartiallyVerifies", "comp_req__TracePointTypeToMwComApiMapping,comp_req__CallTraceApiWithDataResidingInSharedMemory,comp_req__UsageOfShmDataChunkList,comp_req__DefinitionOfTracePointTypesEmittingDataResidingInSharedMemory,comp_req__UsageOfOptionalTracePointDataId,comp_req__DetermineTracePointDataId");
     RecordProperty("Description",
                    "The Trace point types for binding SkeletonEvent Send are correctly mapped "
                    "(SCR-18216878). The Send trace points are traced with a ShmDataChunkList "
@@ -180,6 +181,7 @@ TEST_F(SkeletonEventTracingSendFixture, SendCallsAreTracedWhenEnabled)
 TEST_F(SkeletonEventTracingSendFixture, MultipleSendCallsUsesCorrectTracePointDataId)
 {
     RecordProperty("Verifies", "SCR-18216878, SCR-18200105, SCR-18222321, SCR-18200106, SCR-18200787, SCR-18200533");
+    RecordProperty("PartiallyVerifies", "comp_req__TracePointTypeToMwComApiMapping,comp_req__CallTraceApiWithDataResidingInSharedMemory,comp_req__UsageOfShmDataChunkList,comp_req__DefinitionOfTracePointTypesEmittingDataResidingInSharedMemory,comp_req__UsageOfOptionalTracePointDataId,comp_req__DetermineTracePointDataId");
     RecordProperty("Description",
                    "The Trace point types for binding SkeletonEvent Send are correctly mapped "
                    "(SCR-18216878). The Send trace points are traced with a ShmDataChunkList "
@@ -253,6 +255,7 @@ TEST_F(SkeletonEventTracingSendFixture, MultipleSendCallsUsesCorrectTracePointDa
 TEST_F(SkeletonEventTracingSendFixture, SendCallsAreNotTracedWhenAllocateFails)
 {
     RecordProperty("Verifies", "SCR-18216878");
+    RecordProperty("PartiallyVerifies", "comp_req__TracePointTypeToMwComApiMapping");
     RecordProperty("Description", "The Trace point types for binding SkeletonEvent Send are correctly mapped.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -295,6 +298,7 @@ using SkeletonEventTracingSendWithAllocateFixture = SkeletonEventTracingFixture;
 TEST_F(SkeletonEventTracingSendWithAllocateFixture, SendWithAllocateCallsAreTracedWhenEnabled)
 {
     RecordProperty("Verifies", "SCR-18216878, SCR-18200105, SCR-18222321, SCR-18200106, SCR-18200787, SCR-18200533");
+    RecordProperty("PartiallyVerifies", "comp_req__TracePointTypeToMwComApiMapping,comp_req__CallTraceApiWithDataResidingInSharedMemory,comp_req__UsageOfShmDataChunkList,comp_req__DefinitionOfTracePointTypesEmittingDataResidingInSharedMemory,comp_req__UsageOfOptionalTracePointDataId,comp_req__DetermineTracePointDataId");
     RecordProperty("Description",
                    "The Trace point types for binding SkeletonEvent Send with allocate are correctly mapped "
                    "(SCR-18216878). The Send trace points are traced with a ShmDataChunkList "
@@ -369,6 +373,7 @@ TEST_F(SkeletonEventTracingSendWithAllocateFixture, SendWithAllocateCallsAreTrac
 TEST_F(SkeletonEventTracingSendWithAllocateFixture, MultipleSendCallsUsesCorrectTracePointDataId)
 {
     RecordProperty("Verifies", "SCR-18216878, SCR-18200105, SCR-18222321, SCR-18200106, SCR-18200787, SCR-18200533");
+    RecordProperty("PartiallyVerifies", "comp_req__TracePointTypeToMwComApiMapping,comp_req__CallTraceApiWithDataResidingInSharedMemory,comp_req__UsageOfShmDataChunkList,comp_req__DefinitionOfTracePointTypesEmittingDataResidingInSharedMemory,comp_req__UsageOfOptionalTracePointDataId,comp_req__DetermineTracePointDataId");
     RecordProperty("Description",
                    "The Trace point types for binding SkeletonEvent Send with allocate are correctly mapped "
                    "(SCR-18216878). The Send trace points are traced with a ShmDataChunkList "

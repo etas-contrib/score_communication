@@ -135,6 +135,10 @@ using RuntimeInitializationTest = RuntimeSingleTestPerProcessFixture;
 TEST_F(RuntimeInitializationTest, ConstructorRegistersItsOwnConfigurationWithInstanceIdentifier)
 {
     RecordProperty("Verifies", "SCR-18448357, SCR-18448382");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__InstanceIdentifierCreate,"
+        "comp_req__InstanceIdentifierToString");
     RecordProperty("Description",
                    "The impl::Runtime constructor registers a pointer to its own "
                    "configuration_ member with InstanceIdentifier::SetConfiguration, so that "
@@ -161,6 +165,10 @@ TEST_F(RuntimeInitializationTest, ConstructorRegistersItsOwnConfigurationWithIns
 TEST_F(RuntimeInitializationTest, ImplicitInitializationAlsoRegistersConfigurationWithInstanceIdentifier)
 {
     RecordProperty("Verifies", "SCR-18448357, SCR-18448382");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__InstanceIdentifierCreate,"
+        "comp_req__InstanceIdentifierToString");
     RecordProperty("Description",
                    "Also for implicit (default) initialization the Runtime constructor registers its own "
                    "configuration_ member with InstanceIdentifier, enabling InstanceIdentifier::Create.");
@@ -185,6 +193,7 @@ TEST_F(RuntimeInitializationTest, ImplicitInitializationAlsoRegistersConfigurati
 TEST_F(RuntimeInitializationTest, InitializationLoadsCorrectConfiguration)
 {
     RecordProperty("Verifies", "SCR-6221480, SCR-21781439");
+    RecordProperty("PartiallyVerifies", "comp_req__RuntimeResolveInstanceIDs");
     RecordProperty("Description", "InstanceSpecifier resolution can not retrieve wrong InstanceIdentifier.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -268,6 +277,7 @@ using RuntimeTest = RuntimeSingleTestPerProcessFixture;
 TEST_F(RuntimeTest, CannotResolveUnknownInstanceSpecifier)
 {
     RecordProperty("Verifies", "SCR-6221480, SCR-21781439");
+    RecordProperty("PartiallyVerifies", "comp_req__RuntimeResolveInstanceIDs");
     RecordProperty("Description", "InstanceSpecifier resolution can not retrieve wrong InstanceIdentifier.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -316,6 +326,7 @@ TEST_F(RuntimeTest, CannotRetrieveUnconfiguredBinding)
 TEST_F(RuntimeTest, HandleTypeContainsEventsSpecifiedInConfiguration)
 {
     RecordProperty("Verifies", "SCR-15600146");
+    RecordProperty("PartiallyVerifies", "comp_req__EventListSource");
     RecordProperty("Description",
                    "A HandleType containing the events in the Lola configuration file can be created from the "
                    "configuration file.");
@@ -342,6 +353,7 @@ TEST_F(RuntimeTest, HandleTypeContainsEventsSpecifiedInConfiguration)
 TEST_F(RuntimeTest, TracingIsDisabledWhenTraceFilterConfigPathIsInvalid)
 {
     RecordProperty("Verifies", "SCR-18159104");
+    RecordProperty("PartiallyVerifies", "comp_req__ProcessingTraceFilterConfig");
     RecordProperty("Description",
                    "Checks that tracing is disabled (indicated by lack of tracing runtime) when TraceFilterConfig path "
                    "does not point to a valid tracing configuration.");

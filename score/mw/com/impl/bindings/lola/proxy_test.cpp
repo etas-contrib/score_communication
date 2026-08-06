@@ -804,6 +804,7 @@ TEST_F(ProxyTransactionLogRollbackFixture, RollbackWillBeNotBeCalledOnNonExistin
 TEST_F(ProxyTransactionLogRollbackFixture, FailureInRollingBackExistingTransactionLogWillReturnEmptyProxyBinding)
 {
     RecordProperty("Verifies", "SCR-31295722");
+    RecordProperty("PartiallyVerifies", "comp_req__ErrorOnUnsuccessfulRestart");
     RecordProperty(
         "Description",
         "error, which is represented by a nullptr, shall be returned if a transaction rollback is not possible.");

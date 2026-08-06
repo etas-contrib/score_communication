@@ -53,6 +53,32 @@ jobs:
         id: run-tests
         run: bazel test //... --build_tests_only
 
+      - name: Assemble classified test results
+        if: inputs.fetch-only != 'true' && steps.run-tests.outcome == 'success'
+        id: classified_test_results
+        run: |
+          bazel run //:unit_test_results -- --collect-only
+          bazel run //:component_test_results -- --collect-only
+
+      # Run after the tests so score_metrics can consume their Bazel XML.
+      - name: Generate traceability metrics
+        if: inputs.fetch-only != 'true'
+        id: traceability_metrics
+        run: bazel run //:docs_check
+
+      - name: Upload quality evidence
+        if: always() && inputs.fetch-only != 'true' && steps.traceability_metrics.outcome == 'success' && steps.classified_test_results.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-evidence-${{ github.sha }}
+          path: |
+            _build/needs.json
+            _build/metrics.json
+            _quality/artifacts/tests.*.xml
+            _quality/artifacts/tests.*.manifest.json
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Upload failed Bazel test logs
         if: inputs.fetch-only != 'true' && failure() && steps.run-tests.outcome == 'failure'
         uses: ./.github/actions/00_infrastructure/upload_bazel_testlogs_on_failure

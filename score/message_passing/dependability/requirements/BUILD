@@ -40,7 +40,10 @@ component_requirements(
     name = "component_requirements",
     srcs = ["component_requirements.trlc"],
     target_compatible_with = ["@platforms//os:linux"],
-    visibility = ["//score/message_passing/dependability:__subpackages__"],
+    visibility = [
+        "//:__pkg__",
+        "//score/message_passing/dependability:__subpackages__",
+    ],
     deps = [
         ":feature_requirements",
         "//score/message_passing/dependability/assumed_system:assumed_system_requirements",

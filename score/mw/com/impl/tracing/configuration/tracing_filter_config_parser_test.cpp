@@ -288,6 +288,7 @@ class TraceConfigParserFixture : public ::testing::Test
 TEST_F(TraceConfigParserFixture, FilterConfigOK)
 {
     RecordProperty("Verifies", "SCR-18144499, SCR-18144675, SCR-18159398, SCR-18159733");
+    RecordProperty("PartiallyVerifies", "comp_req__FormatOfTraceFilterConfig,comp_req__EventLevelConfigSwitch,comp_req__FieldLevelConfigSwitch,comp_req__IpcTracingRegardedAsActive");
     RecordProperty("Description",
                    "Checks whether format of Trace Filter Config is correctly parsed (SCR-18144499) and the event "
                    "(SCR-18144675) and field (SCR-18159398) specific <enableIpcTracing> properties. A Trace Filter "
@@ -531,6 +532,7 @@ TEST_F(TraceConfigParserFixture, FilterConfigWithTwoServiceTypesOK)
 TEST_F(TraceConfigParserFixture, FilterConfigOKFromFile)
 {
     RecordProperty("Verifies", "SCR-18159104, SCR-18144499, SCR-18144675, SCR-18159398");
+    RecordProperty("PartiallyVerifies", "comp_req__ProcessingTraceFilterConfig,comp_req__FormatOfTraceFilterConfig,comp_req__EventLevelConfigSwitch,comp_req__FieldLevelConfigSwitch");
     RecordProperty("Description",
                    "Checks whether format of Trace Filter Config is correctly parsed (SCR-18144499) from file "
                    "(SCR-18159104) and the event (SCR-18144675) and field (SCR-18159398) specific <enableIpcTracing> "
@@ -615,6 +617,7 @@ TEST_F(TraceConfigParserFixture, FilterConfigOKFromFile)
 TEST_F(TraceConfigParserFixture, FilterConfigJsonError)
 {
     RecordProperty("Verifies", "SCR-18159173");
+    RecordProperty("PartiallyVerifies", "comp_req__SchemaValidationFailure");
     RecordProperty("Description",
                    "Checks whether a broken json-format leads to an Error return. Note: We are NOT doing a real "
                    "schema-validation during runtime. We try to understand the content best-effort!");
@@ -693,6 +696,7 @@ TEST_F(TraceConfigParserFixture, FilterConfigJsonError)
 TEST_F(TraceConfigParserFixture, IgnoreTracePointReferencingUnknownServiceType)
 {
     RecordProperty("Verifies", "SCR-18159328");
+    RecordProperty("PartiallyVerifies", "comp_req__TraceFilterConfigReferenceToNonExistingTracePoint");
     RecordProperty("Description",
                    "Checks whether references from tracing filter config to trace-points for service elements, which "
                    "do not exist in mw::com/LoLa are ignored.");
@@ -741,6 +745,7 @@ TEST_F(TraceConfigParserFixture, IgnoreTracePointReferencingUnknownServiceType)
 TEST_F(TraceConfigParserFixture, IgnoreTracePointReferencingUnknownEventField)
 {
     RecordProperty("Verifies", "SCR-18159328");
+    RecordProperty("PartiallyVerifies", "comp_req__TraceFilterConfigReferenceToNonExistingTracePoint");
     RecordProperty("Description",
                    "Checks whether references from tracing filter config to trace-points for service elements, "
                    "which do not exist in mw::com/LoLa are ignored.");
@@ -796,6 +801,9 @@ TEST_F(TraceConfigParserFixture, IgnoreTracePointReferencingUnknownEventField)
 TEST_F(TraceConfigParserFixture, IgnoreTracePointForDisabledEventWithWarning)
 {
     RecordProperty("Verifies", "SCR-18159594, SCR-18144675, SCR-18144767");
+    RecordProperty("PartiallyVerifies",
+                   "comp_req__MismatchTracePointConfigWithApplicationConfig,comp_req__EventLevelConfigSwitch");
+    RecordProperty("FullyVerifies", "comp_req__DefaultEventLevelConfigSwitch");
     RecordProperty("Description",
                    "Checks whether an activated trace-point in the tracing filter config for a service element, "
                    "for which tracing has been disabled explicitly (SCR-18144675) or implicitly (SCR-18144767) in "
@@ -922,6 +930,9 @@ TEST_F(TraceConfigParserFixture, IgnoreTracePointForDisabledEventWithWarning)
 TEST_F(TraceConfigParserFixture, IgnoreTracePointForDisabledFieldWithWarning)
 {
     RecordProperty("Verifies", "SCR-18159594, SCR-18159398, SCR-18159385");
+    RecordProperty("PartiallyVerifies",
+                   "comp_req__MismatchTracePointConfigWithApplicationConfig,comp_req__FieldLevelConfigSwitch");
+    RecordProperty("FullyVerifies", "comp_req__DefaultFieldLevelConfigSwitch");
     RecordProperty("Description",
                    "Checks whether an activated trace-point in the tracing filter config for a service element, "
                    "for which tracing has been disabled explicitly (SCR-18159398) or implicitly (SCR-18159385) in "
@@ -1109,6 +1120,7 @@ TEST_F(TraceConfigParserFixture, IgnoreTracePointForTemporarilyDisabledTracePoin
 TEST_F(TraceConfigParserFixture, ParserReturnsValidObjectWhenConfigurationContainsUnsupportedTracePoints)
 {
     RecordProperty("Verifies", "SCR-18159207");
+    RecordProperty("PartiallyVerifies", "comp_req__IgnoreUnsupportedTracePointTypes");
     RecordProperty("Description",
                    "Checks that parser still returns a valid TracingFilterConfig when the configuration contains "
                    "unsupported trace points.");
@@ -1143,6 +1155,7 @@ TEST_F(TraceConfigParserFixture,
        TracingFilterConfigContainsValidTracePointsWhenConfigurationContainsUnsupportedTracePoints)
 {
     RecordProperty("Verifies", "SCR-18159207");
+    RecordProperty("PartiallyVerifies", "comp_req__IgnoreUnsupportedTracePointTypes");
     RecordProperty("Description",
                    "Checks that valid trace points are still parsed when configuration contains invalid trace points.");
     RecordProperty("TestType", "Requirements-based test");

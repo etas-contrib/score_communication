@@ -51,6 +51,7 @@ const ServiceInstanceDeployment kService2InstanceDeploymentNoInstanceId{kService
 TEST(HandleTypeTest, CopyAssignableAndCopyConstructible)
 {
     RecordProperty("Verifies", "SCR-14116410");
+    RecordProperty("PartiallyVerifies", "comp_req__HandleType");
     RecordProperty("Description", "Checks CopyAssignment operator and CopyConstructor");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -63,6 +64,7 @@ TEST(HandleTypeTest, CopyAssignableAndCopyConstructible)
 TEST(HandleTypeTest, MoveAssignableAndMoveConstructible)
 {
     RecordProperty("Verifies", "SCR-14116410");
+    RecordProperty("PartiallyVerifies", "comp_req__HandleType");
     RecordProperty("Description", "Checks CopyAssignment operator and CopyConstructor");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -83,6 +85,7 @@ TEST(HandleTypeTest, CanUseAsKeyInMap)
 TEST(HandleTypeWithProvidedInstanceIdTest, CanBeCopiedAndEqualCompared)
 {
     RecordProperty("Verifies", "SCR-14116410");
+    RecordProperty("PartiallyVerifies", "comp_req__HandleType");
     RecordProperty("Description", "Checks CopyAssignment operator and EqualComparableOperator");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -115,6 +118,7 @@ TEST(HandleTypeWithInstanceIdFromConfigTest, CopyAssignmentOperatorCopiesHandleT
 TEST(HandleTypeWithProvidedInstanceIdTest, LessCompareable)
 {
     RecordProperty("Verifies", "SCR-14116410");
+    RecordProperty("PartiallyVerifies", "comp_req__HandleType");
     RecordProperty("Description", "Checks LessComparableOperator");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -136,6 +140,7 @@ TEST(HandleTypeWithProvidedInstanceIdTest, LessCompareable)
 TEST(HandleTypeWithProvidedInstanceIdTest, CanGetInstance)
 {
     RecordProperty("Verifies", "SCR-14116410");
+    RecordProperty("PartiallyVerifies", "comp_req__HandleType");
     RecordProperty("Description", "Checks if the underlying instance is correctly retrieved.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -184,6 +189,7 @@ TEST(HandleTypeWithProvidedInstanceIdTest, HashesOfTheSameHandleTypeAreEqual)
 TEST(HandleTypeWithInstanceIdFromConfigTest, CanBeCopiedAndEqualCompared)
 {
     RecordProperty("Verifies", "SCR-14116410");
+    RecordProperty("PartiallyVerifies", "comp_req__HandleType");
     RecordProperty("Description", "Checks CopyAssignment operator and EqualComparableOperator");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -199,6 +205,7 @@ TEST(HandleTypeWithInstanceIdFromConfigTest, CanBeCopiedAndEqualCompared)
 TEST(HandleTypeWithInstanceIdFromConfigTest, LessCompareable)
 {
     RecordProperty("Verifies", "SCR-14116410");
+    RecordProperty("PartiallyVerifies", "comp_req__HandleType");
     RecordProperty("Description", "Checks LessComparableOperator");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -217,6 +224,7 @@ TEST(HandleTypeWithInstanceIdFromConfigTest, LessCompareable)
 TEST(HandleTypeWithInstanceIdFromConfigTest, CanGetInstance)
 {
     RecordProperty("Verifies", "SCR-14116410");
+    RecordProperty("PartiallyVerifies", "comp_req__HandleType");
     RecordProperty("Description", "Checks if the underlying instance is correctly retrieved.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

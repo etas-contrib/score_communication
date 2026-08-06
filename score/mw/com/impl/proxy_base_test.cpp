@@ -145,6 +145,10 @@ TEST_F(ProxyBaseFixture, GetImplReturnsProxyBindingPassedToConstructor)
 TEST_F(ProxyBaseFixture, StoredHandleTypeEqualToSuppliedOne)
 {
     RecordProperty("Verifies", "SCR-14030261, SCR-14110935");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__GenericProxyGetHandle,"
+        "comp_req__ProxyGetHandle");
     RecordProperty("Description", "Checks that GetHandle gets the handle from which the ProxyBase has been created.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -404,6 +408,11 @@ TEST_F(ProxyBaseFindServiceInstanceIdentifierFixture,
        FindServiceWithInstanceIdentifierShouldReturnHandlesContainerIfServiceCanBeFound)
 {
     RecordProperty("Verifies", "SCR-14005991, SCR-14110933, SCR-18804932");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__GenericProxyFindServiceWithInstanceIdentifier,"
+        "comp_req__ProxyFindServiceWithInstanceIdentifier,"
+        "comp_req__BehaviourOfFindService");
     RecordProperty("Description", "Checks finding a service with instance identifier");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -432,6 +441,11 @@ TEST_F(ProxyBaseFindServiceInstanceIdentifierFixture,
        FindServiceWithInstanceIdentifierShouldReturnErrorIfBindingReturnsError)
 {
     RecordProperty("Verifies", "SCR-14005991, SCR-14110933, SCR-18804932");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__GenericProxyFindServiceWithInstanceIdentifier,"
+        "comp_req__ProxyFindServiceWithInstanceIdentifier,"
+        "comp_req__BehaviourOfFindService");
     RecordProperty("Description", "FindService returns a kBindingFailure error code if binding returns any error.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -669,6 +683,7 @@ TEST_F(ProxyBaseServiceElementReferencesFixture, RegisteringServiceElementStores
 TEST_F(ProxyBaseServiceElementReferencesFixture, MoveConstructingUpdatesReferencesToServiceElements)
 {
     RecordProperty("Verifies", "SCR-17432438");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyMoveSemantics");
     RecordProperty("Description", "skeleton is move constructible");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -705,6 +720,7 @@ TEST_F(ProxyBaseServiceElementReferencesFixture, MoveConstructingUpdatesReferenc
 TEST_F(ProxyBaseServiceElementReferencesFixture, MoveAssigningUpdatesReferencesToServiceElements)
 {
     RecordProperty("Verifies", "SCR-21290799");
+    RecordProperty("PartiallyVerifies", "comp_req__ProxyMoveSemantics");
     RecordProperty("Description", "Proxy is move assignable");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

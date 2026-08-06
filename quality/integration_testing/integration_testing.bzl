@@ -129,6 +129,7 @@ def integration_test(name, srcs, filesystem, **kwargs):
         "target_compatible_with",
         ["@score_cpp_policies//sanitizers/constraints:no_tsan"],
     )
+    _extend_list_in_kwargs_without_duplicates(kwargs, "tags", ["component"])
 
     # Tag as integration test so flaky-detection and other tooling can select
     # these via --test_tag_filters=integration-test.
@@ -243,6 +244,7 @@ def dual_qemu_integration_test(
         "target_compatible_with",
         ["@score_cpp_policies//sanitizers/constraints:no_tsan"],
     )
+    _extend_list_in_kwargs_without_duplicates(kwargs, "tags", ["component"])
     _extend_list_in_kwargs(kwargs, "target_compatible_with", QNX_TARGET_COMPATIBLE_WITH)
 
     py_itf_test(

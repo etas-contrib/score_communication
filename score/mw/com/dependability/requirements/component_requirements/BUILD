@@ -27,7 +27,10 @@ component_requirements(
         "component_requirements_ipc_methods.trlc",
     ],
     target_compatible_with = ["@platforms//os:linux"],
-    visibility = ["//score/mw/com/dependability:__subpackages__"],
+    visibility = [
+        "//:__pkg__",
+        "//score/mw/com/dependability:__subpackages__",
+    ],
     deps = [
         "//score/mw/com/dependability/requirements/assumed_system_requirements",
         "//score/mw/com/dependability/requirements/feature_requirements:feature_requirements_ipc",

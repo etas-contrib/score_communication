@@ -71,6 +71,7 @@ class ConfigurationJsonParsingStrategyFixture : public ::testing::Test
 TEST_F(ConfigurationJsonParsingStrategyFixture, ParseExampleJson)
 {
     RecordProperty("Verifies", "SCR-21803701, SCR-21803702, SCR-5898925, SCR-5899090, SCR-5899184, SCR-7088394");
+    RecordProperty("PartiallyVerifies", "comp_req__ChangeOfServiceInterfaceDeployment,comp_req__ChangeOfServiceInstanceDeployment,comp_req__EnableMultiTargetBuild,comp_req__TheNumberOfSlotsShallBeConfigurable,comp_req__OnlyConfiguredUidsShallHaveAccessToTheLoLaSharedMemorySegments,comp_req__OversubscriptionOfAnEventOnlyPossibleIfConfigured");
     RecordProperty("Description", "Checks whether all necessary configuration can be read at runtime");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -2003,6 +2004,7 @@ TEST(ConfigurationJsonParsingStrategy, LolaFieldOptionalMaxConcurrentAllocations
 TEST(ConfigurationJsonParsingStrategy, LolaEventOptionalEnforceMaxSamples)
 {
     RecordProperty("Verifies", "SCR-7088394");
+    RecordProperty("PartiallyVerifies", "comp_req__OversubscriptionOfAnEventOnlyPossibleIfConfigured");
     RecordProperty("Description", "Checks whether optional 'enforceMaxSamples' configuration can be read at runtime");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -2873,6 +2875,7 @@ INSTANTIATE_TEST_SUITE_P(ValidShmSizeCalcMode, ShmSizeCalcMode, ::testing::Value
 TEST(ConfigurationJsonParsingStrategyTracing, EnablingGlobalTracingFlagSetsTracingEnabled)
 {
     RecordProperty("Verifies", "SCR-18159733");
+    RecordProperty("PartiallyVerifies", "comp_req__IpcTracingRegardedAsActive");
     RecordProperty("Description",
                    "TracingConfiguration IsTracingEnabled is true when global tracing enabled flag is set.");
     RecordProperty("TestType", "Requirements-based test");
@@ -2901,6 +2904,7 @@ TEST(ConfigurationJsonParsingStrategyTracing, EnablingGlobalTracingFlagSetsTraci
 TEST(ConfigurationJsonParsingStrategyTracing, EnablingGlobalTracingFlagSetsTracingDisbled)
 {
     RecordProperty("Verifies", "SCR-18159733");
+    RecordProperty("PartiallyVerifies", "comp_req__IpcTracingRegardedAsActive");
     RecordProperty("Description",
                    "TracingConfiguration IsTracingEnabled is false when global tracing enabled flag is not set.");
     RecordProperty("TestType", "Requirements-based test");
@@ -2929,6 +2933,7 @@ TEST(ConfigurationJsonParsingStrategyTracing, EnablingGlobalTracingFlagSetsTraci
 TEST(ConfigurationJsonParsingStrategyTracing, ProvidingAllTracingConfigElementsDoesNotCrash)
 {
     RecordProperty("Verifies", "SCR-18143152");
+    RecordProperty("PartiallyVerifies", "comp_req__ApplicationLevelConfigSwitch");
     RecordProperty("Description", "mw/com configuration file contains flag for enabling / disabling tracing.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -2958,6 +2963,7 @@ TEST(ConfigurationJsonParsingStrategyTracing, ProvidingAllTracingConfigElementsD
 TEST(ConfigurationJsonParsingStrategyTracing, ProvidingAllRequiredTracingConfigElementsDoesNotCrash)
 {
     RecordProperty("Verifies", "SCR-18143152, SCR-18143480");
+    RecordProperty("FullyVerifies", "comp_req__BehaviourInAbsenceOfConfigSwitch");
     RecordProperty("Description",
                    "Flag for enabling / disabling tracing is optional (SCR-18143152). If the flag is not provided, it "
                    "will default to false (SCR-18143480).");
@@ -2987,6 +2993,7 @@ TEST(ConfigurationJsonParsingStrategyTracing,
      ParsingSucceedsIfApplicationInstanceIdentifierPropertyExistsWhenTracingIsEnabled)
 {
     RecordProperty("Verifies", "SCR-19177359");
+    RecordProperty("PartiallyVerifies", "comp_req__ApplicationLevelPropertyInstanceIdentifier");
     RecordProperty(
         "Description",
         "Checks that parsing succeeds if applicationInstanceID property is provided when tracing is enabled.");
@@ -3015,6 +3022,7 @@ TEST(ConfigurationJsonParsingStrategyTracing,
      ParsingTerminatesIfApplicationInstanceIdentifierPropertyDoesNotExistWhenTracingIsEnabled)
 {
     RecordProperty("Verifies", "SCR-19177359");
+    RecordProperty("PartiallyVerifies", "comp_req__ApplicationLevelPropertyInstanceIdentifier");
     RecordProperty(
         "Description",
         "Checks that parsing terminates if applicationInstanceID property is not provided when tracing is enabled.");
@@ -3043,6 +3051,7 @@ TEST(ConfigurationJsonParsingStrategyTracing,
      ParsingSucceedsIfTraceFilterConfigPathPropertyExistsWhenTracingSectionIsPresent)
 {
     RecordProperty("Verifies", "SCR-18144291");
+    RecordProperty("PartiallyVerifies", "comp_req__TraceFilterConfigPath");
     RecordProperty("Description",
                    "Checks that parsing succeeds if traceFilterConfigPath property is provided when the tracing "
                    "section is present in the configuration file.");
@@ -3071,6 +3080,7 @@ TEST(ConfigurationJsonParsingStrategyTracing,
      ParsingSucceedsIfTraceFilterConfigPathPropertyDoesNotExistWhenTracingSectionIsPresent)
 {
     RecordProperty("Verifies", "SCR-18144411");
+    RecordProperty("FullyVerifies", "comp_req__DefaultTraceFilterConfigPath");
     RecordProperty("Description",
                    "Checks that the traceFilterConfigPath property is optional and the default value is "
                    "./etc/mw_com_trace_filter.json.");

@@ -24,6 +24,7 @@ namespace
 TEST(ServiceElementMapViewTest, MapSizeChangesWithInsertionOfElements)
 {
     RecordProperty("Verifies", "SCR-14031544");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyEventMapViewClassProperties");
     RecordProperty("Description",
                    "Checks that the ServiceElementMapView class behaves identically to a "
                    "std::map regarding non-mutable methods");
@@ -44,6 +45,7 @@ TEST(ServiceElementMapViewTest, MapSizeChangesWithInsertionOfElements)
 TEST(ServiceElementMapViewTest, MapSizeChangesWithRemovalOfElements)
 {
     RecordProperty("Verifies", "SCR-14031544");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyEventMapViewClassProperties");
     RecordProperty("Description", "Checks that the GenericProxy EventMap class behaves identically to a std::map");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -70,6 +72,7 @@ TEST(ServiceElementMapViewTest, MapSizeChangesWithRemovalOfElements)
 TEST(ServiceElementMapViewTest, MapWithElementsIsNotEmpty)
 {
     RecordProperty("Verifies", "SCR-14031544");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyEventMapViewClassProperties");
     RecordProperty("Description", "Checks that the GenericProxy EventMap class behaves identically to a std::map");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -87,6 +90,7 @@ TEST(ServiceElementMapViewTest, MapWithElementsIsNotEmpty)
 TEST(ServiceElementMapViewTest, CanFindElementsInMap)
 {
     RecordProperty("Verifies", "SCR-14031544");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyEventMapViewClassProperties");
     RecordProperty("Description", "Checks that the GenericProxy EventMap class behaves identically to a std::map");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

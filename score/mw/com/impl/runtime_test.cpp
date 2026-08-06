@@ -228,6 +228,7 @@ TEST_F(RuntimeTracingConfigTest, GetTracingFilterConfigWillReturnEmptyOptionalIf
 TEST_F(RuntimeTracingConfigTest, CreatingRuntimeWillRegisterClientIfTracingEnabledAndFilterConfigExists)
 {
     RecordProperty("Verifies", "SCR-18159752");
+    RecordProperty("PartiallyVerifies", "comp_req__RegisterAtIpcTracingAsAClient");
     RecordProperty("Description",
                    "Checks whether Runtime will call RegisterClient if tracing is enabled and a TracingFilterConfig is "
                    "provided. It should be called with the lola binding type and the correct applicationInstanceID.");
@@ -258,6 +259,7 @@ TEST_F(RuntimeTracingConfigTest, CreatingRuntimeWillRegisterClientIfTracingEnabl
 TEST_F(RuntimeTracingConfigTest, TracingWillBeDisabledIfRegisterClientReturnsAnError)
 {
     RecordProperty("Verifies", "SCR-18159752");
+    RecordProperty("PartiallyVerifies", "comp_req__RegisterAtIpcTracingAsAClient");
     RecordProperty("Description", "Checks whether tracing is disabled if RegisterClient returns an error.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
@@ -286,6 +288,7 @@ TEST_F(RuntimeTracingConfigTest, TracingWillBeDisabledIfRegisterClientReturnsAnE
 TEST_F(RuntimeTracingConfigTest, TraceClientIdWillBeSavedWhenRegisterClientSucceeds)
 {
     RecordProperty("Verifies", "SCR-18172251");
+    RecordProperty("PartiallyVerifies", "comp_req__MemorizeTraceClientIdOnRegistrationSuccess");
     RecordProperty("Description", "Checks whether the TraceClientId returned by RegisterClient will be saved.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
@@ -315,6 +318,7 @@ TEST_F(RuntimeTracingConfigTest,
        CreatingRuntimeWillRegisterTraceDoneCBWithClientIdFromClientRegistrationIfRegisterClientSucceeded)
 {
     RecordProperty("Verifies", "SCR-18194091");
+    RecordProperty("PartiallyVerifies", "comp_req__RegisterACallbackForTraceDoneNotification");
     RecordProperty(
         "Description",
         "Checks whether RegisterTraceDoneCB is called with the correct TraceClientId if RegisterClient succeeds.");
@@ -346,6 +350,7 @@ TEST_F(RuntimeTracingConfigTest,
 TEST_F(RuntimeTracingConfigTest, RegisterTraceDoneCBWillNotBeCalledIfRegisterClientReturnsAnError)
 {
     RecordProperty("Verifies", "SCR-18194091");
+    RecordProperty("PartiallyVerifies", "comp_req__RegisterACallbackForTraceDoneNotification");
     RecordProperty("Description", "Checks that RegisterTraceDoneCB is not called if RegisterClient returns an error.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
@@ -375,6 +380,7 @@ TEST_F(RuntimeTracingConfigTest, RegisterTraceDoneCBWillNotBeCalledIfRegisterCli
 TEST_F(RuntimeTracingConfigTest, TracingWillBeDisabledIfRegisterTraceDoneCBReturnsAnError)
 {
     RecordProperty("Verifies", "SCR-18194091");
+    RecordProperty("PartiallyVerifies", "comp_req__RegisterACallbackForTraceDoneNotification");
     RecordProperty("Description", "Checks that tracing is disabled if RegisterTraceDoneCB returns an error.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
@@ -407,6 +413,7 @@ TEST_F(RuntimeTracingConfigTest, TracingWillBeDisabledIfRegisterTraceDoneCBRetur
 TEST_F(RuntimeTracingConfigTest, CreatingRuntimeWillCreateTracingRuntimeIfTracingEnabledAndFilterConfigExists)
 {
     RecordProperty("Verifies", "SCR-18159733");
+    RecordProperty("PartiallyVerifies", "comp_req__IpcTracingRegardedAsActive");
     RecordProperty("Description",
                    "Checks that IPC tracing runtime will be created if tracing is enabled in TracingConfiguration and "
                    "a valid Trace Filter config is provided.");
@@ -437,6 +444,7 @@ TEST_F(RuntimeTracingConfigTest, CreatingRuntimeWillCreateTracingRuntimeIfTracin
 TEST_F(RuntimeTracingConfigTest, CreatingRuntimeNotCreateTracingRuntimeIfTracingDisabled)
 {
     RecordProperty("Verifies", "SCR-18159733");
+    RecordProperty("PartiallyVerifies", "comp_req__IpcTracingRegardedAsActive");
     RecordProperty(
         "Description",
         "Checks that IPC tracing runtime will not be created if tracing is disabled in TracingConfiguration.");
@@ -467,6 +475,7 @@ TEST_F(RuntimeTracingConfigTest, CreatingRuntimeNotCreateTracingRuntimeIfTracing
 TEST_F(RuntimeTracingConfigTest, CreatingRuntimeNotCreateTracingRuntimeIfNoTraceFilterConfigExists)
 {
     RecordProperty("Verifies", "SCR-18159733");
+    RecordProperty("PartiallyVerifies", "comp_req__IpcTracingRegardedAsActive");
     RecordProperty(
         "Description",
         "Checks that IPC tracing runtime will not be created if a valid Trace Filter config is not provided.");

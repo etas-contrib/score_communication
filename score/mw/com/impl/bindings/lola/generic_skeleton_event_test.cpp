@@ -63,6 +63,7 @@ class GenericSkeletonEventFixture : public SkeletonEventFixture
 TEST_F(GenericSkeletonEventFixture, CanConstructAGenericSkeletonEvent)
 {
     RecordProperty("Verifies", "SCR-14035184");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericSkeletonEventClass");
     RecordProperty("Description", "Checks that a GenericSkeletonEvent can be constructed.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -106,6 +107,7 @@ TEST_F(GenericSkeletonEventFixture, GetBindingType)
 TEST_F(GenericSkeletonEventFixture, GetSizeInfo)
 {
     RecordProperty("Verifies", "SCR-14035184");
+    RecordProperty("FullyVerifies", "comp_req__GenericSkeletonEventGetSizeInfo");
     RecordProperty("Description", "Checks that GetSizeInfo returns correct size and alignment.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -203,6 +205,7 @@ TEST_F(GenericSkeletonEventFixture, CannotAllocateBeforePrepareOffer)
 TEST_F(GenericSkeletonEventFixture, CanAllocateAfterPrepareOffer)
 {
     RecordProperty("Verifies", "SCR-21840368, SCR-17434933");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericSkeletonEventAllocate,comp_req__BehaviourOfAllocate");
     RecordProperty("Description", "Checks that allocation succeeds after PrepareOffer.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -230,6 +233,7 @@ TEST_F(GenericSkeletonEventFixture, CanAllocateAfterPrepareOffer)
 TEST_F(GenericSkeletonEventFixture, MultipleAllocationsWork)
 {
     RecordProperty("Verifies", "SCR-21840368, SCR-17434933");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericSkeletonEventAllocate,comp_req__BehaviourOfAllocate");
     RecordProperty("Description", "Checks that multiple allocations work correctly.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -263,6 +267,7 @@ TEST_F(GenericSkeletonEventFixture, MultipleAllocationsWork)
 TEST_F(GenericSkeletonEventFixture, AllocationFailsWhenSlotsFull)
 {
     RecordProperty("Verifies", "SCR-21840368, SCR-17434933, SCR-5899090");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericSkeletonEventAllocate,comp_req__BehaviourOfAllocate,comp_req__TheNumberOfSlotsShallBeConfigurable");
     RecordProperty("Description", "Checks that allocation fails when all slots are used.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -302,6 +307,7 @@ TEST_F(GenericSkeletonEventFixture, AllocationFailsWhenSlotsFull)
 TEST_F(GenericSkeletonEventFixture, CanSendAfterAllocate)
 {
     RecordProperty("Verifies", "SCR-21840368");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericSkeletonEventSend,comp_req__BehaviourOfZeroCopyUpdateSend");
     RecordProperty("Description", "Checks that Send works with allocated samples.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -362,6 +368,7 @@ TEST_F(GenericSkeletonEventFixture, CanNotifyConsumers)
 TEST_F(GenericSkeletonEventFixture, NotifyCallsMessagePassingWithRegisteredHandlers)
 {
     RecordProperty("Verifies", "SCR-21840368");
+    RecordProperty("FullyVerifies", "comp_req__EventNotificationsShallBeImplementedViaMessagePassing");
     RecordProperty("Description",
                    "Checks that Notify forwards event updates to message passing when receive handlers are present.");
     RecordProperty("TestType", "Requirements-based test");
@@ -466,6 +473,7 @@ TEST_F(GenericSkeletonEventFixture, SetSkeletonEventTracingData)
 TEST_F(GenericSkeletonEventFixture, FullEventLifecycle)
 {
     RecordProperty("Verifies", "SCR-21840368, SCR-17434933, SCR-5899090");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericSkeletonEventAllocate,comp_req__GenericSkeletonEventSend,comp_req__BehaviourOfAllocate,comp_req__BehaviourOfZeroCopyUpdateSend,comp_req__TheNumberOfSlotsShallBeConfigurable");
     RecordProperty("Description", "Checks complete event lifecycle: Offer -> Allocate -> Send -> StopOffer.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

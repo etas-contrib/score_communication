@@ -212,6 +212,7 @@ TYPED_TEST(LolaProxyEventConstructionFixture, ConstructingRegistersEventWithPare
 TYPED_TEST(LolaProxyEventGetNewSamplesFixture, CallsReceiverForEachAccessibleSample)
 {
     this->RecordProperty("Verifies", "SCR-14035773, SCR-21350367, SCR-6225206");
+    this->RecordProperty("PartiallyVerifies", "comp_req__BehaviourOfGetNewSamples,comp_req__ReturnValueOfSuccessfulGetNewSamples");
     this->RecordProperty(
         "Description",
         "Checks that GetNewSamples will get new samples from provider. Slot referencing works (req. SCR-6225206)");
@@ -244,6 +245,7 @@ TYPED_TEST(LolaProxyEventGetNewSamplesFixture, CallsReceiverForEachAccessibleSam
 TYPED_TEST(LolaProxyEventGetNewSamplesFixture, CallsReceiverForEachAccessibleSampleLimitedBySubscription)
 {
     this->RecordProperty("Verifies", "SCR-14035773, SCR-21350367, SCR-6225206");
+    this->RecordProperty("PartiallyVerifies", "comp_req__BehaviourOfGetNewSamples,comp_req__ReturnValueOfSuccessfulGetNewSamples");
     this->RecordProperty(
         "Description",
         "Checks that GetNewSamples will get new samples from provider. Slot referencing works (req. SCR-6225206)");
@@ -276,6 +278,7 @@ TYPED_TEST(LolaProxyEventGetNewSamplesFixture, CallsReceiverForEachAccessibleSam
 TYPED_TEST(LolaProxyEventGetNewSamplesFixture, CallsReceiverForEachAccessibleSampleLimitedByMaxSampleCount)
 {
     this->RecordProperty("Verifies", "SCR-14035773, SCR-21350367, SCR-6225206");
+    this->RecordProperty("PartiallyVerifies", "comp_req__BehaviourOfGetNewSamples,comp_req__ReturnValueOfSuccessfulGetNewSamples");
     this->RecordProperty(
         "Description",
         "Checks that GetNewSamples will get new samples from provider. Slot referencing works (req. SCR-6225206)");
@@ -308,6 +311,7 @@ TYPED_TEST(LolaProxyEventGetNewSamplesFixture, CallsReceiverForEachAccessibleSam
 TYPED_TEST(LolaProxyEventGetNewSamplesFixture, CallsReceiverForEachAccessibleSampleLimitedByCurrentlyHeldSamples)
 {
     this->RecordProperty("Verifies", "SCR-14035773, SCR-21350367, SCR-6225206");
+    this->RecordProperty("PartiallyVerifies", "comp_req__BehaviourOfGetNewSamples,comp_req__ReturnValueOfSuccessfulGetNewSamples");
     this->RecordProperty(
         "Description",
         "Checks that GetNewSamples will get new samples from provider. Slot referencing works (req. SCR-6225206)");
@@ -353,6 +357,7 @@ TYPED_TEST(LolaProxyEventGetNewSamplesFixture, CallsReceiverForEachAccessibleSam
 TYPED_TEST(LolaProxyEventGetNewSamplesFixture, CallsReceiverWithDataFromProviderInCorrectOrder)
 {
     this->RecordProperty("Verifies", "SCR-14035773, SCR-21350367");
+    this->RecordProperty("PartiallyVerifies", "comp_req__BehaviourOfGetNewSamples,comp_req__ReturnValueOfSuccessfulGetNewSamples");
     this->RecordProperty("Description", "Checks that GetNewSamples will get new samples from provider.");
     this->RecordProperty("TestType", "Requirements-based test");
     this->RecordProperty("Priority", "1");
@@ -389,6 +394,7 @@ TYPED_TEST(LolaProxyEventGetNewSamplesFixture, CallsReceiverWithDataFromProvider
 TYPED_TEST(LolaProxyEventGetNewSamplesFixture, DoNotReceiveEventsFromThePast)
 {
     this->RecordProperty("Verifies", "SCR-14035773, SCR-21350367");
+    this->RecordProperty("PartiallyVerifies", "comp_req__BehaviourOfGetNewSamples,comp_req__ReturnValueOfSuccessfulGetNewSamples");
     this->RecordProperty("Description",
                          "Sends multiple events and checks that reported number of new samples is correct and no "
                          "samples of the past are reported/received.");
@@ -426,6 +432,7 @@ TYPED_TEST(LolaProxyEventGetNewSamplesFixture, DoNotReceiveEventsFromThePast)
 TYPED_TEST(LolaProxyEventGetNewSamplesFixture, TransmitEventInShmArea)
 {
     this->RecordProperty("Verifies", "SCR-6367235");
+    this->RecordProperty("PartiallyVerifies", "comp_req__UserDataShallBeExchangedViaSharedMemory");
     this->RecordProperty("Description", "A valid SamplePtr shall reference a valid and correct slot.");
     this->RecordProperty("TestType ", "Requirements-based test");
     this->RecordProperty("DerivationTechnique", "Analysis of requirements");
@@ -496,6 +503,7 @@ TYPED_TEST(LolaProxyEventGetNewSamplesFixture, CallsReceiverForEachAccessibleSam
 TYPED_TEST(LolaProxyEventGetNumNewSamplesAvailableFixture, ReturnsNumberOfAvailableSamples)
 {
     this->RecordProperty("Verifies", "SCR-21294278");
+    this->RecordProperty("PartiallyVerifies", "comp_req__BehaviourOfGetNumNewSamplesAvailable");
     this->RecordProperty("Description",
                          "Checks that GetNumNewSamplesAvailable reflects the number of new samples available.");
     this->RecordProperty("TestType", "Requirements-based test");
@@ -519,6 +527,7 @@ TYPED_TEST(LolaProxyEventGetNumNewSamplesAvailableFixture, ReturnsNumberOfAvaila
 TYPED_TEST(LolaProxyEventGetNumNewSamplesAvailableFixture, ReturnsNumberOfAvailableSamplesSinceLastGetNewSamples)
 {
     this->RecordProperty("Verifies", "SCR-21294278");
+    this->RecordProperty("PartiallyVerifies", "comp_req__BehaviourOfGetNumNewSamplesAvailable");
     this->RecordProperty("Description",
                          "Checks that GetNumNewSamplesAvailable reflects the number of new samples available.");
     this->RecordProperty("TestType", "Requirements-based test");
@@ -546,6 +555,7 @@ TYPED_TEST(LolaProxyEventGetNumNewSamplesAvailableFixture, ReturnsNumberOfAvaila
 TYPED_TEST(LolaProxyEventGetNumNewSamplesAvailableFixture, ReturnsNumberOfAvailableSamplesIgnoringLimitInSubscription)
 {
     this->RecordProperty("Verifies", "SCR-21294278");
+    this->RecordProperty("PartiallyVerifies", "comp_req__BehaviourOfGetNumNewSamplesAvailable");
     this->RecordProperty("Description",
                          "Checks that GetNumNewSamplesAvailable reflects the number of new samples available.");
     this->RecordProperty("TestType", "Requirements-based test");
@@ -766,6 +776,7 @@ TEST_F(LoLaTypedProxyEventTestFixture, GetNewSamplesReturnsTypedSampleFromProvid
 TEST_F(LoLaTypedProxyEventTestFixture, SampleConstness)
 {
     RecordProperty("Verifies", "SCR-6340729");
+    RecordProperty("PartiallyVerifies", "comp_req__SamplePtr");
     RecordProperty("Description", "Proxy shall interpret slot data as const");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");

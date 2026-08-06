@@ -553,6 +553,7 @@ TEST_F(EventDataControlCompositeFixture, ReturnsNoSlotIfAllUsedQMOnly)
 TEST_F(EventDataControlCompositeFixture, QmConsumerViolation)
 {
     RecordProperty("Verifies", "SCR-5899299, SCR-5899292");
+    RecordProperty("PartiallyVerifies", "comp_req__OnContractViolationQmCommunicationForTheAffectedServiceInstanceShallBeWithdrawn,comp_req__AProducerShallAlwaysBeAbleToStoreNewData");
     RecordProperty("Description", "Checks whether a QM process is ignored if he is miss behaving");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -581,6 +582,7 @@ TEST_F(EventDataControlCompositeFixture, QmConsumerViolation)
 TEST_F(EventDataControlCompositeFixture, AllocationIgnoresQMAfterContractViolation)
 {
     RecordProperty("Verifies", "SCR-5899299, SCR-5899292");
+    RecordProperty("PartiallyVerifies", "comp_req__OnContractViolationQmCommunicationForTheAffectedServiceInstanceShallBeWithdrawn,comp_req__AProducerShallAlwaysBeAbleToStoreNewData");
     RecordProperty("Description", "Checks whether a QM process is ignored if he is miss behaving");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

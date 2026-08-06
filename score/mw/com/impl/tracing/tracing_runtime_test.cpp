@@ -180,6 +180,7 @@ TEST(TracingRuntime, TracingRuntimeTraceWillReceivePointerToConstShmData)
 TEST(TracingRuntimeDisable, TraceClientRegistrationFails)
 {
     RecordProperty("Verifies", "SCR-18159752");
+    RecordProperty("PartiallyVerifies", "comp_req__RegisterAtIpcTracingAsAClient");
     RecordProperty("Description",
                    "Checks whether the binding specific tracing runtimes are triggered to register themselves as "
                    "clients and that a failure even with one client leads to global disabling of tracing.");
@@ -227,6 +228,7 @@ using TracingRuntimeRegisterShmObjectFixture = TracingRuntimeFixture;
 TEST_F(TracingRuntimeRegisterShmObjectFixture, RegisterShmObjectOK)
 {
     RecordProperty("Verifies", "SCR-18166404");
+    RecordProperty("PartiallyVerifies", "comp_req__RegisterSharedMemoryObject");
     RecordProperty("Description", "Verifies, that the correct API from GenericTraceAPI gets called.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
@@ -260,6 +262,7 @@ TEST_F(TracingRuntimeRegisterShmObjectFixture, RegisterShmObjectOK)
 TEST_F(TracingRuntimeRegisterShmObjectFixture, RegisterShmObjectNOK_unrecoverable)
 {
     RecordProperty("Verifies", "SCR-18166404, SCR-18172406");
+    RecordProperty("PartiallyVerifies", "comp_req__RegisterSharedMemoryObject,comp_req__IgnoringSharedMemoryObjectOnNonRecoverableError");
     RecordProperty("Description",
                    "Verifies, that the correct API from GenericTraceAPI gets called and that in case of an "
                    "unrecoverable error no registration-retry logic is set up.");
@@ -287,6 +290,7 @@ TEST_F(TracingRuntimeRegisterShmObjectFixture, RegisterShmObjectNOK_unrecoverabl
 TEST_F(TracingRuntimeRegisterShmObjectFixture, RegisterShmObjectNOK_FatalError)
 {
     RecordProperty("Verifies", "SCR-18398054");
+    RecordProperty("PartiallyVerifies", "comp_req__GlobalNonRecoverableErrorLeadsToDeactivationOfIpcTracing");
     RecordProperty("Description",
                    "Checks that after a terminal fatal error in RegisterShmObject() call, tracing is "
                    "completely disabled and a log message mit severity warning is "
@@ -315,6 +319,7 @@ TEST_F(TracingRuntimeRegisterShmObjectFixture, RegisterShmObjectNOK_FatalError)
 TEST_F(TracingRuntimeRegisterShmObjectFixture, RegisterShmObjectNOK_recoverable)
 {
     RecordProperty("Verifies", "SCR-18166404, SCR-18172392");
+    RecordProperty("PartiallyVerifies", "comp_req__RegisterSharedMemoryObject,comp_req__DeferredOnDemandRegistrationOnRecoverableError");
     RecordProperty("Description",
                    "Verifies, that the correct API from GenericTraceAPI gets called and that in case of an "
                    "recoverable error registration-retry logic is set up.");

@@ -20,6 +20,79 @@ load("//tools/lint:linters.bzl", "use_clang_tidy_targets")
 
 exports_files(["MODULE.bazel"])
 
+exports_files(
+    ["docs/metamodel.yaml"],
+    visibility = [
+        "//bazel/toolchains:__pkg__",
+        "//quality/docs_metrics:__pkg__",
+    ],
+)
+
+# Communication's TRLC requirements -> native Sphinx-Needs RST
+#
+# TRLC files are the single source of truth. This genrule projects them into
+# an RST file that emits native `.. feat_req::` and `.. comp_req::`
+# directives so the existing Sphinx build and traceability exporter can use
+# the same requirement inventory.
+#
+# The projection uses TRLC's official parser and AST, so the same RSL schema,
+# reference resolution, and semantic checks used by the requirement targets
+# guard the generated documentation.
+#
+# Once DR-008 (upstream TRLC -> native Needs conversion) is available, this
+# genrule and the tools under //tools can be deleted; the ID scheme decided
+# by docs/metamodel.yaml remains the same either way.
+genrule(
+    name = "trlc_requirements_rst",
+    srcs = [
+        "//score/mw/com/dependability/requirements/component_requirements:component_requirements_ipc",
+        "//score/message_passing/dependability/requirements:component_requirements",
+    ],
+    outs = ["trlc_requirements.generated.rst"],
+    cmd = "$(location //tools:trlc_to_needs) --output $@ --input-files $(SRCS)",
+    tools = ["//tools:trlc_to_needs"],
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "docs",
+    testonly = True,
+    actual = "//docs/sphinx:sphinx_doc",
+)
+
+alias(
+    name = "docs_check",
+    testonly = True,
+    actual = "//quality/docs_metrics:docs_check",
+)
+
+alias(
+    name = "needs_json",
+    testonly = True,
+    actual = "//docs/sphinx:sphinx_doc_needs",
+)
+
+alias(
+    name = "metrics_json",
+    testonly = True,
+    actual = "//quality/docs_metrics:metrics_json",
+)
+
+alias(
+    name = "unit_test_results",
+    actual = "//quality/test_results:unit_test_results",
+)
+
+alias(
+    name = "component_test_results",
+    actual = "//quality/test_results:component_test_results",
+)
+
+alias(
+    name = "code_coverage",
+    actual = "//quality/test_results:code_coverage",
+)
+
 sphinx_docs_library(
     name = "contributing_md",
     srcs = ["CONTRIBUTING.md"],

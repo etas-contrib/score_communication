@@ -22,6 +22,7 @@ namespace
 TEST(EventSlotStatusView, SeparatesReferenceCount)
 {
     RecordProperty("Verifies", "SCR-5899287");
+    RecordProperty("PartiallyVerifies", "comp_req__AControlSlotShallContainAllNecessaryDataInformationForSynchronizingDataAccess");
     RecordProperty("Description", "Ensures that a slot status contains a reference count");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -40,6 +41,7 @@ TEST(EventSlotStatusView, SeparatesReferenceCount)
 TEST(EventSlotStatusView, SeparatesTimeStamp)
 {
     RecordProperty("Verifies", "SCR-5899287");
+    RecordProperty("PartiallyVerifies", "comp_req__AControlSlotShallContainAllNecessaryDataInformationForSynchronizingDataAccess");
     RecordProperty("Description", "Ensures that a slot status contains a time stamp");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -94,6 +96,7 @@ TEST(EventSlotStatusView, CorrectlyReturnsValid)
 TEST(EventSlotStatusView, CanBeMarkedInvalid)
 {
     RecordProperty("Verifies", "SCR-5899287");
+    RecordProperty("PartiallyVerifies", "comp_req__AControlSlotShallContainAllNecessaryDataInformationForSynchronizingDataAccess");
     RecordProperty("Description", "Ensures that can be marked invalid");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -124,6 +127,7 @@ TEST(EventSlotStatusView, CorrectlyReturnsInWriting)
 TEST(EventSlotStatusView, CanBeMarkedWriting)
 {
     RecordProperty("Verifies", "SCR-5899287");
+    RecordProperty("PartiallyVerifies", "comp_req__AControlSlotShallContainAllNecessaryDataInformationForSynchronizingDataAccess");
     RecordProperty("Description", "Ensures that can be marked writing");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -182,6 +186,7 @@ TEST(EventSlotStatusView, TimeStampIsNotInBetweenIfInWriting)
 TEST(EventSlotStatusView, TimeStampIsInBetween)
 {
     RecordProperty("Verifies", "SCR-5899287");
+    RecordProperty("PartiallyVerifies", "comp_req__AControlSlotShallContainAllNecessaryDataInformationForSynchronizingDataAccess");
     RecordProperty("Description", "Ensures that a timestamp can be check inbetween two other");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

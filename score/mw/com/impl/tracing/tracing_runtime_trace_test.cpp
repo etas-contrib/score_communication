@@ -206,6 +206,7 @@ TEST_P(TracingRuntimeTraceShmParamaterisedFixture, CanConstructTracingRuntime)
 TEST_P(TracingRuntimeTraceShmParamaterisedFixture, CallingTraceDispatchesToBinding)
 {
     RecordProperty("Verifies", "SCR-18200105, SCR-18222321");
+    RecordProperty("PartiallyVerifies", "comp_req__CallTraceApiWithDataResidingInSharedMemory,comp_req__UsageOfShmDataChunkList");
     RecordProperty(
         "Description",
         "Checks whether the right Trace call is done for data residing in shared-mem (SCR-18200105) and the right "
@@ -243,6 +244,7 @@ TEST_P(TracingRuntimeTraceShmParamaterisedFixture, CallingTraceDispatchesToBindi
 TEST_P(TracingRuntimeTraceShmParamaterisedFixture, CallingTraceWillClearDataLossFlagOnSuccess)
 {
     RecordProperty("Verifies", "SCR-18398053");
+    RecordProperty("FullyVerifies", "comp_req__ResetCurrentValueOfTraceDataLossFlagAfterEachTraceCall");
     RecordProperty("Description", "Checks reset of the data loss flag after successful Trace call.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
@@ -269,6 +271,7 @@ TEST_P(TracingRuntimeTraceShmParamaterisedFixture, CallingTraceWillClearDataLoss
 TEST_P(TracingRuntimeTraceShmParamaterisedFixture, CallingTraceWillIndicateThatShmIsCurrentlyBeingTraced)
 {
     RecordProperty("Verifies", "SCR-18390315");
+    RecordProperty("PartiallyVerifies", "comp_req__MarkSharedMemoryDataAsInUseDuringTraceCall");
     RecordProperty("Description",
                    "Calling Trace will notify the binding that data in shared memory is currently being traced.");
     RecordProperty("TestType", "Requirements-based test");
@@ -299,6 +302,7 @@ TEST_P(TracingRuntimeTraceShmParamaterisedFixture,
        CallingTraceWhileShmIsCurrentlyBeingTracedWillNotTraceAndWillSetDataLossFlag)
 {
     RecordProperty("Verifies", "SCR-18391193, SCR-18398043");
+    RecordProperty("PartiallyVerifies", "comp_req__ThresholdForInUseMarkingOfDataInSharedMemory,comp_req__GlobalTraceDataLossFlag");
     RecordProperty("Description",
                    "Calling Trace when the binding indicates that shared memory is currently being traced will not "
                    "Trace and will set the data loss flag (SCR-18391193). The data loss flag is stored in the binding "
@@ -334,6 +338,7 @@ TEST_P(TracingRuntimeTraceShmParamaterisedFixture,
 TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataOK_RetryShmObjectRegistration)
 {
     RecordProperty("Verifies", "SCR-18200105, SCR-18222321, SCR-18398047, SCR-18172392");
+    RecordProperty("PartiallyVerifies", "comp_req__CallTraceApiWithDataResidingInSharedMemory,comp_req__UsageOfShmDataChunkList,comp_req__TransmitCurrentValueOfTraceDataLossFlagInTraceCalls,comp_req__DeferredOnDemandRegistrationOnRecoverableError");
     RecordProperty(
         "Description",
         "Checks whether the right Trace call is done for data residing in shared-mem (SCR-18200105) and the right "
@@ -404,6 +409,7 @@ TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataOK_RetryShmObject
 TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataNOK_RetryShmObjectRegistrationFailsWithNonFatalError)
 {
     RecordProperty("Verifies", "SCR-18200105, SCR-18222321, SCR-18398047, SCR-18172392");
+    RecordProperty("PartiallyVerifies", "comp_req__CallTraceApiWithDataResidingInSharedMemory,comp_req__UsageOfShmDataChunkList,comp_req__TransmitCurrentValueOfTraceDataLossFlagInTraceCalls,comp_req__DeferredOnDemandRegistrationOnRecoverableError");
     RecordProperty(
         "Description",
         "Checks whether the right Trace call is done for data residing in shared-mem (SCR-18200105) and the right "
@@ -453,6 +459,7 @@ TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataNOK_RetryShmObjec
 TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataNOK_RetryShmObjectFailsWithFatalErrorDisabledTracing)
 {
     RecordProperty("Verifies", "SCR-18200105, SCR-18222321, SCR-18398047, SCR-18172392");
+    RecordProperty("PartiallyVerifies", "comp_req__CallTraceApiWithDataResidingInSharedMemory,comp_req__UsageOfShmDataChunkList,comp_req__TransmitCurrentValueOfTraceDataLossFlagInTraceCalls,comp_req__DeferredOnDemandRegistrationOnRecoverableError");
     RecordProperty(
         "Description",
         "Checks whether the right Trace call is done for data residing in shared-mem (SCR-18200105) and the right "
@@ -498,6 +505,7 @@ TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataNOK_RetryShmObjec
 TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataNOK_NoCachedFiledescriptor)
 {
     RecordProperty("Verifies", "SCR-18200105, SCR-18222321, SCR-18398047, SCR-18172392");
+    RecordProperty("PartiallyVerifies", "comp_req__CallTraceApiWithDataResidingInSharedMemory,comp_req__UsageOfShmDataChunkList,comp_req__TransmitCurrentValueOfTraceDataLossFlagInTraceCalls,comp_req__DeferredOnDemandRegistrationOnRecoverableError");
     RecordProperty(
         "Description",
         "Checks whether the right Trace call is done for data residing in shared-mem (SCR-18200105) and the right "
@@ -576,6 +584,7 @@ TEST_P(TracingRuntimeTraceShmParamaterisedDeathTest, TraceShmDataNOK_GetShmRegio
 TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataNOK_NonRecoverableError)
 {
     RecordProperty("Verifies", "SCR-18398059");
+    RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     RecordProperty(
         "Description",
         "Checks that after a non-recoverable error in Trace() call, the data-loss flag is set, the caller is notified, "
@@ -636,6 +645,7 @@ TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataNOK_NonRecoverabl
 TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataNOK_TerminalFatalError)
 {
     RecordProperty("Verifies", "SCR-18398054");
+    RecordProperty("PartiallyVerifies", "comp_req__GlobalNonRecoverableErrorLeadsToDeactivationOfIpcTracing");
     RecordProperty("Description",
                    "Checks that after a terminal fatal error in Trace() call, tracing is "
                    "completely disabled and a log message mit severity warning is issued");
@@ -690,6 +700,7 @@ TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataNOK_TerminalFatal
 TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataNOK_RecoverableError)
 {
     RecordProperty("Verifies", "SCR-18200105, SCR-18222321, SCR-18398047, SCR-18398073");
+    RecordProperty("PartiallyVerifies", "comp_req__CallTraceApiWithDataResidingInSharedMemory,comp_req__UsageOfShmDataChunkList,comp_req__TransmitCurrentValueOfTraceDataLossFlagInTraceCalls,comp_req__RecoverableErrorInTraceCall");
     RecordProperty(
         "Description",
         "Checks whether the right Trace call is done for data residing in shared-mem (SCR-18200105) and the right "
@@ -737,6 +748,7 @@ TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataNOK_RecoverableEr
 TEST_P(TracingRuntimeTraceShmParamaterisedFixture, TraceShmDataNOK_ConsecutiveRecoverableErrors)
 {
     RecordProperty("Verifies", "SCR-18200105, SCR-18222321, SCR-18398047, SCR-24726513");
+    RecordProperty("PartiallyVerifies", "comp_req__CallTraceApiWithDataResidingInSharedMemory,comp_req__UsageOfShmDataChunkList,comp_req__TransmitCurrentValueOfTraceDataLossFlagInTraceCalls,comp_req__DisableTracingAfterNumberOfConsecutiveTraceErrors");
     RecordProperty(
         "Description",
         "Checks whether the right Trace call is done for data residing in shared-mem (SCR-18200105) and the right "
@@ -824,6 +836,7 @@ TEST_P(TracingRuntimeTraceLocalParamaterisedFixture, CanConstructTracingRuntime)
 TEST_P(TracingRuntimeTraceLocalParamaterisedFixture, CallingTraceDispatchesToBinding)
 {
     RecordProperty("Verifies", "SCR-18221771, SCR-18222516");
+    RecordProperty("PartiallyVerifies", "comp_req__CallTraceAPIWithLocalDataNotResidingInSharedMemory,comp_req__UsageOfLocalDataChunkList");
     RecordProperty("Description",
                    "Checks whether the right Trace call is done for local data (SCR-18221771). Also checks the "
                    "handling of LocalDataChunkLists (SCR-18222516)");
@@ -861,6 +874,7 @@ TEST_P(TracingRuntimeTraceLocalParamaterisedFixture, CallingTraceDispatchesToBin
 TEST_P(TracingRuntimeTraceLocalParamaterisedFixture, TraceLocalData_RecoverableError)
 {
     RecordProperty("Verifies", "SCR-18221771, SCR-18398047, SCR-18222516");
+    RecordProperty("PartiallyVerifies", "comp_req__CallTraceAPIWithLocalDataNotResidingInSharedMemory,comp_req__TransmitCurrentValueOfTraceDataLossFlagInTraceCalls,comp_req__UsageOfLocalDataChunkList");
     RecordProperty(
         "Description",
         "Checks whether the right Trace call is done for local data (SCR-18221771). Also checks the transmission"
@@ -901,6 +915,7 @@ TEST_P(TracingRuntimeTraceLocalParamaterisedFixture, TraceLocalData_RecoverableE
 TEST_P(TracingRuntimeTraceLocalParamaterisedFixture, TraceLocalData_NonRecoverableError)
 {
     RecordProperty("Verifies", "SCR-18221771, SCR-18398047");
+    RecordProperty("PartiallyVerifies", "comp_req__CallTraceAPIWithLocalDataNotResidingInSharedMemory,comp_req__TransmitCurrentValueOfTraceDataLossFlagInTraceCalls");
     RecordProperty(
         "Description",
         "Checks whether the right Trace call is done for local data (SCR-18221771). Also checks the transmission"
@@ -1001,6 +1016,7 @@ TEST_P(TracingRuntimeTraceLocalParamaterisedFixture, DisabledTracing_EarlyReturn
 TEST_P(TracingRuntimeTraceLocalParamaterisedFixture, TraceLocalData_FatalError)
 {
     RecordProperty("Verifies", "SCR-18398054");
+    RecordProperty("PartiallyVerifies", "comp_req__GlobalNonRecoverableErrorLeadsToDeactivationOfIpcTracing");
     RecordProperty("Description",
                    "Checks that after a terminal fatal error in Trace() call, tracing is "
                    "completely disabled and a log message mit severity warning is issued");
@@ -1102,6 +1118,7 @@ INSTANTIATE_TEST_CASE_P(TracingRuntimeLocalMetaInfoFixture,
 TEST_P(TracingRuntimeShmMetaInfoFixture, ShmTraceCallMetaInfoContainsAraComMetaInfo)
 {
     RecordProperty("Verifies", "SCR-18200119");
+    RecordProperty("PartiallyVerifies", "comp_req__ParameterMetaInfoVariantUsedInTraceCalls");
     RecordProperty("Description",
                    "Checks that the meta_info type used in Shm Trace calls are set to the variant AraComMetaInfo");
     RecordProperty("TestType", "Requirements-based test");
@@ -1136,6 +1153,7 @@ TEST_P(TracingRuntimeShmMetaInfoFixture,
        ShmTraceCallMetaInfoPropertiesContainsCorrectTracePointTypeAndServiceInstanceElement)
 {
     RecordProperty("Verifies", "SCR-18200709");
+    RecordProperty("PartiallyVerifies", "comp_req__DetermineTracePointIdentification");
     RecordProperty("Description",
                    "Checks that the meta_info properties used in Shm Trace calls have the correct TracePointType and "
                    "ServiceInstanceElement.");
@@ -1180,6 +1198,7 @@ TEST_P(TracingRuntimeShmMetaInfoFixture,
 TEST_P(TracingRuntimeLocalMetaInfoFixture, LocalTraceCallMetaInfoContainsAraComMetaInfo)
 {
     RecordProperty("Verifies", "SCR-18200119");
+    RecordProperty("PartiallyVerifies", "comp_req__ParameterMetaInfoVariantUsedInTraceCalls");
     RecordProperty("Description",
                    "Checks that the meta_info type used in local Trace calls are set to the variant AraComMetaInfo");
     RecordProperty("TestType", "Requirements-based test");
@@ -1212,6 +1231,7 @@ TEST_P(TracingRuntimeLocalMetaInfoFixture,
        LocalTraceCallMetaInfoPropertiesContainsCorrectTracePointTypeAndServiceInstanceElement)
 {
     RecordProperty("Verifies", "SCR-18200709");
+    RecordProperty("PartiallyVerifies", "comp_req__DetermineTracePointIdentification");
     RecordProperty("Description",
                    "Checks that the meta_info properties used in local Trace calls have the correct TracePointType and "
                    "ServiceInstanceElement.");
@@ -1272,6 +1292,7 @@ INSTANTIATE_TEST_SUITE_P(TracingRuntimeTraceDataLossFlagParameterisedFixture,
 TEST_P(TracingRuntimeTraceDataLossFlagParameterisedFixture, CallingShmTraceWillTransmitCurrentValueOfDataLossFlag)
 {
     RecordProperty("Verifies", "SCR-18398047, SCR-18398043");
+    RecordProperty("PartiallyVerifies", "comp_req__TransmitCurrentValueOfTraceDataLossFlagInTraceCalls,comp_req__GlobalTraceDataLossFlag");
     RecordProperty("Description",
                    "Checks the transmission data loss flag with Shm Trace call (SCR-18398047). The value of the data "
                    "loss flag will be retrieved from the binding TracingRuntime (SCR-18398043).");
@@ -1320,6 +1341,7 @@ TEST_P(TracingRuntimeTraceDataLossFlagParameterisedFixture, CallingShmTraceWillT
 TEST_P(TracingRuntimeTraceDataLossFlagParameterisedFixture, CallingLocalTraceWillTransmitCurrentValueOfDataLossFlag)
 {
     RecordProperty("Verifies", "SCR-18398047, SCR-18398043");
+    RecordProperty("PartiallyVerifies", "comp_req__TransmitCurrentValueOfTraceDataLossFlagInTraceCalls,comp_req__GlobalTraceDataLossFlag");
     RecordProperty("Description",
                    "Checks the transmission data loss flag with local Trace call (SCR-18398047). The value of the data "
                    "loss flag will be retrieved from the binding TracingRuntime (SCR-18398043).");

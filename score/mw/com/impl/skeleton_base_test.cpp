@@ -219,6 +219,7 @@ using SkeletonBaseOfferFixture = SkeletonBaseFixture;
 TEST_F(SkeletonBaseOfferFixture, OfferService)
 {
     RecordProperty("Verifies", "SCR-5897815, SCR-17434118");  // SWS_CM_00101
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonOfferService");
     RecordProperty("Description", "Checks whether a service can be offered.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -267,6 +268,7 @@ TEST_F(SkeletonBaseOfferFixture, OfferServiceFailsIfAllMethodsHaveNotBeenRegiste
 TEST_F(SkeletonBaseOfferFixture, CallingPrepareOfferWhenSkeletonBindingPrepareOfferFailsReturnsError)
 {
     RecordProperty("Verifies", "SCR-6222081, SCR-21856131, SCR-17434118");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonOfferService");
     RecordProperty("Description",
                    "Checks that service offering returns error when binding prepare offer fails as no events will be "
                    "offered, which violates req.");
@@ -312,6 +314,7 @@ TEST_F(SkeletonBaseOfferFixture, PrepareStopOfferIsNotCalledWhenSkeletonBindingP
 TEST_F(SkeletonBaseOfferFixture, CallingPrepareOfferWhenEventBindingFailsReturnsError)
 {
     RecordProperty("Verifies", "SCR-6222081, SCR-21856131, SCR-17434118");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonOfferService");
     RecordProperty("Description",
                    "Checks that service offering returns error when event binding prepare offer fails as no events "
                    "will be offered, which violates req.");
@@ -362,6 +365,7 @@ TEST_F(SkeletonBaseOfferFixture,
 TEST_F(SkeletonBaseOfferFixture, CallingPrepareOfferWhenFieldValueNotSetReturnsError)
 {
     RecordProperty("Verifies", "SCR-6222081, SCR-21856131, SCR-17434118");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonOfferService");
     RecordProperty("Description",
                    "Checks, that service offering leads to termination, when binding prepare offer service fails as "
                    "no events will be offered, which violates req.");
@@ -411,6 +415,7 @@ TEST_F(SkeletonBaseOfferFixture,
 TEST_F(SkeletonBaseOfferFixture, CallingPrepareOfferWhenFieldBindingFailsReturnsError)
 {
     RecordProperty("Verifies", "SCR-6222081, SCR-21856131, SCR-17434118");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonOfferService");
     RecordProperty("Description",
                    "Checks, that service offering leads to termination, when binding prepare offer service fails as "
                    "no events will be offered, which violates req.");
@@ -488,6 +493,7 @@ using SkeletonBaseStopOfferFixture = SkeletonBaseFixture;
 TEST_F(SkeletonBaseStopOfferFixture, PrepareStopOffer)
 {
     RecordProperty("Verifies", "SCR-5897820, SCR-17434265");  // SWS_CM_00111
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonStopOfferService");
     RecordProperty("Description", "Checks that PrepareStopOffer() actually stops a offered service");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -590,6 +596,10 @@ TEST_F(SkeletonBaseMoveFixture, SelfMovingAssignmentDoesNotCauseIssues)
 TEST_F(SkeletonBaseOfferFixture, ServiceCanBeReOfferedAfterMoveConstructingService)
 {
     RecordProperty("Verifies", "SCR-17432457, SCR-17432438");
+    RecordProperty(
+        "PartiallyVerifies",
+        "comp_req__SkeletonDestructor,"
+        "comp_req__SkeletonMoveSemantics");
     RecordProperty("Description",
                    "If the service provided by the skeleton is currently being offered at the time of the destruction, "
                    "the offering shall be stopped. And skeleton is move constructible");
@@ -907,6 +917,7 @@ TEST_F(SkeletonBaseServiceElementReferencesFixture, MoveAssigningUpdatesReferenc
 {
 
     RecordProperty("Verifies", "SCR-17432438");
+    RecordProperty("PartiallyVerifies", "comp_req__SkeletonMoveSemantics");
     RecordProperty("Description", "Skeleton is move assignable");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

@@ -54,6 +54,7 @@ const auto kEventName{"DummyEvent1"};
 TEST(GenericProxyEventTest, NotCopyable)
 {
     RecordProperty("Verifies", "SCR-14032718");
+    RecordProperty("FullyVerifies", "comp_req__GenericProxyEventCopySemantics");
     RecordProperty("Description", "Checks copy semantics for GenericProxyEvent");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -72,6 +73,7 @@ TEST(GenericProxyEventTest, NotMoveable)
 TEST(GenericProxyEventTest, SamplePtrsToSlotDataAreConst)
 {
     RecordProperty("Verifies", "SCR-6340729");
+    RecordProperty("PartiallyVerifies", "comp_req__SamplePtr");
     RecordProperty("Description", "Proxy shall interpret slot data as const");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -139,6 +141,7 @@ TEST(GenericProxyEventDeathTest, DieOnProxyDestructionWhileHoldingSamplePtrs)
 TEST(GenericProxyEventGetSampleSizeTest, GetSampleSizeDispatchesToBinding)
 {
     RecordProperty("Verifies", "SCR-14035184");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyEventGetSampleSize");
     RecordProperty("Description", "Checks that GetSampleSize will return the sample size from the binding");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -165,6 +168,7 @@ TEST(GenericProxyEventGetSampleSizeTest, GetSampleSizeDispatchesToBinding)
 TEST(GenericProxyEventHasSerializedFormatTest, HasSerializedFormatDispatchesToBinding)
 {
     RecordProperty("Verifies", "SCR-14035199");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyEventHasSerializedFormat");
     RecordProperty("Description", "Checks that HasSerializedFormat will return the sample size from the binding");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -191,6 +195,7 @@ TEST(GenericProxyEventHasSerializedFormatTest, HasSerializedFormatDispatchesToBi
 TEST(GenericProxyEventGetNewSamplesTest, GetNewSamplesContainsCorrectReceiverSignature)
 {
     RecordProperty("Verifies", "SCR-14086929");
+    RecordProperty("FullyVerifies", "comp_req__GetNewSamplesReceiverSignature");
     RecordProperty("Description", "Checks that the GetNewSamples receiver signature is correct");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

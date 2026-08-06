@@ -438,6 +438,7 @@ INSTANTIATE_TEST_CASE_P(
 TYPED_TEST(ProxyEventTracingSubscribeFixture, SubscribeCallsAreTracedWhenEnabled)
 {
     this->RecordProperty("Verifies", "SCR-18216878, SCR-18221771, SCR-18222516");
+    this->RecordProperty("PartiallyVerifies", "comp_req__TracePointTypeToMwComApiMapping,comp_req__CallTraceAPIWithLocalDataNotResidingInSharedMemory,comp_req__UsageOfLocalDataChunkList");
     this->RecordProperty(
         "Description",
         "The Trace point types for ProxyEvent/ProxyField Subscibe are correctly mapped (SCR-18216878). The Subscribe "
@@ -500,6 +501,7 @@ TYPED_TEST(ProxyEventTracingSubscribeFixture,
            SubscribeTracePointShouldBeDisabledAfterTraceReturnsDisableTracePointError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty("Description",
                          "The Trace point for ProxyEvent/ProxyField Subscibe should be disabled after receiving a "
                          "disable trace point error from the tracing runtime Trace call.");
@@ -572,6 +574,7 @@ TYPED_TEST(ProxyEventTracingSubscribeFixture,
            SubscribeTracePointShouldBeDisabledAfterTraceReturnsDisableAllTracePointsError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty("Description",
                          "All Trace points for the ProxyEvent/ProxyField should be disabled after receiving a disable "
                          "all trace point error from the tracing runtime Trace call.");
@@ -642,6 +645,7 @@ TYPED_TEST(ProxyEventTracingSubscribeFixture,
 TYPED_TEST(ProxyEventTracingSubscribeFixture, SubscribeCallsAreNotTracedWhenDisabled)
 {
     this->RecordProperty("Verifies", "SCR-18217128");
+    this->RecordProperty("PartiallyVerifies", "comp_req__WhenToCallTrace");
     this->RecordProperty("Description",
                          "The ProxyEvent/ProxyField Subscribe trace points are not traced if the service element is "
                          "disabled in the Trace FilterConfig.");
@@ -683,6 +687,7 @@ TYPED_TEST(ProxyEventTracingSubscribeFixture, SubscribeCallsAreNotTracedWhenDisa
 TYPED_TEST(ProxyEventTracingUnsubscribeFixture, UnsubscribeCallsAreTracedWhenEnabled)
 {
     this->RecordProperty("Verifies", "SCR-18216878, SCR-18221771, SCR-18228095");
+    this->RecordProperty("PartiallyVerifies", "comp_req__TracePointTypeToMwComApiMapping,comp_req__CallTraceAPIWithLocalDataNotResidingInSharedMemory,comp_req__UsageOfEmptyLocalDataChunkList");
     this->RecordProperty("Description",
                          "The Trace point types for ProxyEvent/ProxyField Unsubscribe are correctly mapped "
                          "(SCR-18216878). The Unsubscribe "
@@ -744,6 +749,7 @@ TYPED_TEST(ProxyEventTracingUnsubscribeFixture,
            UnsubscribeTracePointShouldBeDisabledAfterTraceReturnsDisableTracePointError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty("Description",
                          "The Trace point for ProxyEvent/ProxyField Unsubscribe should be disabled after receiving a "
                          "disable trace point error from the tracing runtime Trace call.");
@@ -806,6 +812,7 @@ TYPED_TEST(ProxyEventTracingUnsubscribeFixture,
            UnsubscribeTracePointShouldBeDisabledAfterTraceReturnsDisableAllTracePointsError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty("Description",
                          "All Trace points for the ProxyEvent/ProxyField should be disabled after receiving a disable "
                          "all trace point error from the tracing runtime Trace call.");
@@ -866,6 +873,7 @@ TYPED_TEST(ProxyEventTracingUnsubscribeFixture,
 TYPED_TEST(ProxyEventTracingUnsubscribeFixture, UnsubscribeCallsAreNotTracedWhenDisabled)
 {
     this->RecordProperty("Verifies", "SCR-18217128");
+    this->RecordProperty("PartiallyVerifies", "comp_req__WhenToCallTrace");
     this->RecordProperty("Description",
                          "The ProxyEvent/ProxyField Unsubscribe trace points are not traced if the service element is "
                          "disabled in the Trace FilterConfig.");
@@ -912,6 +920,7 @@ TYPED_TEST(ProxyEventTracingUnsubscribeFixture, UnsubscribeCallsAreNotTracedWhen
 TYPED_TEST(ProxyEventTracingSetReceiveHandlerFixture, SetReceiveHandlerCallsAreTracedWhenEnabled)
 {
     this->RecordProperty("Verifies", "SCR-18216878, SCR-18221771, SCR-18228095");
+    this->RecordProperty("PartiallyVerifies", "comp_req__TracePointTypeToMwComApiMapping,comp_req__CallTraceAPIWithLocalDataNotResidingInSharedMemory,comp_req__UsageOfEmptyLocalDataChunkList");
     this->RecordProperty("Description",
                          "The Trace point types for ProxyEvent/ProxyField SetReceiveHandler are correctly mapped "
                          "(SCR-18216878). The SetReceiveHandler trace points are traced without a LocalDataChunkList "
@@ -964,6 +973,7 @@ TYPED_TEST(ProxyEventTracingSetReceiveHandlerFixture,
            SetReceiveHandlerTracePointShouldBeDisabledAfterTraceReturnsDisableTracePointError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty(
         "Description",
         "The Trace point for ProxyEvent/ProxyField SetReceiveHandler should be disabled after receiving a "
@@ -1026,6 +1036,7 @@ TYPED_TEST(ProxyEventTracingSetReceiveHandlerFixture,
            SetReceiveHandlerTracePointShouldBeDisabledAfterTraceReturnsDisableAllTracePointsError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty("Description",
                          "All Trace points for the ProxyEvent/ProxyField should be disabled after receiving a disable "
                          "all trace point error from the tracing runtime Trace call.");
@@ -1085,6 +1096,7 @@ TYPED_TEST(ProxyEventTracingSetReceiveHandlerFixture,
 TYPED_TEST(ProxyEventTracingSetReceiveHandlerFixture, SetReceiveHandlerCallsAreNotTracedWhenDisabled)
 {
     this->RecordProperty("Verifies", "SCR-18217128");
+    this->RecordProperty("PartiallyVerifies", "comp_req__WhenToCallTrace");
     this->RecordProperty(
         "Description",
         "The ProxyEvent/ProxyField SetReceiveHandler trace points are not traced if the service element is "
@@ -1123,6 +1135,7 @@ TYPED_TEST(ProxyEventTracingSetReceiveHandlerFixture, SetReceiveHandlerCallsAreN
 TYPED_TEST(ProxyEventTracingReceiveHandlerCallbackFixture, ReceiveHandlerCallbackCallsAreTracedWhenEnabled)
 {
     this->RecordProperty("Verifies", "SCR-18216878, SCR-18221771, SCR-18228095");
+    this->RecordProperty("PartiallyVerifies", "comp_req__TracePointTypeToMwComApiMapping,comp_req__CallTraceAPIWithLocalDataNotResidingInSharedMemory,comp_req__UsageOfEmptyLocalDataChunkList");
     this->RecordProperty("Description",
                          "The Trace point types for ProxyEvent/ProxyField ReceiveHandlerCallback are correctly mapped "
                          "(SCR-18216878). The ReceiveHandlerCallback trace points are traced without a "
@@ -1186,6 +1199,7 @@ TYPED_TEST(ProxyEventTracingReceiveHandlerCallbackFixture,
            ReceiveHandlerCallbackTracePointShouldBeDisabledAfterTraceReturnsDisableTracePointError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty(
         "Description",
         "The Trace point for ProxyEvent/ProxyField ReceiveHandlerCallback should be disabled after receiving a "
@@ -1260,6 +1274,7 @@ TYPED_TEST(ProxyEventTracingReceiveHandlerCallbackFixture,
            ReceiveHandlerCallbackTracePointShouldBeDisabledAfterTraceReturnsDisableAllTracePointsError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty("Description",
                          "All Trace points for the ProxyEvent/ProxyField should be disabled after receiving a disable "
                          "all trace point error from the tracing runtime Trace call.");
@@ -1331,6 +1346,7 @@ TYPED_TEST(ProxyEventTracingReceiveHandlerCallbackFixture,
 TYPED_TEST(ProxyEventTracingReceiveHandlerCallbackFixture, ReceiveHandlerCallbackCallsAreNotTracedWhenDisabled)
 {
     this->RecordProperty("Verifies", "SCR-18217128");
+    this->RecordProperty("PartiallyVerifies", "comp_req__WhenToCallTrace");
     this->RecordProperty(
         "Description",
         "The ProxyEvent/ProxyField ReceiveHandlerCallback trace points are not traced if the service element is "
@@ -1381,6 +1397,7 @@ TYPED_TEST(ProxyEventTracingReceiveHandlerCallbackFixture, ReceiveHandlerCallbac
 TYPED_TEST(ProxyEventTracingUnsetReceiveHandlerFixture, UnsetReceiveHandlerCallsAreTracedWhenEnabled)
 {
     this->RecordProperty("Verifies", "SCR-18216878, SCR-18221771, SCR-18228095");
+    this->RecordProperty("PartiallyVerifies", "comp_req__TracePointTypeToMwComApiMapping,comp_req__CallTraceAPIWithLocalDataNotResidingInSharedMemory,comp_req__UsageOfEmptyLocalDataChunkList");
     this->RecordProperty("Description",
                          "The Trace point types for ProxyEvent/ProxyField UnsetReceiveHandler are correctly mapped "
                          "(SCR-18216878). The UnsetReceiveHandler trace points are traced without a LocalDataChunkList "
@@ -1435,6 +1452,7 @@ TYPED_TEST(ProxyEventTracingUnsetReceiveHandlerFixture,
            UnsetReceiveHandlerTracePointShouldBeDisabledAfterTraceReturnsDisableTracePointError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty(
         "Description",
         "The Trace point for ProxyEvent/ProxyField UnsetReceiveHandler should be disabled after receiving a "
@@ -1500,6 +1518,7 @@ TYPED_TEST(ProxyEventTracingUnsetReceiveHandlerFixture,
            UnsetReceiveHandlerTracePointShouldBeDisabledAfterTraceReturnsDisableAllTracePointsError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty("Description",
                          "All Trace points for the ProxyEvent/ProxyField should be disabled after receiving a disable "
                          "all trace point error from the tracing runtime Trace call.");
@@ -1562,6 +1581,7 @@ TYPED_TEST(ProxyEventTracingUnsetReceiveHandlerFixture,
 TYPED_TEST(ProxyEventTracingUnsetReceiveHandlerFixture, UnsetReceiveHandlerCallsAreNotTracedWhenDisabled)
 {
     this->RecordProperty("Verifies", "SCR-18217128");
+    this->RecordProperty("PartiallyVerifies", "comp_req__WhenToCallTrace");
     this->RecordProperty(
         "Description",
         "The ProxyEvent/ProxyField UnsetReceiveHandler trace points are not traced if the service element is "
@@ -1603,6 +1623,7 @@ TYPED_TEST(ProxyEventTracingUnsetReceiveHandlerFixture, UnsetReceiveHandlerCalls
 TYPED_TEST(ProxyEventTracingGetNewSamplesFixture, GetNewSamplesCallsAreTracedWhenEnabled)
 {
     this->RecordProperty("Verifies", "SCR-18216878, SCR-18221771, SCR-18228095");
+    this->RecordProperty("PartiallyVerifies", "comp_req__TracePointTypeToMwComApiMapping,comp_req__CallTraceAPIWithLocalDataNotResidingInSharedMemory,comp_req__UsageOfEmptyLocalDataChunkList");
     this->RecordProperty("Description",
                          "The Trace point types for ProxyEvent/ProxyField GetNewSamples are correctly mapped "
                          "(SCR-18216878). The GetNewSamples trace points are traced without a LocalDataChunkList "
@@ -1653,6 +1674,7 @@ TYPED_TEST(ProxyEventTracingGetNewSamplesFixture,
            GetNewSamplesTracePointShouldBeDisabledAfterTraceReturnsDisableTracePointError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty("Description",
                          "The Trace point for ProxyEvent/ProxyField GetNewSamples should be disabled after receiving a "
                          "disable trace point error from the tracing runtime Trace call.");
@@ -1713,6 +1735,7 @@ TYPED_TEST(ProxyEventTracingGetNewSamplesFixture,
            GetNewSamplesTracePointShouldBeDisabledAfterTraceReturnsDisableAllTracePointsError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty("Description",
                          "All Trace points for the ProxyEvent/ProxyField should be disabled after receiving a disable "
                          "all trace point error from the tracing runtime Trace call.");
@@ -1771,6 +1794,7 @@ TYPED_TEST(ProxyEventTracingGetNewSamplesFixture,
 TYPED_TEST(ProxyEventTracingGetNewSamplesFixture, GetNewSamplesCallsAreNotTracedWhenDisabled)
 {
     this->RecordProperty("Verifies", "SCR-18217128");
+    this->RecordProperty("PartiallyVerifies", "comp_req__WhenToCallTrace");
     this->RecordProperty(
         "Description",
         "The ProxyEvent/ProxyField GetNewSamples trace points are not traced if the service element is "
@@ -1808,6 +1832,7 @@ TYPED_TEST(ProxyEventTracingGetNewSamplesFixture, GetNewSamplesCallsAreNotTraced
 TYPED_TEST(ProxyEventTracingGetNewSamplesCallbackFixture, GetNewSamplesCallbackCallsAreTracedWhenEnabled)
 {
     this->RecordProperty("Verifies", "SCR-18216878, SCR-18221771, SCR-18228095, SCR-18200787");
+    this->RecordProperty("PartiallyVerifies", "comp_req__TracePointTypeToMwComApiMapping,comp_req__CallTraceAPIWithLocalDataNotResidingInSharedMemory,comp_req__UsageOfEmptyLocalDataChunkList,comp_req__UsageOfOptionalTracePointDataId");
     this->RecordProperty(
         "Description",
         "The Trace point types for ProxyEvent/ProxyField GetNewSamplesCallback are correctly mapped "
@@ -1879,6 +1904,7 @@ TYPED_TEST(ProxyEventTracingGetNewSamplesCallbackFixture,
            GetNewSamplesCallbackTracePointShouldBeDisabledAfterTraceReturnsDisableTracePointError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty(
         "Description",
         "The Trace point for ProxyEvent/ProxyField GetNewSamplesCallback should be disabled after receiving a "
@@ -1959,6 +1985,7 @@ TYPED_TEST(ProxyEventTracingGetNewSamplesCallbackFixture,
            GetNewSamplesCallbackTracePointShouldBeDisabledAfterTraceReturnsDisableAllTracePointsError)
 {
     this->RecordProperty("Verifies", "SCR-18398059");
+    this->RecordProperty("PartiallyVerifies", "comp_req__NonRecoverableErrorInTraceCall");
     this->RecordProperty("Description",
                          "All Trace points for the ProxyEvent/ProxyField should be disabled after receiving a disable "
                          "all trace point error from the tracing runtime Trace call.");
@@ -2036,6 +2063,7 @@ TYPED_TEST(ProxyEventTracingGetNewSamplesCallbackFixture,
 TYPED_TEST(ProxyEventTracingGetNewSamplesCallbackFixture, GetNewSamplesCallbackCallsAreNotTracedWhenDisabled)
 {
     this->RecordProperty("Verifies", "SCR-18217128");
+    this->RecordProperty("PartiallyVerifies", "comp_req__WhenToCallTrace");
     this->RecordProperty(
         "Description",
         "The ProxyEvent/ProxyField GetNewSamplesCallback trace points are not traced if the service element is "

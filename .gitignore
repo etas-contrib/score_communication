@@ -3,6 +3,7 @@ examples/bazel-*
 user.downloader_config
 user.bazelrc
 _build
+_quality/
 
 # ignore folders created by IDEs
 .vscode
@@ -20,6 +21,14 @@ rust-project.json
 
 # docs-as-code
 docs/ubproject.toml
+ubproject.toml
 cpp_coverage_linux/
 cpp_coverage_qnx/
 __pycache__/
+
+# score_metrics / sphinx-needs exports (also produced under _build/)
+metrics.json
+needs.json
+trlc_requirements.generated.rst
+communication_metamodel.yaml
+docs/trlc_requirements.rst

@@ -50,6 +50,7 @@ constexpr auto kTSHMDeviceName = "/dev/typedshm";
 TEST_F(SharedMemoryResourceOpenTest, OpensSharedMemoryReadOnlyByDefault)
 {
     RecordProperty("Verifies", "SCR-5899175, SCR-6240424");
+    RecordProperty("PartiallyVerifies", "comp_req__SharedMemorySegmentsShallNotBeMappedToAFixedVirtualAddress");
     RecordProperty(
         "Description",
         "Can open shared memory segment read-only. Only opens shared memory segment provided in constructor.");
@@ -126,6 +127,7 @@ TEST_F(SharedMemoryResourceOpenTest, OpeningSharedMemoryFreesResourcesOnDestruct
 TEST_F(SharedMemoryResourceOpenTest, OpensSharedMemoryWillWaitUntilLockFileIsGone)
 {
     RecordProperty("Verifies", "SCR-5899175");
+    RecordProperty("PartiallyVerifies", "comp_req__SharedMemorySegmentsShallNotBeMappedToAFixedVirtualAddress");
     RecordProperty("Description", "Can open shared memory segment read-only after a lock was created");
     RecordProperty("TestType", "requirements-based");  // requirements test
     RecordProperty("Priority", "1");
@@ -197,6 +199,7 @@ TEST_F(SharedMemoryResourceOpenTest, OpensSharedMemoryErrorOnLockFileHandleGrace
 TEST_F(SharedMemoryResourceOpenTest, OpensSharedMemoryReadWrite)
 {
     RecordProperty("Verifies", "SCR-5899175, SCR-6240424");
+    RecordProperty("PartiallyVerifies", "comp_req__SharedMemorySegmentsShallNotBeMappedToAFixedVirtualAddress");
     RecordProperty(
         "Description",
         "Can open shared memory segment read-write. Only opens shared memory segment provided in constructor.");

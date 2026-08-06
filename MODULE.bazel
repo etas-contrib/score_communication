@@ -67,6 +67,10 @@ single_version_override(
     version = "1.3.1",
 )
 
+# S-CORE docs-as-code infrastructure for metrics.json generation
+bazel_dep(name = "score_docs_as_code", version = "6.0.0", dev_dependency = True)
+bazel_dep(name = "score_process", version = "2.0.2", dev_dependency = True)
+
 # Dependencies required for development that will not get propagated to our users as transitive dependencies
 bazel_dep(name = "gcc_toolchain", version = "0.10.0", dev_dependency = True)
 
@@ -415,8 +419,6 @@ single_version_override(
     patch_strip = 1,
     patches = ["//third_party/rule_doxygen:Doxyfile.patch"],
 )
-
-bazel_dep(name = "score_docs_as_code", version = "6.0.0", dev_dependency = True)
 
 # Doxygen extension for documentation generation
 doxygen_extension = use_extension("@rules_doxygen//:extensions.bzl", "doxygen_extension", dev_dependency = True)

@@ -63,6 +63,7 @@ TEST_F(LolaGenericProxyEventFixture, CanConstructAGenericProxyEvent)
 TEST_F(LolaGenericProxyEventFixture, GetSampleSize)
 {
     RecordProperty("Verifies", "SCR-14035184");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyEventGetSampleSize");
     RecordProperty("Description",
                    "Checks that GetSampleSize will return the sample size of the underlying event data type.");
     RecordProperty("TestType", "Requirements-based test");
@@ -80,6 +81,7 @@ TEST_F(LolaGenericProxyEventFixture, GetSampleSize)
 TEST_F(LolaGenericProxyEventFixture, HasSerializedFormat)
 {
     RecordProperty("Verifies", "SCR-14035199");
+    RecordProperty("PartiallyVerifies", "comp_req__GenericProxyEventHasSerializedFormat");
     RecordProperty("Description", "Checks that HasSerializedFormat will always return false for the Lola binding.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -95,6 +97,7 @@ TEST_F(LolaGenericProxyEventFixture, HasSerializedFormat)
 TEST_F(LolaGenericProxyEventFixture, SampleConstness)
 {
     RecordProperty("Verifies", "SCR-6340729");
+    RecordProperty("PartiallyVerifies", "comp_req__SamplePtr");
     RecordProperty("Description", "Proxy shall interpret slot data as const");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");

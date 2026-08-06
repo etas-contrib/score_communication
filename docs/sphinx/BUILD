@@ -77,6 +77,7 @@ sphinx_module(
             ":generate_api_rst",
             ":quality_links",
             ":static_assets",
+            "//:trlc_requirements_rst",
         ],
     docs_library_deps = [
         "//score/mw/com/dependability:mw_com_rst",

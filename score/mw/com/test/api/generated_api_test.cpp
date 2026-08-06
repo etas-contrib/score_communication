@@ -92,6 +92,8 @@ TEST(API, ImplementationDataTypeExistence)
 {
     // SWS_CM_10373, SWS_CM_10374, SWS_CM_10375, SWS_CM_00421, SWS_CM_00400
     RecordProperty("Verifies", "SCR-5878057, SCR-5878068, SCR-5878095, SCR-5878759, SCR-5879577");
+    RecordProperty("PartiallyVerifies",
+                   "feat_req__SupportForProgrammingLanguageIdioms,feat_req__UseProgrammingLanguageInfrastructure");
     RecordProperty("Description",
                    "Checks whether the header files exist in the right name in the right folder. Each of the mentioned "
                    "types will then be tested in his respective requirement.");
@@ -107,6 +109,7 @@ TEST(API, AvoidsDataTypeRedeclaration)
 {
     // SWS_CM_00411
     RecordProperty("Verifies", "SCR-5878780");
+    RecordProperty("PartiallyVerifies", "feat_req__SupportForProgrammingLanguageIdioms");
     RecordProperty("Description", "Checks whether we have ODR violations if a type is used twice.");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -117,6 +120,8 @@ TEST(API, SupportsPrimitiveCppImplementationTypes)
 {
     // SWS_CM_00504, SWS_CM_00402, SWS_CM_00405, SWS_CM_00414
     RecordProperty("Verifies", "SCR-5879657, SCR-5879672, SCR-5879866, SCR-5880470");
+    RecordProperty("PartiallyVerifies",
+                   "feat_req__SupportForProgrammingLanguageIdioms,feat_req__UseProgrammingLanguageInfrastructure");
     RecordProperty("Description", "Generates necessary types and checks if they are usable (all primitive types)");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -141,6 +146,8 @@ TEST(API, ArrayDeclarationWithOneDimension)
 {
     // SWS_CM_00403
     RecordProperty("Verifies", "SCR-5879819");
+    RecordProperty("PartiallyVerifies",
+                   "feat_req__SupportForProgrammingLanguageIdioms,feat_req__UseProgrammingLanguageInfrastructure");
     RecordProperty("Description",
                    "Checks whether array with one dimension is generated. Inplace are not supported by Franca.");
     RecordProperty("TestType", "Requirements-based test");
@@ -157,6 +164,8 @@ TEST(API, ArrayDeclarationWithMultiDimArray)
 {
     // SWS_CM_00404
     RecordProperty("Verifies", "SCR-5879837");
+    RecordProperty("PartiallyVerifies",
+                   "feat_req__SupportForProgrammingLanguageIdioms,feat_req__UseProgrammingLanguageInfrastructure");
     RecordProperty("Description",
                    "Checks whether array with multiple dimension is generated. Inplace are not supported by Franca.");
     RecordProperty("TestType", "Requirements-based test");
@@ -174,6 +183,8 @@ TEST(API, StringIsSupported)
 {
     // SWS_CM_00406
     RecordProperty("Verifies", "SCR-5880416");
+    RecordProperty("PartiallyVerifies",
+                   "feat_req__SupportForProgrammingLanguageIdioms,feat_req__UseProgrammingLanguageInfrastructure");
     RecordProperty("Description", "Checks whether strings are supported");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -190,6 +201,8 @@ TEST(API, VectorDeclarationWithOneDimension)
 {
     // SWS_CM_00407
     RecordProperty("Verifies", "SCR-5880510");
+    RecordProperty("PartiallyVerifies",
+                   "feat_req__SupportForProgrammingLanguageIdioms,feat_req__UseProgrammingLanguageInfrastructure");
     RecordProperty("Description",
                    "Checks whether vector with one dimension is generated. Inplace are not supported by Franca.");
     RecordProperty("TestType", "Requirements-based test");
@@ -205,6 +218,8 @@ TEST(API, VectorDeclarationWithMultiDimVector)
 {
     // SWS_CM_00408
     RecordProperty("Verifies", "SCR-5880804");
+    RecordProperty("PartiallyVerifies",
+                   "feat_req__SupportForProgrammingLanguageIdioms,feat_req__UseProgrammingLanguageInfrastructure");
     RecordProperty("Description",
                    "Checks whether vector with multiple dimension is generated. Inplace are not supported by Franca.");
     RecordProperty("TestType", "Requirements-based test");
@@ -219,6 +234,7 @@ TEST(API, TypeDefToCustomType)
 {
     // SWS_CM_00410
     RecordProperty("Verifies", "SCR-5881043");
+    RecordProperty("PartiallyVerifies", "feat_req__SupportForProgrammingLanguageIdioms");
     RecordProperty("Description", "Checks whether typedefs are generated correctly");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -231,6 +247,8 @@ TEST(API, EnumerationGenerated)
 {
     // SWS_CM_00424
     RecordProperty("Verifies", "SCR-5881063");
+    RecordProperty("PartiallyVerifies",
+                   "feat_req__SupportForProgrammingLanguageIdioms,feat_req__UseProgrammingLanguageInfrastructure");
     RecordProperty("Description", "Checks whether enums are generated correctly");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

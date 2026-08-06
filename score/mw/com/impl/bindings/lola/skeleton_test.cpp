@@ -255,6 +255,7 @@ TEST_F(SkeletonTestSharedMemoryCreationFixture, PrepareServiceOfferFailsOnShmCre
 TEST_F(SkeletonTestSharedMemoryCreationFixture, PrepareServiceOfferWithTraceCallback)
 {
     RecordProperty("Verifies", "SCR-19178261, SCR-18166404");
+    RecordProperty("PartiallyVerifies", "comp_req__TypedMemoryPreferenceForSharedMemoryObjects,comp_req__RegisterSharedMemoryObject");
     RecordProperty("Description",
                    "Checks whether, typed-memory is preferred (SCR-19178261) for creation of shm-object for DATA in "
                    "case it is tracing relevant. Checks, that registration is only tried, when shm-object has been "
@@ -291,6 +292,7 @@ TEST_F(SkeletonTestSharedMemoryCreationFixture, PrepareServiceOfferWithTraceCall
 TEST_F(SkeletonTestSharedMemoryCreationFixture, PrepareServiceOfferWithTraceCallbackNeverCalledIfNotInTypedMemory)
 {
     RecordProperty("Verifies", "SCR-19178261, SCR-18166404");
+    RecordProperty("PartiallyVerifies", "comp_req__TypedMemoryPreferenceForSharedMemoryObjects,comp_req__RegisterSharedMemoryObject");
     RecordProperty("Description",
                    "Checks whether, typed-memory is preferred (SCR-19178261) for creation of shm-object for DATA in "
                    "case it is tracing relevant. Checks, that registration is only tried, when shm-object has been "

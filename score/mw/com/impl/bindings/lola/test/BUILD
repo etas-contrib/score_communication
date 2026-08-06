@@ -134,8 +134,8 @@ cc_test(
         "aborts_upon_exception",
     ],
     tags = [
+        "component",
         "exclusive",  # Sandboxing is not properly working with LoLa message passing 2.0 (Ticket-217341)
-        "unit",
     ],
     target_compatible_with = ["@platforms//os:linux"],  # @todo: This should also work under QNX, convert to integration test
     visibility = [
@@ -161,8 +161,8 @@ cc_test(
         "aborts_upon_exception",
     ],
     tags = [
+        "component",
         "exclusive",  # Sandboxing is not properly working with LoLa message passing 2.0 (Ticket-217341)
-        "unit",
     ],
     target_compatible_with = ["@platforms//os:linux"],  # @todo: This should also work under QNX, convert to integration test
     visibility = [
@@ -192,8 +192,8 @@ cc_test(
     srcs = ["proxy_component_test.cpp"],
     features = COMPILER_WARNING_FEATURES + ["aborts_upon_exception"],
     tags = [
+        "component",
         "exclusive",  # Sandboxing is not properly working with LoLa message passing 2.0 (Ticket-217341)
-        "unit",
     ],
     target_compatible_with = ["@platforms//os:linux"],  # @todo: This should also work under QNX, convert to integration test
     visibility = [

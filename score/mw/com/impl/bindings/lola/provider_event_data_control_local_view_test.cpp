@@ -114,6 +114,7 @@ class ProviderEventDataControlLocalViewFixture : public ::testing::Test
 TEST_F(ProviderEventDataControlLocalViewFixture, CanAllocateOneSlotWithoutContention)
 {
     RecordProperty("Verifies", "SCR-5899076");
+    RecordProperty("PartiallyVerifies", "comp_req__TheSharedMemorySegmentsShallBeDividedIntoSlots");
     RecordProperty("Description", "Ensures that a slot can be allocated");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");
@@ -133,6 +134,7 @@ TEST_F(ProviderEventDataControlLocalViewFixture, CanAllocateOneSlotWithoutConten
 TEST_F(ProviderEventDataControlLocalViewFixture, WillAllocateSecondSlotIfFirstOneIsInWriting)
 {
     RecordProperty("Verifies", "SCR-5899076");
+    RecordProperty("PartiallyVerifies", "comp_req__TheSharedMemorySegmentsShallBeDividedIntoSlots");
     RecordProperty("Description", "Ensures that a slot can be allocated");
     RecordProperty("TestType", "Requirements-based test");
     RecordProperty("Priority", "1");

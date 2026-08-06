@@ -149,19 +149,27 @@ For detailed documentation of the pipeline architecture, tools, and requirements
 ### Running Coverage
 
 ```bash
-bazel coverage //...
+bazel run //:code_coverage
 ```
+
+This runs all non-manual tests with coverage and writes the stable report to
+`_quality/artifacts/coverage/cpp/<variant>/html/index.html`. The corresponding
+raw report, ZIP archive, and manifest are written to
+`_quality/artifacts/coverage/cpp/<variant>/_coverage_report.dat` and
+`_quality/artifacts/coverage.cpp.<variant>.{zip,manifest.json}`.
 
 To run coverage for a specific target:
 
 ```bash
-bazel coverage //score/message_passing:client_connection_test_linux
+bazel run //:code_coverage -- \
+  --target //score/message_passing:client_connection_test
 ```
 
 The coverage report generator produces a zip file at
 `bazel-out/_coverage/_coverage_report.dat` containing the HTML report, an LCOV export, and a text summary.
 
-To extract the HTML report (works for both full and single-target runs):
+The lower-level report extraction target remains available for an existing
+coverage run:
 
 ```bash
 bazel run //quality/coverage:generate_coverage_html

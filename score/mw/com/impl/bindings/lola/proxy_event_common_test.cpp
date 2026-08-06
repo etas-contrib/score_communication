@@ -162,6 +162,7 @@ TYPED_TEST(LolaProxyEventCommonFixture, DoNotRegisterEventHandler)
 TYPED_TEST(LolaProxyEventCommonFixture, SubscriptionFailsWhenProviderRejectsSubscription)
 {
     this->RecordProperty("Verifies", "SCR-21269964, SCR-14137270, SCR-17292398, SCR-14033248");
+    this->RecordProperty("PartiallyVerifies", "comp_req__BehaviourOfSubscribe,comp_req__ProxyEventSubscribe,comp_req__GenericProxyEventSubscribe");
     this->RecordProperty("Description",
                          "Checks that a subscription will fail when the provider rejects the subscription due to "
                          "overflowed max sample count.");
@@ -185,6 +186,7 @@ TYPED_TEST(LolaProxyEventCommonFixture, SubscriptionFailsWhenProviderRejectsSubs
 TYPED_TEST(LolaProxyEventCommonFixture, UnsubscribeImmediatelyAfterSubscribing)
 {
     this->RecordProperty("Verifies", "SCR-14033377, SCR-17292399, SCR-14137271, SCR-21286218");
+    this->RecordProperty("PartiallyVerifies", "comp_req__GenericProxyEventUnsubscribe,comp_req__ProxyEventUnsubscribe,comp_req__BehaviourOfUnsubscribe");
     this->RecordProperty("Description",
                          "Unsubscribe will be succesfully processed if a user unsubscribes from an event immediately "
                          "after subscribing.");
@@ -213,6 +215,7 @@ TYPED_TEST(LolaProxyEventCommonFixture, UnsubscribingWillUnregisterEventHandler)
     // this test covers Unsubscribe triggering UnregisterEventNotification, the other covers proxy
     // destruction triggering Unsubscribe on the events and fields.
     this->RecordProperty("Verifies", "SCR-21293524, SCR-20236391, SCR-20237033");
+    this->RecordProperty("PartiallyVerifies", "comp_req__BehaviourOfUnsetReceiveHandler");
     this->RecordProperty(
         "Description",
         "Checks that calling Unsubscribe while currently subscribed will unregister a registered event "

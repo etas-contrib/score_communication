@@ -28,6 +28,7 @@ py_binary(
     name = "sphinx_build",
     srcs = ["@score_tooling//bazel/rules/rules_score:src/sphinx_wrapper.py"],
     data = [
+        "//:docs/metamodel.yaml",
         "@score_tooling//plantuml:fta_metamodel",
         "@score_tooling//third_party/docs_runtime:dot",
         "@score_tooling//third_party/plantuml",
@@ -46,6 +47,7 @@ py_binary(
         "@score_communication_pip//sphinx_needs:pkg",
         "@score_communication_pip//sphinx_rtd_theme:pkg",
         "@score_communication_pip//sphinxcontrib_plantuml:pkg",
+        "@score_docs_as_code//src/extensions/score_sphinx_bundle",
         "@score_tooling//bazel/rules/rules_score:bazel_sphinx_needs",
         "@score_tooling//bazel/rules/rules_score:sphinx_module_ext",
         "@score_tooling//plantuml/sphinx/clickable_plantuml",
