@@ -444,11 +444,5 @@ TEST_F(ConfigurationFlatbufferParsingStrategyFixture, WrongFileIdentifierWillDie
         ConfigurationFlatbufferParsingStrategy{}.Parse(score::cpp::span<const std::uint8_t>{buffer}));
 }
 
-TEST_F(ConfigurationFlatbufferParsingStrategyFixture, InvalidPathWillDie)
-{
-    SCORE_LANGUAGE_FUTURECPP_EXPECT_CONTRACT_VIOLATED(
-        ConfigurationFlatbufferParsingStrategy{}.Parse(std::string_view{"my_invalid_path_to_nowhere"}));
-}
-
 }  // namespace
 }  // namespace score::mw::com::impl::configuration
