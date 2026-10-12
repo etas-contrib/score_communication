@@ -1,9 +1,0 @@
-{
-    "serviceInstances": [],
-    "serviceTypes": [],
-    "tracing": {
-        "enable": true,
-        "traceFilterConfigPath": "./mw_com_trace_filter.json",
-        "applicationInstanceID": "test_application_id"
-    }
-}

@@ -1,9 +1,0 @@
-{
-    "serviceTypes": [],
-    "serviceInstances": [],
-    "global": {
-        "queue-size": {
-            "QM-receiver": 8
-        }
-    }
-}
