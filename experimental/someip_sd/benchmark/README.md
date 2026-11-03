@@ -367,6 +367,28 @@ Notes:
   run_host_load_peer.sh <host_ip> <interface> 239.192.255.251 30490 --rx-port 34501 \
       --cpu-scales 0.25,0.5
   ```
+
+  [run_hw_load.sh](target/run_hw_load.sh) (also in `load_host_bundle`) does all of this from a Linux
+  host in the target's network, such as the jump server: deploy, peer, target run, results, report
+  and target reset. It can be run repeatedly, and every run gets
+  `~/someip_load_hw/runs/<timestamp>/`. Put `load_target_bundle.tar.gz`, `load_host_bundle.tar.gz`
+  (built for the host's architecture) and safe-posix-platform's `qqvp_diag.py` (DoIP reset) into one
+  directory and run `./run_hw_load.sh [-- someip_load_lola options]` there. See the script header
+  for the options.
+- Reference: the same workload on the image's Vector ara::com stack (`someipd_posix`).
+  safe-posix-platform `platform/aas/ara/com/example/someip_bench/load` holds `SomeipLoadAra`,
+  which is generated from the same `workload.txt`. Build its `target_bundle` with
+  `--config=ipn10_qnx8` and copy it as `vector_load_target_bundle.tar.gz` next to `run_hw_load.sh`.
+  Then run `./run_hw_load.sh --stack vector [--no-udp-collection]`. The script starts the peer with
+  `--payload-offset 4`, because the `ara::core::Vector` payload has a 4 byte length field before the
+  header. The wire payload size stays the same.
+- Compare two runs, e.g. io-sock (A) and Vector (B). The report shows CPU per phase, per component
+  and per event, plus delivery, as absolute values, B − A and %:
+
+  ```sh
+  python3 load_report.py --compare <A target results.txt> <A peer results.txt> \
+      <B target results.txt> <B peer results.txt>
+  ```
 - The module serves the services of the bundle it was loaded from (`etc/mw_com_config.json` next to
   its `bin`). `run_target.sh` refuses to run if io-sock already holds a module from another bundle,
   e.g. after a round-trip measurement. Restart io-sock or the target in between.

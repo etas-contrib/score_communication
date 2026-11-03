@@ -54,6 +54,9 @@ struct Options
     std::string label{"lg-someip"};
     double scale{1.0};
     std::vector<double> cpu_scales;
+    // Bytes before the header in every payload; 4 for a peer serializing the payload as a dynamic array with a
+    // 4 byte length field (Vector ara::com), which is written there.
+    std::uint32_t payload_offset{0U};
 };
 
 bool ParseOptions(int argc, char** argv, Options& options)
@@ -86,12 +89,16 @@ bool ParseOptions(int argc, char** argv, Options& options)
                 return false;
             }
         }
+        else if (name == "--payload-offset")
+        {
+            options.payload_offset = static_cast<std::uint32_t>(std::stoul(text));
+        }
         else
         {
             return false;
         }
     }
-    return ((argc % 2) == 0) && (options.scale > 0.0);
+    return ((argc % 2) == 0) && (options.scale > 0.0) && ((options.payload_offset == 0U) || (options.payload_offset == 4U));
 }
 
 }  // namespace
@@ -103,7 +110,7 @@ int main(int argc, char** argv)
     {
         std::cerr << "usage: " << argv[0]
                   << " <lg-someip config json> [--workload ./etc/workload.txt] [--scale 1.0] [--label lg-someip]"
-                     " [--cpu-scales 0.25,0.5]"
+                     " [--cpu-scales 0.25,0.5] [--payload-offset 0|4]"
                   << std::endl;
         return EXIT_FAILURE;
     }
@@ -173,11 +180,11 @@ int main(int argc, char** argv)
                 [&, index](const std::shared_ptr<lgsomeip::api::Message>& message) {
                     const auto arrival = load::NowNs();
                     if ((message->type != lgsomeip::api::MessageType::Notification) ||
-                        (message->payload.size() < bench::kHeaderSize))
+                        (message->payload.size() < options.payload_offset + bench::kHeaderSize))
                     {
                         return;
                     }
-                    const auto header = bench::DecodeHeader(message->payload.data());
+                    const auto header = bench::DecodeHeader(message->payload.data() + options.payload_offset);
                     const auto phase = (header.sequence >> load::kPhaseShift) & load::kPhaseMask;
                     if (phase < load_phases.size())
                     {
@@ -262,9 +269,18 @@ int main(int argc, char** argv)
                     return;
                 }
                 const auto& stream = workload.streams[index];
-                lgsomeip::api::Payload payload(stream.payload, 0U);
+                const auto size = std::max<std::size_t>(stream.payload, options.payload_offset + bench::kHeaderSize);
+                lgsomeip::api::Payload payload(size, 0U);
+                if (options.payload_offset > 0U)
+                {
+                    const auto length = size - options.payload_offset;
+                    for (std::uint32_t byte = 0U; byte < 4U; ++byte)
+                    {
+                        payload[byte] = static_cast<std::uint8_t>(length >> (8U * (3U - byte)));
+                    }
+                }
                 bench::EncodeHeader(bench::Header{sequences[index]++, static_cast<std::uint64_t>(load::NowNs())},
-                                    payload.data());
+                                    payload.data() + options.payload_offset);
                 application->notify(stream.service, stream.instance, stream.event, payload);
                 auto& counters = sent[stream.event_class];
                 ++counters.sent;

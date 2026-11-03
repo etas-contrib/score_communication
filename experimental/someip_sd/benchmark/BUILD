@@ -378,6 +378,7 @@ pkg_files(
     srcs = [
         "load_report.py",
         "target/run_host_load_peer.sh",
+        "target/run_hw_load.sh",
     ],
     attributes = _EXECUTABLE,
     prefix = "someip_load_peer/scripts",
