@@ -28,6 +28,7 @@ This document reviews the [SOME/IP-SD prototype](../README.md) and proposes how 
 2. **Duplicated code.** Most of the new connection code already exists in
    [socom](../../../inc_someip_gateway/score/socom) and
    [gateway_ipc_binding](../../../inc_someip_gateway/score/gateway_ipc_binding):
+3. **Very SOME/IP stack implementation specific.** The current proposal is tightly coupled to a SOME/IP stack implementation, making it less flexible for other protocols or other stacks. The current design in `inc_someip_gateway` allows e.g. adding a DDS stack [without modifying the core gateway infrastructure](./dds-gateway-layers.png).
 
 | Prototype (new) | Already available |
 | --- | --- |
