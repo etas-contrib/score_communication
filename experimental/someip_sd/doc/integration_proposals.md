@@ -179,9 +179,9 @@ flowchart LR
     subgraph asil_app["ASIL application process"]
         asil_code["Application code<br/>mw::com proxy / skeleton"]
         subgraph asil_bind["mw::com SOME/IP binding [step 5]"]
-            asil_ser["Serialization, SOME/IP header<br/>E2E protect / check"]
-            asil_socom["socom runtime"]
-            asil_client["gateway_ipc_binding client"]
+            asil_ser["Serialization, SOME/IP header<br/>E2E protect / check<br/>[score, adapted] from gatewayd"]
+            asil_socom["socom runtime [score]"]
+            asil_client["gateway_ipc_binding client [score]"]
             asil_ser --> asil_socom --> asil_client
         end
         asil_code --> asil_ser
@@ -189,18 +189,18 @@ flowchart LR
 
     subgraph qm_app["QM application process"]
         qm_code["Application code<br/>mw::com proxy / skeleton"]
-        qm_bind["mw::com SOME/IP binding [step 5]<br/>serialization, SOME/IP header,<br/>socom, gateway_ipc_binding client"]
+        qm_bind["mw::com SOME/IP binding [step 5]<br/>serialization, SOME/IP header,<br/>socom, gateway_ipc_binding client<br/>[score, adapted] from gatewayd"]
         qm_code --> qm_bind
     end
 
     subgraph sd["someipd process (QM)"]
-        startup["Shared startup [step 3]<br/>called by main.cpp,<br/>later by the io-sock module entry point"]
-        srv["gateway_ipc_binding server<br/>SomeipdService (runtime config)"]
-        sd_socom["socom runtime"]
-        svc["GatewaydServices<br/>LocalNetworkService / RemoteNetworkService"]
+        startup["Shared startup [step 3]<br/>called by main.cpp,<br/>later by the io-sock module entry point<br/>[score, adapted]"]
+        srv["gateway_ipc_binding server<br/>SomeipdService (runtime config)<br/>[score]"]
+        sd_socom["socom runtime [score]"]
+        svc["GatewaydServices<br/>LocalNetworkService / RemoteNetworkService<br/>[score, adapted]: vsomeip → lg-someip"]
         subgraph lg["lg-someip, replaces vsomeip [step 1]"]
             smgr["ServiceManager [LG]<br/>SD state machine"]
-            router["SomeipRouter : ServiceRouter<br/>SD + data routing,<br/>zero-copy RX / TX [step 4]"]
+            router["SomeipRouter : ServiceRouter [new]<br/>SD + data routing,<br/>zero-copy RX / TX [step 4]"]
             osa["osabstraction: POSIX backend [LG]<br/>Multiplexer, UDP + TCP sockets"]
             smgr <--> router --> osa
         end
@@ -219,6 +219,32 @@ flowchart LR
     qm_bind -. "SomeipdService" .-> srv
     osa -- "recvmsg into LoLa slot /<br/>sendmsg from LoLa slot" --> kernel
     kernel -- "SOME/IP-SD UDP 30490<br/>SOME/IP UDP + TCP" --- remote
+
+    subgraph legend["Legend"]
+        direction LR
+        l_lg["[LG] reused from lg-someip"]:::lg
+        l_score["[score] reused from eclipse-score"]:::score
+        l_adapted["[score, adapted] reused from eclipse-score,<br/>moved or changed"]:::adapted
+        l_new["[new] to be implemented"]:::new
+        l_platform["platform / existing / external"]:::platform
+        l_lg ~~~ l_score ~~~ l_adapted ~~~ l_new ~~~ l_platform
+    end
+
+    classDef lg fill:#dae8fc,stroke:#6c8ebf,color:#000
+    classDef score fill:#d5e8d4,stroke:#82b366,color:#000
+    classDef adapted fill:#d5e8d4,stroke:#d79b00,stroke-width:2px,stroke-dasharray:5 3,color:#000
+    classDef new fill:#ffe6cc,stroke:#d79b00,color:#000
+    classDef platform fill:#f5f5f5,stroke:#666666,color:#000
+    classDef proc fill:#ffffff,stroke:#333333,color:#000
+    classDef group fill:none,stroke:#999999,stroke-dasharray:3 3,color:#000
+
+    class smgr,osa lg
+    class asil_socom,asil_client,srv,sd_socom score
+    class asil_ser,qm_bind,startup,svc adapted
+    class router new
+    class asil_code,qm_code,kernel,remote platform
+    class asil_app,qm_app,sd proc
+    class asil_bind,lg,legend group
 ```
 
 Removed compared to the prototype: `someip_sd_daemon`, `SdFacade`, `sd_client`, the user-space event module, and
@@ -231,15 +257,26 @@ of the stack and the host process change; on Linux it keeps running as the `some
 
 ```mermaid
 flowchart LR
-    asil_app["ASIL application<br/>mw::com SOME/IP binding:<br/>serialization, E2E,<br/>gateway_ipc_binding client"]
-    qm_app["QM application<br/>mw::com SOME/IP binding:<br/>serialization,<br/>gateway_ipc_binding client"]
+    subgraph asil_app["ASIL application process"]
+        asil_code["Application code"]
+        asil_bind["mw::com SOME/IP binding<br/>serialization, E2E,<br/>gateway_ipc_binding client<br/>[score, adapted]"]
+        asil_code --> asil_bind
+    end
+    subgraph qm_app["QM application process"]
+        qm_code["Application code"]
+        qm_bind["mw::com SOME/IP binding<br/>serialization,<br/>gateway_ipc_binding client<br/>[score, adapted]"]
+        qm_code --> qm_bind
+    end
 
     subgraph iosock["io-sock process (QNX)"]
         subgraph mod["mods-someipd.so"]
-            entry["Module entry point [step 3]<br/>MOD_LOAD → shared startup"]
-            core["someipd component<br/>gateway_ipc_binding server, socom,<br/>GatewaydServices,<br/>lg-someip ServiceManager + SomeipRouter"]
-            osa_k["osabstraction: io-sock backend [step 2]<br/>so* kernel API, UDP + TCP,<br/>upcalls / kthread,<br/>RX mbuf → LoLa slot, TX MEXTADD"]
-            entry --> core --> osa_k
+            entry["Module entry point [new, step 3]<br/>MOD_LOAD → shared startup"]
+            core["someipd component [score, adapted]<br/>gateway_ipc_binding server, socom,<br/>GatewaydServices, shared startup"]
+            smgr["ServiceManager [LG]"]
+            router["SomeipRouter [new]"]
+            osa_k["osabstraction: io-sock backend<br/>[new, step 2], glue from prototype<br/>so* kernel API, UDP + TCP,<br/>upcalls / kthread,<br/>RX mbuf → LoLa slot, TX MEXTADD"]
+            entry --> core --> smgr <--> router --> osa_k
+            core --> router
         end
         stack["TCP/UDP/IP stack"]
         osa_k --> stack
@@ -247,9 +284,34 @@ flowchart LR
 
     remote["Remote ECU"]
 
-    asil_app -- "gateway_ipc_binding<br/>(LoLa, zero-copy)" --> core
-    qm_app --> core
+    asil_bind -- "gateway_ipc_binding<br/>(LoLa, zero-copy)" --> core
+    qm_bind --> core
     stack -- "SOME/IP-SD, SOME/IP" --- remote
+
+    subgraph legend["Legend"]
+        direction LR
+        l_lg["[LG] reused from lg-someip"]:::lg
+        l_score["[score] reused from eclipse-score"]:::score
+        l_adapted["[score, adapted] reused from eclipse-score,<br/>moved or changed"]:::adapted
+        l_new["[new] to be implemented"]:::new
+        l_platform["platform / existing / external"]:::platform
+        l_lg ~~~ l_score ~~~ l_adapted ~~~ l_new ~~~ l_platform
+    end
+
+    classDef lg fill:#dae8fc,stroke:#6c8ebf,color:#000
+    classDef score fill:#d5e8d4,stroke:#82b366,color:#000
+    classDef adapted fill:#d5e8d4,stroke:#d79b00,stroke-width:2px,stroke-dasharray:5 3,color:#000
+    classDef new fill:#ffe6cc,stroke:#d79b00,color:#000
+    classDef platform fill:#f5f5f5,stroke:#666666,color:#000
+    classDef proc fill:#ffffff,stroke:#333333,color:#000
+    classDef group fill:none,stroke:#999999,stroke-dasharray:3 3,color:#000
+
+    class smgr lg
+    class asil_bind,qm_bind,core adapted
+    class entry,router,osa_k new
+    class asil_code,qm_code,stack,remote platform
+    class asil_app,qm_app,iosock proc
+    class mod,legend group
 ```
 
 ## Suggested order
