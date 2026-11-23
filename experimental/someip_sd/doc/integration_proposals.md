@@ -52,7 +52,7 @@ payloads, but the module can only be loaded into io-sock once the io-sock backen
 
 ```mermaid
 flowchart LR
-    subgraph asil_app["ASIL application process"]
+    subgraph asil_app["Application process"]
         asil_code["Application code<br/>mw::com proxy / skeleton"]
         subgraph asil_bind["mw::com SOME/IP binding [step 5]"]
             asil_ser["Serialization, SOME/IP header<br/>E2E protect / check<br/>[score, adapted] from gatewayd"]
@@ -61,12 +61,6 @@ flowchart LR
             asil_ser --> asil_socom --> asil_client
         end
         asil_code --> asil_ser
-    end
-
-    subgraph qm_app["QM application process"]
-        qm_code["Application code<br/>mw::com proxy / skeleton"]
-        qm_bind["mw::com SOME/IP binding [step 5]<br/>serialization, SOME/IP header,<br/>socom, gateway_ipc_binding client<br/>[score, adapted] from gatewayd"]
-        qm_code --> qm_bind
     end
 
     subgraph sd["someipd process (QM)"]
@@ -91,8 +85,6 @@ flowchart LR
 
     asil_client -- "LoLa, zero-copy<br/>sample_layout: prefix + SOME/IP message<br/>availability, subscriptions" --> srv
     asil_client -. "SomeipdService<br/>flatbuffer config" .-> srv
-    qm_bind -- "LoLa, zero-copy" --> srv
-    qm_bind -. "SomeipdService" .-> srv
     osa -- "recvmsg into LoLa slot /<br/>sendmsg from LoLa slot" --> kernel
     kernel -- "SOME/IP-SD UDP 30490<br/>SOME/IP UDP + TCP" --- remote
 
@@ -116,10 +108,10 @@ flowchart LR
 
     class smgr,osa lg
     class asil_socom,asil_client,srv,sd_socom score
-    class asil_ser,qm_bind,startup,svc adapted
+    class asil_ser,startup,svc adapted
     class router new
-    class asil_code,qm_code,kernel,remote platform
-    class asil_app,qm_app,sd proc
+    class asil_code,kernel,remote platform
+    class asil_app,sd proc
     class asil_bind,lg,legend group
 ```
 
@@ -133,15 +125,10 @@ of the stack and the host process change; on Linux it keeps running as the `some
 
 ```mermaid
 flowchart LR
-    subgraph asil_app["ASIL application process"]
+    subgraph asil_app["Application process"]
         asil_code["Application code"]
         asil_bind["mw::com SOME/IP binding<br/>serialization, E2E,<br/>gateway_ipc_binding client<br/>[score, adapted]"]
         asil_code --> asil_bind
-    end
-    subgraph qm_app["QM application process"]
-        qm_code["Application code"]
-        qm_bind["mw::com SOME/IP binding<br/>serialization,<br/>gateway_ipc_binding client<br/>[score, adapted]"]
-        qm_code --> qm_bind
     end
 
     subgraph iosock["io-sock process (QNX)"]
@@ -161,7 +148,6 @@ flowchart LR
     remote["Remote ECU"]
 
     asil_bind -- "gateway_ipc_binding<br/>(LoLa, zero-copy)" --> core
-    qm_bind --> core
     stack -- "SOME/IP-SD, SOME/IP" --- remote
 
     subgraph legend["Legend"]
@@ -183,10 +169,10 @@ flowchart LR
     classDef group fill:none,stroke:#999999,stroke-dasharray:3 3,color:#000
 
     class smgr lg
-    class asil_bind,qm_bind,core adapted
+    class asil_bind,core adapted
     class entry,router,osa_k new
-    class asil_code,qm_code,stack,remote platform
-    class asil_app,qm_app,iosock proc
+    class asil_code,stack,remote platform
+    class asil_app,iosock proc
     class mod,legend group
 ```
 
